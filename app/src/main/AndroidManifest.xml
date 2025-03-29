@@ -25,6 +25,7 @@
             android:name=".OcrActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.Parking" />
+
         <activity
             android:name=".PaymentActivity"
             android:exported="false" />
@@ -48,6 +49,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.elite.parking.provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <provider
             android:name="androidx.core.content.FileProvider"

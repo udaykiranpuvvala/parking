@@ -2,12 +2,18 @@ package com.elite.parking
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.elite.parking.Model.Vehicle
+import com.elite.parking.apis.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +36,26 @@ class LoginActivity : AppCompatActivity() {
             } else if (password.isEmpty()) {
                 Toast.makeText(this, "Please fill Password", Toast.LENGTH_SHORT).show()
             } else {
+                callAPIForLogin()
                  val intent = Intent(this@LoginActivity, MainActivity::class.java)
                  startActivity(intent)
             }
         }
+    }
+
+    private fun callAPIForLogin() {
+        RetrofitClient.instance.getUsers().enqueue(object : Callback<List<Vehicle>> {
+            override fun onResponse(call: Call<List<Vehicle>>, response: Response<List<Vehicle>>) {
+                if (response.isSuccessful) {
+                    val users = response.body()
+                } else {
+                    Log.e("API_ERROR", "Response failed: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Vehicle>>, t: Throwable) {
+                Log.e("API_ERROR", "Network error: ${t.message}")
+            }
+        })
     }
 }

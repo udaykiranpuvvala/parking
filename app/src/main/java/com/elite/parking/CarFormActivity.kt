@@ -1,9 +1,11 @@
 package com.elite.parking
 
 import android.app.Activity
-import android.app.DatePickerDialog
+import android.Manifest
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -17,14 +19,15 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -33,6 +36,10 @@ import java.util.Date
 import java.util.Locale
 
 class CarFormActivity : AppCompatActivity() {
+
+    companion object {
+        private const val CAMERA_PERMISSION_CODE = 101
+    }
 
     private val PICK_IMAGES_REQUEST = 1001
     private val TAKE_PHOTO_REQUEST = 1002
@@ -46,6 +53,8 @@ class CarFormActivity : AppCompatActivity() {
     private lateinit var lnrLytCamera: LinearLayout
     private lateinit var imgBtnCamera: ImageButton
     private lateinit var et_vehicle_number: EditText
+    private var imageUri: Uri? = null
+    private var imageFile: File? = null
 
 
     private var lastSelectedLayout: LinearLayout? = null
@@ -107,7 +116,7 @@ class CarFormActivity : AppCompatActivity() {
             }
         }
 
-        btnUploadPhotos.setOnClickListener { openImagePicker() }
+        btnUploadPhotos.setOnClickListener { showPopupMenu(it) }
 
         // Set click listeners for each item
         llSuv.setOnClickListener {
@@ -162,19 +171,60 @@ class CarFormActivity : AppCompatActivity() {
             // Show the TimePickerDialog
             timePickerDialog.show()
         }
-
-
     }
 
+    private fun showPopupMenu(view: View) {
+        val popupMenu = PopupMenu(this, view)
+        popupMenu.menuInflater.inflate(R.menu.menu_image_picker, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_camera -> checkCameraPermission()
+                R.id.menu_gallery -> openImagePicker()
+            }
+            true
+        }
+        popupMenu.show()
+    }
+
+    // Handle Camera Permission & Open Camera
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_GRANTED) {
+            openCamera()
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_CODE)
+        }
+    }
+
+    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+//            val photo = result.data?.extras?.get("data") as Bitmap
+            //imageView.setImageBitmap(photo)
+//            selectedImageUris.add()
+            imageUri?.let {
+                selectedImageUris.add(it)
+            } ?: Toast.makeText(this, "Failed to get image URI", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun openCamera() {
+        try {
+            imageFile = createImageFile()
+            imageUri = FileProvider.getUriForFile(this, "$packageName.provider", imageFile!!)
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+            cameraLauncher.launch(intent)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(this, "Failed to create file", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun setSelected(selectedLayout: LinearLayout) {
         // If the selected item is already selected, do nothing
         if (selectedLayout == lastSelectedLayout) return
-
         lastSelectedLayout?.setBackgroundResource(R.drawable.unselector_bg)  // Set unselected state
-
         selectedLayout.setBackgroundResource(R.drawable.selector_bg)  // Set selected state
-
         lastSelectedLayout = selectedLayout
     }
 
@@ -185,31 +235,8 @@ class CarFormActivity : AppCompatActivity() {
         startActivityForResult(intent, PICK_IMAGES_REQUEST)
     }
 
-
-    private fun openCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(packageManager) != null) {
-            // Create a file for storing the image
-            val photoFile: File? = try {
-                createImageFile() // You'll need to implement this to create a file
-            } catch (e: IOException) {
-                null
-            }
-            photoFile?.let {
-                val photoURI: Uri = FileProvider.getUriForFile(
-                    this,
-                    "com.elite.parking.fileprovider",  // Your app's file provider authority
-                    it
-                )
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(intent, TAKE_PHOTO_REQUEST)
-            }
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 // Handle image picker result (gallery)
@@ -230,23 +257,34 @@ class CarFormActivity : AppCompatActivity() {
                 }
 
                 // Handle image from camera capture
-                TAKE_PHOTO_REQUEST -> {
+                /*TAKE_PHOTO_REQUEST -> {
                     val photoUri = data?.data
                     if (photoUri != null) {
                         selectedImageUris.add(photoUri)
                     }
-                }
+                }*/
                 REQUEST_CODE -> {
-                    val data = data?.data
-//                    val value = data.
-                    et_vehicle_number.setText(""+data)
 
+                    val resultValIntent = data?.getStringExtra("key")
+                    if(resultValIntent != null) {
+                        et_vehicle_number.setText("" + resultValIntent)
+                    }else{
+                        Toast.makeText(this, "Number is null", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
             imageAdapter.notifyDataSetChanged()  // Notify the adapter that data has changed
         }
     }
-    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("IMG_$timeStamp", ".jpg", storageDir).apply {
+            deleteOnExit() // Auto-delete if needed
+        }
+    }
+
+    /*@Throws(IOException::class)
     private fun createImageFile(): File {
         // Create a timestamp for the image file name
         val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -254,10 +292,31 @@ class CarFormActivity : AppCompatActivity() {
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
         // Create and return the image file
         return File.createTempFile(
-            "JPEG_${timestamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
+            "JPEG_${timestamp}_", *//* prefix *//*
+            ".jpg", *//* suffix *//*
+            storageDir *//* directory *//*
         )
-    }
+    }*/
+
+    /*private fun openCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (intent.resolveActivity(packageManager) != null) {
+            // Create a file for storing the image
+            val photoFile: File? = try {
+                createImageFile() // You'll need to implement this to create a file
+            } catch (e: IOException) {
+                null
+            }
+            photoFile?.let {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    this,
+                    "com.elite.parking.fileprovider",  // Your app's file provider authority
+                    it
+                )
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(intent, TAKE_PHOTO_REQUEST)
+            }
+        }
+    }*/
 
 }
