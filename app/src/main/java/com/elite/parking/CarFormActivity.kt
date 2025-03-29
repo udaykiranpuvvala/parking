@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Spinner
@@ -35,6 +36,8 @@ class CarFormActivity : AppCompatActivity() {
 
     private val PICK_IMAGES_REQUEST = 1001
     private val TAKE_PHOTO_REQUEST = 1002
+    private val REQUEST_CODE = 1003
+
 
 
     private val selectedImageUris = mutableListOf<Uri>()
@@ -42,6 +45,7 @@ class CarFormActivity : AppCompatActivity() {
     private lateinit var imageAdapter: ImageAdapter
     private lateinit var lnrLytCamera: LinearLayout
     private lateinit var imgBtnCamera: ImageButton
+    private lateinit var et_vehicle_number: EditText
 
 
     private var lastSelectedLayout: LinearLayout? = null
@@ -57,6 +61,7 @@ class CarFormActivity : AppCompatActivity() {
         intimeEditText = findViewById(R.id.intime)
         lnrLytCamera = findViewById(R.id.lnrLytCamera)
         imgBtnCamera = findViewById(R.id.imgBtnCamera)
+        et_vehicle_number = findViewById(R.id.et_vehicle_number)
 
         recyclerView = findViewById(R.id.recyclerViewImages)
         imageAdapter = ImageAdapter(this, selectedImageUris)
@@ -114,11 +119,15 @@ class CarFormActivity : AppCompatActivity() {
         }
 
         lnrLytCamera.setOnClickListener {
-            startActivity(Intent(this@CarFormActivity, OcrActivity::class.java))
+//            startActivity(Intent(this@CarFormActivity, OcrActivity::class.java))
+            val intent = Intent(this, OcrActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE)
         }
 
         imgBtnCamera.setOnClickListener {
-            startActivity(Intent(this@CarFormActivity, OcrActivity::class.java))
+//            startActivity(Intent(this@CarFormActivity, OcrActivity::class.java))
+            val intent = Intent(this, OcrActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE)
         }
 
         llSedan.setOnClickListener {
@@ -226,6 +235,12 @@ class CarFormActivity : AppCompatActivity() {
                     if (photoUri != null) {
                         selectedImageUris.add(photoUri)
                     }
+                }
+                REQUEST_CODE -> {
+                    val data = data?.data
+//                    val value = data.
+                    et_vehicle_number.setText(""+data)
+
                 }
             }
             imageAdapter.notifyDataSetChanged()  // Notify the adapter that data has changed

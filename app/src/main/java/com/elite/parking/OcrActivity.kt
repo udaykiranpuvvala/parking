@@ -1,6 +1,8 @@
 package com.elite.parking
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -111,6 +113,10 @@ class OcrActivity : AppCompatActivity() {
                 val extractedText = visionText.text
                 val numberPlate = extractNumberPlate(extractedText)
                 textView.text = extractedText//numberPlate ?: "No valid number plate detected"
+                val resultIntent = Intent()
+                resultIntent.putExtra("key", extractedText)
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
             }
             .addOnFailureListener { e ->
                 Log.e("OCR", "Text recognition failed", e)
