@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#F44336</color>
+    <color name="maroon">#800000</color>
+    <color name="colorSelectedHome">#FFFF00</color> <!-- Yellow for Home -->
+    <color name="colorSelectedProfile">#FFFF00</color> <!-- Vrashwhite (light gray) for Profile -->
+    <color name="colorUnselectedItem">#9E9E9E</color> <!-- Unselected color -->
+    <color name="colorSelected">#800000</color> <!-- Maroon color for selected item -->
+    <color name="colorUnselected">#808080</color> <!-- Gray color for unselected items -->
+</resources>

@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Header Section -->
+  <!--  <TextView
+        android:id="@+id/textHeader"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/maroon"
+        android:text="D WALLET"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"/>-->
+
+    <!-- Scrollable Content Section -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:spacing="16dp">
+
+            <!-- Vehicle Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vehicle Number"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_vehicle_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:layout_weight="0.9"
+                        android:inputType="text"/>
+                        <LinearLayout
+                            android:id="@+id/lnrLytCamera"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="0.1"
+                            android:padding="5dp"
+                            android:background="@drawable/anpr_bg"
+                            android:orientation="horizontal">
+                            <ImageButton
+                                android:id="@+id/imgBtnCamera"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableStart="@drawable/camera"
+                                android:layout_gravity="center"
+                                android:background="?android:attr/selectableItemBackgroundBorderless"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/camera" />
+                         <!--   <TextView
+                                android:id="@+id/btn_anpr"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="@color/red"
+                                android:text="@string/anpr" />-->
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vehicle Type"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:spacing="4dp">
+
+                        <!-- Vehicle Type Buttons -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:padding="2dp"
+                            android:id="@+id/ll_suv"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btn_suv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/car_repair"
+                                android:background="?android:attr/selectableItemBackgroundBorderless"
+                                android:scaleType="centerInside"
+                                android:contentDescription="SUV"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="SUV"
+                                android:textSize="12sp"
+                                android:gravity="center"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:padding="2dp"
+                            android:id="@+id/ll_luxury"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btn_luxury"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/car_repair"
+                                android:background="?android:attr/selectableItemBackgroundBorderless"
+                                android:scaleType="centerInside"
+                                android:contentDescription="Luxury"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Luxury"
+                                android:textSize="12sp"
+                                android:gravity="center"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="2dp"
+                            android:gravity="center"
+                            android:id="@+id/ll_sedan"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btn_sedan"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/car_repair"
+                                android:background="?android:attr/selectableItemBackgroundBorderless"
+                                android:scaleType="centerInside"
+                                android:contentDescription="Sedan"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Sedan"
+                                android:textSize="12sp"
+                                android:gravity="center"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="2dp"
+                            android:gravity="center"
+                            android:id="@+id/ll_hatchback"
+                            android:orientation="vertical">
+                            <ImageButton
+                                android:id="@+id/btn_hatchback"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/car_repair"
+                                android:background="?android:attr/selectableItemBackgroundBorderless"
+                                android:scaleType="centerInside"
+                                android:contentDescription="Hatchback"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Hatchback"
+                                android:textSize="12sp"
+                                android:gravity="center"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2sp"
+                        android:paddingTop="8sp"
+                        android:text="IN TIME"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/intime"
+                        android:layout_width="130sp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:background="@drawable/edit_text_bg"
+                        android:focusableInTouchMode="true"
+                        android:textSize="16sp"
+                        android:padding="8sp"
+                        android:textColor="#000000" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2sp"
+                        android:paddingTop="4sp"
+                        android:layout_gravity="center"
+                        android:text="@string/hook_number"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/hookNumber"
+                        android:layout_width="130sp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/edit_text_bg"
+                        android:focusableInTouchMode="true"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:padding="8sp"
+                        android:textColor="#000000" />
+
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Additional Sections -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Valet Driver Name"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_valet_driver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:hint="Enter Driver Name"
+                android:textColor="@color/black"
+                android:inputType="textPersonName"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vehicle Make"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_vehicleMake"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:hint="Enter Vehicle Name"
+                android:textColor="@color/black"
+                android:inputType="textPersonName"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vehicle Model"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_vehicleModel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:hint="Enter Vehicle Model"
+                android:textColor="@color/black"
+                android:inputType="textPersonName"/>
+
+            <Button
+                android:id="@+id/btn_upload_photos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/maroon"
+                android:text="+ Upload Photos"
+                android:textColor="@color/white"
+                android:layout_marginTop="16dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewImages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
+
+            <!-- Final Form Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Parking Lot"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp"/>
+
+            <Spinner
+                android:id="@+id/spinner_parkinglot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3sp"
+                android:layout_marginBottom="16sp"
+                android:background="@drawable/edit_text_bg"
+                android:padding="8dp"
+                android:outlineAmbientShadowColor="@color/maroon"
+                android:outlineSpotShadowColor="@color/maroon"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notes"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:inputType="textMultiLine"/>
+
+         <!--   <CheckBox
+                android:id="@+id/cb_senior_citizen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Senior Citizen (25% Discount)"
+                android:layout_marginTop="16dp"/>
+
+            <Switch
+                android:id="@+id/switch_parking_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Is Vehicle Parked?"
+                android:layout_marginTop="16dp"/>-->
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Fixed Submit Button -->
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/maroon"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>

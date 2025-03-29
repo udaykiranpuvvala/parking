@@ -1,0 +1,21 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Parking" parent="@style/Theme.Design.Light">
+        <!-- Set Action Bar text color -->
+        <item name="colorPrimary">@color/maroon</item>
+        <item name="colorPrimaryDark">@color/maroon</item>
+        <item name="colorAccent">@color/maroon</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <style name="LoginTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Your theme customization -->
+    </style>
+
+    <style name="Theme.Parking" parent="Base.Theme.Parking" />
+    <!-- Base application theme. -->
+    <style name="Base.Base.Theme.Parking" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+</resources>
