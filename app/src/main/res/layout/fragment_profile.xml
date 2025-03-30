@@ -34,7 +34,7 @@
 
     <!-- Role/Title -->
     <TextView
-        android:id="@+id/tvRole"
+        android:id="@+id/tvdesignation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Parking Boy"
@@ -43,6 +43,15 @@
         android:layout_gravity="center"
         android:layout_marginBottom="24dp"
         android:fontFamily="sans-serif-light"/>
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="24dp" />
 
     <!-- Contact Information Section -->
     <TextView
@@ -82,25 +91,8 @@
         android:textColor="@android:color/black"
         android:layout_marginBottom="8dp" />
 
-    <TextView
-        android:id="@+id/tvInprogressTasks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="In-progress Tasks: 15"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="24dp" />
 
-    <!-- Edit Profile Button -->
-    <Button
-        android:id="@+id/btnEditProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Edit Profile"
-        android:textColor="@android:color/white"
-        android:background="@drawable/rounded_button"
-        android:layout_marginBottom="16dp"
-        android:padding="12dp"/>
+
 
     <!-- Logout Button -->
     <Button
@@ -108,6 +100,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Logout"
+        android:visibility="gone"
         android:textColor="@android:color/white"
         android:background="@drawable/rounded_button"
         android:padding="12dp" />
