@@ -9,4 +9,5 @@
     <color name="colorUnselectedItem">#9E9E9E</color> <!-- Unselected color -->
     <color name="colorSelected">#800000</color> <!-- Maroon color for selected item -->
     <color name="colorUnselected">#808080</color> <!-- Gray color for unselected items -->
+    <color name="shimmerColor">#EFEFEF</color> <!-- Light gray for shimmer -->
 </resources>

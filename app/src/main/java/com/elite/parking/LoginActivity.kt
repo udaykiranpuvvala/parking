@@ -48,13 +48,14 @@ class LoginActivity : AppCompatActivity() {
                 if (NetworkUtils.isNetworkAvailable(this)) {
                     hideKeyboard()
                     progressBarUtility.show(parentLayout)
-                    loginViewModel.login(email, password, 1)
+                    loginViewModel.login("9492445605", "12345", 1)
                     loginViewModel.apiResponse.observe(this, Observer { response ->
                         response?.let {
                             if (it.status == 1) {
                                 storeUserSession(it.content[0])
                                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                 startActivity(intent)
+                                finish()
                                 progressBarUtility.hide()
                             } else {
                                 progressBarUtility.hide()

@@ -2,6 +2,8 @@ package com.elite.parking
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,18 +19,16 @@ import com.elite.parking.apis.ApiService
 import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.repository.VehicleRepository
 import com.elite.parking.viewModel.VehicleViewModel
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
-private lateinit var recyclerView: RecyclerView
-
-private lateinit var vehicleAdapter: VehicleAdapter
-private lateinit var vehicleList: MutableList<Vehicle>
 
 class HistoryFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var vehicleAdapter: VehicleAdapter
     private lateinit var vehicleViewModel: VehicleViewModel
+    private lateinit var userId: String
+    private lateinit var shimmerLayout: ShimmerFrameLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,15 +37,32 @@ class HistoryFragment : Fragment() {
         // Inflate the layout for the fragment
         val view = inflater.inflate(R.layout.fragment_history, container, false)
 
+        shimmerLayout = view.findViewById(R.id.shimmerLayout)
         recyclerView = view.findViewById(R.id.vehicleRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        val userId = UserSession.uuid ?: "N/A"
+        userId = UserSession.uuid ?: "N/A"
         val fabAddVehicle: FloatingActionButton=view.findViewById(R.id.fabAddVehicle)
+
+        shimmerLayout.startShimmer()
+
+        // Simulate data loading (e.g., API call)
+        Handler(Looper.getMainLooper()).postDelayed({
+            // Stop shimmer effect & show RecyclerView
+            shimmerLayout.stopShimmer()
+            shimmerLayout.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }, 3000) // 3 seconds delay
 
         fabAddVehicle.setOnClickListener {
             val intent = Intent(requireActivity(), CarFormActivity::class.java)
             startActivity(intent)
         }
+        initialAPICall()
+
+        return view
+    }
+
+    private fun initialAPICall() {
         // Initialize ViewModel
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
         val repository = VehicleRepository(apiService)
@@ -53,7 +70,7 @@ class HistoryFragment : Fragment() {
 
         // Observe LiveData for vehicle list
         vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->
-            vehicleAdapter = VehicleAdapter(vehicleList)
+            vehicleAdapter = VehicleAdapter(requireActivity(),vehicleList)
             recyclerView.adapter = vehicleAdapter
         })
 
@@ -70,7 +87,10 @@ class HistoryFragment : Fragment() {
 
         // Fetch vehicle details
         vehicleViewModel.fetchVehicleDetails(userId)
+    }
 
-        return view
+    override fun onResume() {
+        super.onResume()
+        initialAPICall()
     }
 }

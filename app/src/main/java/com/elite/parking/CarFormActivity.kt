@@ -155,6 +155,7 @@ class CarFormActivity : AppCompatActivity() {
                     // Handle success
                     val successMessage = resource.data?.mssg ?: "Vehicle checked in successfully"
                     Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show()
+                    finish()
                 }
 
                 is Resource.Failure -> {
