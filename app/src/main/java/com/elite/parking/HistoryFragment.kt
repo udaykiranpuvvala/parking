@@ -6,9 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.elite.parking.Model.Vehicle
+import com.elite.parking.Model.UserSession
+import com.elite.parking.Model.VehicleViewModelFactory
+import com.elite.parking.Model.login.Vehicle
+import com.elite.parking.apis.ApiService
+import com.elite.parking.apis.RetrofitClient
+import com.elite.parking.repository.VehicleRepository
+import com.elite.parking.viewModel.VehicleViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 private lateinit var recyclerView: RecyclerView
@@ -16,38 +24,53 @@ private lateinit var recyclerView: RecyclerView
 private lateinit var vehicleAdapter: VehicleAdapter
 private lateinit var vehicleList: MutableList<Vehicle>
 
-class HistoryFragment : Fragment(),VehicleAdapter.OnItemClickListener {
+class HistoryFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var vehicleAdapter: VehicleAdapter
+    private lateinit var vehicleViewModel: VehicleViewModel
 
-        val binding= inflater.inflate(R.layout.fragment_history, container, false)
-        recyclerView = binding.findViewById(R.id.vehicleRecyclerView)
-        val fabAddVehicle: FloatingActionButton=binding.findViewById(R.id.fabAddVehicle)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for the fragment
+        val view = inflater.inflate(R.layout.fragment_history, container, false)
 
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        recyclerView = view.findViewById(R.id.vehicleRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        val userId = UserSession.uuid ?: "N/A"
+        val fabAddVehicle: FloatingActionButton=view.findViewById(R.id.fabAddVehicle)
 
         fabAddVehicle.setOnClickListener {
             val intent = Intent(requireActivity(), CarFormActivity::class.java)
             startActivity(intent)
         }
-        vehicleList = mutableListOf(
-            Vehicle("AP39CZ9999", "Mahindra", "Mahindra XUV700","8","InProgress",R.drawable.car1),
-            Vehicle("TS01AB0098", "Maruthi", "Vitara Brezza","9","InProgress",R.drawable.car2),
-            Vehicle("GSGB3B8849", "Mahindra", "Mahindra XUV500","10","Completed",R.drawable.car3),
-            Vehicle("TS01AB9004", "Honda", "CIAZ","12","InProgress",R.drawable.car4),
-            Vehicle("KA01AB1234", "Toyota", "Toyota Fortuner","15","Completed",R.drawable.car1),
-            Vehicle("TN10XY4567", "Honda", "Honda Civic","21","Completed",R.drawable.car2)
-        )
+        // Initialize ViewModel
+        val apiService = RetrofitClient.instance.create(ApiService::class.java)
+        val repository = VehicleRepository(apiService)
+        vehicleViewModel = ViewModelProvider(this, VehicleViewModelFactory(repository)).get(VehicleViewModel::class.java)
 
-        vehicleAdapter = VehicleAdapter(vehicleList,requireActivity(),this)
-        recyclerView.adapter = vehicleAdapter
-        return  binding
+        // Observe LiveData for vehicle list
+        vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->
+            vehicleAdapter = VehicleAdapter(vehicleList)
+            recyclerView.adapter = vehicleAdapter
+        })
+
+        // Observe loading state
+        vehicleViewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->
+            // Show or hide loading indicator
+            // e.g., loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
+        // Observe error state
+        vehicleViewModel.error.observe(viewLifecycleOwner, { errorMessage ->
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+        })
+
+        // Fetch vehicle details
+        vehicleViewModel.fetchVehicleDetails(userId)
+
+        return view
     }
-
-    override fun onItemClick(position: Int) {
-        val vehicle = vehicleList[position]
-        val intent = Intent(requireActivity(), PaymentActivity::class.java)
-        startActivity(intent)
-    }
-
 }

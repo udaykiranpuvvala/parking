@@ -42,7 +42,7 @@
 
         <!-- Title TextView -->
         <TextView
-            android:id="@+id/vehicleNumber"
+            android:id="@+id/vehicleNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="AP39CZ9999"
@@ -52,14 +52,14 @@
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/make"
+            android:id="@+id/vehicleType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mahindra"
             android:textSize="12sp"
             android:textColor="#666666" />
         <TextView
-            android:id="@+id/model"
+            android:id="@+id/parkingId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mahindra XUV700"
@@ -67,14 +67,14 @@
             android:textColor="#666666" />
 
         <TextView
-            android:id="@+id/intime"
+            android:id="@+id/inTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="IN TIME : 5:04 PM"
             android:textSize="12sp"
             android:textColor="@color/black" />
         <TextView
-            android:id="@+id/outTime"
+            android:id="@+id/notes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="OUT TIME 8:04 PM"
@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="8"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textColor="#333333"
             android:layout_marginBottom="2dp"
             android:textStyle="bold"/>

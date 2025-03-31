@@ -12,7 +12,6 @@ object UserSession {
     var designation: String? = null
     var status: Int? = null
 
-    // You can also create a method to clear the session
     fun clearSession() {
         uuid = null
         name = null

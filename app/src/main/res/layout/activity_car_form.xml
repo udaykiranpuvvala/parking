@@ -62,7 +62,7 @@
                         android:orientation="horizontal"
                         android:weightSum="1">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_vehicle_number"
+                        android:id="@+id/vehicleNoEditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_bg"
@@ -239,7 +239,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/intime"
+                        android:id="@+id/inTimeEditText"
                         android:layout_width="130sp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -309,6 +309,7 @@
                 android:text="Vehicle Make"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 android:layout_marginBottom="8dp"/>
 
@@ -318,6 +319,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
                 android:textSize="16sp"
+                android:visibility="gone"
                 android:padding="10dp"
                 android:hint="Enter Vehicle Name"
                 android:textColor="@color/black"
@@ -390,7 +392,7 @@
                 android:layout_marginBottom="8dp"/>
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_notes"
+                android:id="@+id/notesEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
@@ -418,7 +420,7 @@
 
     <!-- Fixed Submit Button -->
     <Button
-        android:id="@+id/btn_submit"
+        android:id="@+id/submitButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit"

@@ -5,7 +5,6 @@ import android.Manifest
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -26,8 +25,14 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.elite.parking.Model.UserSession
+import com.elite.parking.Model.VehicleCheckInRequest
+import com.elite.parking.viewModel.VehicleCheckInViewModel
+import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -46,56 +51,118 @@ class CarFormActivity : AppCompatActivity() {
     private val REQUEST_CODE = 1003
 
 
+    private lateinit var vehicleNoEditText: TextInputEditText
+    private var selectedVehicleType: String? = null
+    private lateinit var inTimeEditText: TextView
+    private lateinit var hookNumberEditText: TextInputEditText
+    private lateinit var valetDriverEditText: TextInputEditText
+    private lateinit var spinnerParkingLot: Spinner
+    private lateinit var notesEditText: TextInputEditText
+    private lateinit var vehicleModelEditText: TextInputEditText
+    private lateinit var submitButton: Button
+
+
+    private lateinit var vehicleCheckInViewModel: VehicleCheckInViewModel
+
 
     private val selectedImageUris = mutableListOf<Uri>()
     private lateinit var recyclerView: RecyclerView
     private lateinit var imageAdapter: ImageAdapter
     private lateinit var lnrLytCamera: LinearLayout
     private lateinit var imgBtnCamera: ImageButton
-    private lateinit var et_vehicle_number: EditText
     private var imageUri: Uri? = null
     private var imageFile: File? = null
 
 
     private var lastSelectedLayout: LinearLayout? = null
-    private lateinit var intimeEditText: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_form)
+
+        vehicleNoEditText = findViewById(R.id.vehicleNoEditText)
+        inTimeEditText = findViewById(R.id.inTimeEditText)
+        hookNumberEditText = findViewById(R.id.hookNumber)
+        valetDriverEditText = findViewById(R.id.et_valet_driver)
+        spinnerParkingLot = findViewById(R.id.spinner_parkinglot)
+        notesEditText = findViewById(R.id.notesEditText)
+        submitButton = findViewById(R.id.submitButton)
+        vehicleModelEditText = findViewById(R.id.et_vehicleModel)
+
 
         val llSuv = findViewById<LinearLayout>(R.id.ll_suv)
         val llLuxury = findViewById<LinearLayout>(R.id.ll_luxury)
         val llSedan = findViewById<LinearLayout>(R.id.ll_sedan)
         val llHatchback = findViewById<LinearLayout>(R.id.ll_hatchback)
-        intimeEditText = findViewById(R.id.intime)
         lnrLytCamera = findViewById(R.id.lnrLytCamera)
         imgBtnCamera = findViewById(R.id.imgBtnCamera)
-        et_vehicle_number = findViewById(R.id.et_vehicle_number)
 
         recyclerView = findViewById(R.id.recyclerViewImages)
         imageAdapter = ImageAdapter(this, selectedImageUris)
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = imageAdapter
 
         val btnUploadPhotos: Button = findViewById(R.id.btn_upload_photos)
-
-        // Initialize the spinner
         val parkingLotSpinner: Spinner = findViewById(R.id.spinner_parkinglot)
+        val btnSubmit: Button = findViewById(R.id.submitButton)
+        // Initialize the ViewModel
+        vehicleCheckInViewModel = ViewModelProvider(this).get(VehicleCheckInViewModel::class.java)
 
-        // Create an adapter using the string array defined in strings.xml
+        val name = UserSession.name ?: "N/A"
+        val uuld = UserSession.uuid ?: "N/A"
+
+        valetDriverEditText.setText(name)
+
+
+        btnSubmit.setOnClickListener {
+
+            if (validateForm()) {
+                Toast.makeText(this, "Form is valid! Submitting...", Toast.LENGTH_SHORT).show()
+                val vehicleCheckInRequest = VehicleCheckInRequest(
+                    parkingId = parkingLotSpinner.selectedItem.toString(),
+                    userId = uuld,
+                    vehicleNo = vehicleNoEditText.text.toString(),
+                    vehicleType = selectedVehicleType.toString(),
+                    hookNo = hookNumberEditText.text.toString(),
+                    notes = notesEditText.text.toString(),
+                    inTime = inTimeEditText.text.toString(),
+                    imageUrl = "",
+                    createdDate = "2025-03-28",
+                    modifiedDate = "2025-03-28",
+                    status = 1
+                )
+                vehicleCheckInViewModel.checkIn(vehicleCheckInRequest)
+            }
+
+        }
+        vehicleCheckInViewModel.vehicleCheckInResponse.observe(this, Observer { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    // Show a loading spinner
+                    Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show()
+                }
+
+                is Resource.Success -> {
+                    // Handle success
+                    val successMessage = resource.data?.mssg ?: "Vehicle checked in successfully"
+                    Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show()
+                }
+
+                is Resource.Failure -> {
+                    // Handle failure
+                    Toast.makeText(this, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
         val adapter = ArrayAdapter.createFromResource(
             this,
-            R.array.parking_lot_items, // reference to the string array
-            android.R.layout.simple_spinner_item // layout for the dropdown items
+            R.array.parking_lot_items,
+            android.R.layout.simple_spinner_item
         )
 
-        // Set the dropdown layout for the spinner
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Apply the adapter to the spinner
         parkingLotSpinner.adapter = adapter
-
-        // Set an item selected listener to handle user selection
         parkingLotSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,
@@ -118,15 +185,24 @@ class CarFormActivity : AppCompatActivity() {
 
         btnUploadPhotos.setOnClickListener { showPopupMenu(it) }
 
-        // Set click listeners for each item
         llSuv.setOnClickListener {
             setSelected(llSuv)
+            selectedVehicleType = "SUV"
         }
 
         llLuxury.setOnClickListener {
             setSelected(llLuxury)
+            selectedVehicleType = "Luxury"
+        }
+        llSedan.setOnClickListener {
+            setSelected(llSedan)
+            selectedVehicleType = "Sedan"
         }
 
+        llHatchback.setOnClickListener {
+            setSelected(llHatchback)
+            selectedVehicleType = "Hatchback"
+        }
         lnrLytCamera.setOnClickListener {
 //            startActivity(Intent(this@CarFormActivity, OcrActivity::class.java))
             val intent = Intent(this, OcrActivity::class.java)
@@ -139,15 +215,7 @@ class CarFormActivity : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_CODE)
         }
 
-        llSedan.setOnClickListener {
-            setSelected(llSedan)
-        }
-
-        llHatchback.setOnClickListener {
-            setSelected(llHatchback)
-        }
-
-        intimeEditText.setOnClickListener {
+        inTimeEditText.setOnClickListener {
             // Get the current time
             val calendar = Calendar.getInstance()
             val hour = calendar.get(Calendar.HOUR_OF_DAY) // Get hour in 24-hour format
@@ -161,7 +229,7 @@ class CarFormActivity : AppCompatActivity() {
                     val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
 
                     // Set the selected time to the EditText
-                    intimeEditText.setText(formattedTime)
+                    inTimeEditText.setText(formattedTime)
                 },
                 hour, // Current hour
                 minute, // Current minute
@@ -189,23 +257,29 @@ class CarFormActivity : AppCompatActivity() {
     // Handle Camera Permission & Open Camera
     private fun checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-            == PackageManager.PERMISSION_GRANTED) {
+            == PackageManager.PERMISSION_GRANTED
+        ) {
             openCamera()
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_CODE)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                CAMERA_PERMISSION_CODE
+            )
         }
     }
 
-    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
 //            val photo = result.data?.extras?.get("data") as Bitmap
-            //imageView.setImageBitmap(photo)
+                //imageView.setImageBitmap(photo)
 //            selectedImageUris.add()
-            imageUri?.let {
-                selectedImageUris.add(it)
-            } ?: Toast.makeText(this, "Failed to get image URI", Toast.LENGTH_SHORT).show()
+                imageUri?.let {
+                    selectedImageUris.add(it)
+                } ?: Toast.makeText(this, "Failed to get image URI", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     private fun openCamera() {
         try {
@@ -266,9 +340,9 @@ class CarFormActivity : AppCompatActivity() {
                 REQUEST_CODE -> {
 
                     val resultValIntent = data?.getStringExtra("key")
-                    if(resultValIntent != null) {
-                        et_vehicle_number.setText("" + resultValIntent)
-                    }else{
+                    if (resultValIntent != null) {
+                        vehicleNoEditText.setText("" + resultValIntent)
+                    } else {
                         Toast.makeText(this, "Number is null", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -276,6 +350,7 @@ class CarFormActivity : AppCompatActivity() {
             imageAdapter.notifyDataSetChanged()  // Notify the adapter that data has changed
         }
     }
+
     private fun createImageFile(): File {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -284,39 +359,58 @@ class CarFormActivity : AppCompatActivity() {
         }
     }
 
-    /*@Throws(IOException::class)
-    private fun createImageFile(): File {
-        // Create a timestamp for the image file name
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        // Get the app's external files directory for pictures
-        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-        // Create and return the image file
-        return File.createTempFile(
-            "JPEG_${timestamp}_", *//* prefix *//*
-            ".jpg", *//* suffix *//*
-            storageDir *//* directory *//*
-        )
-    }*/
-
-    /*private fun openCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(packageManager) != null) {
-            // Create a file for storing the image
-            val photoFile: File? = try {
-                createImageFile() // You'll need to implement this to create a file
-            } catch (e: IOException) {
-                null
-            }
-            photoFile?.let {
-                val photoURI: Uri = FileProvider.getUriForFile(
-                    this,
-                    "com.elite.parking.fileprovider",  // Your app's file provider authority
-                    it
-                )
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(intent, TAKE_PHOTO_REQUEST)
-            }
+    private fun validateForm(): Boolean {
+        // Validate Vehicle Number
+        val vehicleNo = vehicleNoEditText.text.toString().trim()
+        if (vehicleNo.isEmpty()) {
+            showToast("Vehicle Number is required.")
+            return false
         }
-    }*/
 
+        // Validate In Time
+        val inTime = inTimeEditText.text.toString().trim()
+        if (inTime.isEmpty()) {
+            showToast("In Time is required.")
+            return false
+        }
+
+        // Validate Hook Number
+        val hookNumber = hookNumberEditText.text.toString().trim()
+        if (hookNumber.isEmpty()) {
+            showToast("Hook Number is required.")
+            return false
+        }
+
+        val valetDriver = valetDriverEditText.text.toString().trim()
+        if (valetDriver.isEmpty()) {
+            showToast("Valet Driver Name is required.")
+            return false
+        }
+
+        if (spinnerParkingLot.selectedItem == null) {
+            showToast("Parking Lot is required.")
+            return false
+        }
+        val model = vehicleModelEditText.text.toString().trim()
+        if (model.isEmpty()) {
+            showToast("Vehicle Model is required.")
+            return false
+        }
+        val notes = notesEditText.text.toString().trim()
+        if (notes.isEmpty()) {
+            showToast("Notes is required.")
+            return false
+        }
+
+        if (selectedVehicleType == null) {
+            showToast("Please select a vehicle type")
+            return false
+        }
+        return true
+    }
+
+    // Helper method to show a toast message
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }
