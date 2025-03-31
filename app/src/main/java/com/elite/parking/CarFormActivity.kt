@@ -2,9 +2,11 @@ package com.elite.parking
 
 import android.app.Activity
 import android.Manifest
+import android.R.attr.fragment
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -29,10 +31,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.elite.parking.LoginActivity
 import com.elite.parking.Model.UserSession
 import com.elite.parking.Model.VehicleCheckInRequest
+import com.elite.parking.loader.NetworkUtils
 import com.elite.parking.viewModel.VehicleCheckInViewModel
 import com.google.android.material.textfield.TextInputEditText
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -115,25 +122,27 @@ class CarFormActivity : AppCompatActivity() {
 
 
         btnSubmit.setOnClickListener {
-
-            if (validateForm()) {
-                Toast.makeText(this, "Form is valid! Submitting...", Toast.LENGTH_SHORT).show()
-                val vehicleCheckInRequest = VehicleCheckInRequest(
-                    parkingId = parkingLotSpinner.selectedItem.toString(),
-                    userId = uuld,
-                    vehicleNo = vehicleNoEditText.text.toString(),
-                    vehicleType = selectedVehicleType.toString(),
-                    hookNo = hookNumberEditText.text.toString(),
-                    notes = notesEditText.text.toString(),
-                    inTime = inTimeEditText.text.toString(),
-                    imageUrl = "",
-                    createdDate = "2025-03-28",
-                    modifiedDate = "2025-03-28",
-                    status = 1
-                )
-                vehicleCheckInViewModel.checkIn(vehicleCheckInRequest)
+            if (NetworkUtils.isNetworkAvailable(this)) {
+                if (validateForm()) {
+                    Toast.makeText(this, "Form is valid! Submitting...", Toast.LENGTH_SHORT).show()
+                    val vehicleCheckInRequest = VehicleCheckInRequest(
+                        parkingId = parkingLotSpinner.selectedItem.toString(),
+                        userId = uuld,
+                        vehicleNo = vehicleNoEditText.text.toString(),
+                        vehicleType = selectedVehicleType.toString(),
+                        hookNo = hookNumberEditText.text.toString(),
+                        notes = notesEditText.text.toString(),
+                        inTime = inTimeEditText.text.toString(),
+                        imageUrl = "",
+                        createdDate = "2025-03-28",
+                        modifiedDate = "2025-03-28",
+                        status = 1
+                    )
+                    vehicleCheckInViewModel.checkIn(vehicleCheckInRequest)
+                }
+            }else{
+                Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show()
             }
-
         }
         vehicleCheckInViewModel.vehicleCheckInResponse.observe(this, Observer { resource ->
             when (resource) {
@@ -413,4 +422,29 @@ class CarFormActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+    private fun createMultipartImages(): List<MultipartBody.Part> {
+        val multipartImages = mutableListOf<MultipartBody.Part>()
+        for (uri in selectedImageUris) {
+            val file = File(getRealPathFromURI(uri)) // Get the actual file path from URI
+            val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())  // Create requestBody
+            val part = MultipartBody.Part.createFormData("image[]", file.name, requestBody) // Image part
+            multipartImages.add(part)
+        }
+        return multipartImages
+    }
+    private fun getRealPathFromURI(uri: Uri): String {
+        var cursor: Cursor? = null
+        try {
+            val proj = arrayOf(MediaStore.Images.Media.DATA)
+            cursor = contentResolver.query(uri, proj, null, null, null)
+            val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor?.moveToFirst()
+            return cursor?.getString(columnIndex ?: -1) ?: ""
+        } finally {
+            cursor?.close()
+        }
+    }
+
+
 }

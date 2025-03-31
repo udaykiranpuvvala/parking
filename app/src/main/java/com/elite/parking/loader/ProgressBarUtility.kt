@@ -2,16 +2,19 @@ package com.elite.parking.loader
 
 import android.graphics.PorterDuff
 import android.os.Build
+import android.os.Handler
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.content.Context
+import android.graphics.Color
+import android.view.View
 import androidx.core.content.ContextCompat
 
 class ProgressBarUtility(private val context: Context) {
 
     private var progressBar: ProgressBar? = null
     private var progressBarContainer: FrameLayout? = null
+    private var overlayView: View? = null
 
     init {
         // Initialize ProgressBar container and ProgressBar
@@ -28,12 +31,17 @@ class ProgressBarUtility(private val context: Context) {
         progressBar?.layoutParams = params
         progressBar?.isIndeterminate = true
 
-        progressBarContainer?.addView(progressBar)
-        progressBarContainer?.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
+        // Create a transparent overlay to block interactions behind
+        overlayView = View(context)
+        overlayView?.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
+        overlayView?.setBackgroundColor(Color.parseColor("#99000000")) // Semi-transparent black
+        overlayView?.setClickable(true) // Block all touch interactions
 
-        // Make the container non-clickable and non-focusable
-        progressBarContainer?.isClickable = false
-        progressBarContainer?.isFocusable = false
+        progressBarContainer?.addView(progressBar)
+        progressBarContainer?.addView(overlayView) // Add the overlay on top of the container
     }
 
     // Function to show the progress bar dynamically
@@ -41,12 +49,16 @@ class ProgressBarUtility(private val context: Context) {
         if (progressBarContainer?.parent == null) {
             parentLayout.addView(progressBarContainer)
         }
-        progressBarContainer?.visibility = FrameLayout.VISIBLE
+        // Ensure the progress bar and overlay are visible
+        progressBarContainer?.visibility = View.VISIBLE
+        overlayView?.visibility = View.VISIBLE
     }
 
     // Function to hide the progress bar dynamically
     fun hide() {
-        progressBarContainer?.visibility = FrameLayout.GONE
+        // Hide progress bar and overlay
+        progressBarContainer?.visibility = View.GONE
+        overlayView?.visibility = View.GONE
     }
 
     // Function to update the progress (can be used for determinate progress bars)
@@ -69,6 +81,3 @@ class ProgressBarUtility(private val context: Context) {
         }
     }
 }
-
-
-
