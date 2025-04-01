@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<TextView
-    android:id="@+id/toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    app:layout_constraintTop_toTopOf="parent"
-    android:text="Valet Parking"
-    android:gravity="center"
-    android:layout_gravity="center"
-    android:background="@color/maroon"
-    android:textStyle="bold"
-    android:textColor="@color/white"
-    android:titleTextColor="@color/white" />
+
+    <TextView
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:background="@color/maroon"
+        android:gravity="center"
+        android:text="Valet Parking"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:titleTextColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -39,7 +41,6 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_margin="8dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="4dp">
@@ -53,254 +54,267 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Vehicle Number"
-                            android:textSize="14sp"
                             android:layout_marginTop="10dp"
-                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp"
+                            android:text="Vehicle Number"
                             android:textColor="@color/black"
-                            android:layout_marginBottom="8dp"/>
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:weightSum="1">
+
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/vehicleNoEditText"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="0.9"
                                 android:background="@drawable/edit_text_bg"
-                                android:textSize="16sp"
-                                android:padding="10dp"
-                                android:maxLength="12"
                                 android:hint="Enter Vehicle Number"
                                 android:inputType="textCapCharacters"
+                                android:maxLength="16"
+                                android:padding="10dp"
                                 android:textColor="@color/black"
-                                android:layout_weight="0.9" />
+                                android:textSize="14sp" />
+
                             <LinearLayout
                                 android:id="@+id/lnrLytCamera"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:gravity="center"
                                 android:layout_marginStart="2dp"
                                 android:layout_weight="0.1"
-                                android:padding="5dp"
                                 android:background="@drawable/anpr_bg"
-                                android:orientation="horizontal">
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:padding="5dp">
+
                                 <ImageButton
                                     android:id="@+id/imgBtnCamera"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:drawableStart="@drawable/camera"
                                     android:layout_gravity="center"
                                     android:background="?android:attr/selectableItemBackgroundBorderless"
+                                    android:drawableStart="@drawable/camera"
                                     android:scaleType="centerInside"
                                     android:src="@drawable/camera" />
                             </LinearLayout>
                         </LinearLayout>
 
 
-
-
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Vehicle Type"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"
                             android:layout_marginTop="16dp"
-                            android:layout_marginBottom="8dp"/>
+                            android:layout_marginBottom="8dp"
+                            android:text="Vehicle Type"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:spacing="4dp">
 
                             <!-- Vehicle Type Buttons -->
                             <LinearLayout
+                                android:id="@+id/ll_suv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:padding="2dp"
-                                android:id="@+id/ll_suv"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:padding="2dp">
 
                                 <ImageView
                                     android:id="@+id/btn_suv"
                                     android:layout_width="36dp"
                                     android:layout_height="36dp"
-                                    android:src="@drawable/suv"
                                     android:background="?android:attr/selectableItemBackgroundBorderless"
+                                    android:contentDescription="SUV"
                                     android:scaleType="centerInside"
-                                    android:contentDescription="SUV"/>
+                                    android:src="@drawable/suv" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:gravity="center"
                                     android:text="SUV"
-                                    android:textSize="12sp"
-                                    android:gravity="center"/>
+                                    android:textSize="12sp" />
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/ll_luxury"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:padding="2dp"
-                                android:id="@+id/ll_luxury"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:padding="2dp">
 
                                 <ImageView
                                     android:id="@+id/btn_luxury"
                                     android:layout_width="36dp"
                                     android:layout_height="36dp"
-                                    android:src="@drawable/luxury"
                                     android:background="?android:attr/selectableItemBackgroundBorderless"
+                                    android:contentDescription="Luxury"
                                     android:scaleType="centerInside"
-                                    android:contentDescription="Luxury"/>
+                                    android:src="@drawable/luxury" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:gravity="center"
                                     android:text="Luxury"
-                                    android:textSize="12sp"
-                                    android:gravity="center"/>
+                                    android:textSize="12sp" />
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/ll_sedan"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:padding="2dp"
                                 android:gravity="center"
-                                android:id="@+id/ll_sedan"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:padding="2dp">
 
                                 <ImageView
                                     android:id="@+id/btn_sedan"
                                     android:layout_width="36dp"
                                     android:layout_height="36dp"
-                                    android:src="@drawable/sedan"
                                     android:background="?android:attr/selectableItemBackgroundBorderless"
+                                    android:contentDescription="Sedan"
                                     android:scaleType="centerInside"
-                                    android:contentDescription="Sedan"/>
+                                    android:src="@drawable/sedan" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:gravity="center"
                                     android:text="Sedan"
-                                    android:textSize="12sp"
-                                    android:gravity="center"/>
+                                    android:textSize="12sp" />
                             </LinearLayout>
+
                             <LinearLayout
+                                android:id="@+id/ll_hatchback"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:padding="2dp"
                                 android:gravity="center"
-                                android:id="@+id/ll_hatchback"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:padding="2dp">
+
                                 <ImageView
                                     android:id="@+id/btn_hatchback"
                                     android:layout_width="36dp"
                                     android:layout_height="36dp"
-                                    android:src="@drawable/hatchback"
                                     android:background="?android:attr/selectableItemBackgroundBorderless"
+                                    android:contentDescription="Hatchback"
                                     android:scaleType="centerInside"
-                                    android:contentDescription="Hatchback"/>
+                                    android:src="@drawable/hatchback" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:gravity="center"
                                     android:text="Hatchback"
-                                    android:textSize="12sp"
-                                    android:gravity="center"/>
+                                    android:textSize="12sp" />
                             </LinearLayout>
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:gravity="center"
-                            android:weightSum="2"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginBottom="2sp"
-                                    android:paddingTop="8sp"
-                                    android:text="IN TIME"
-                                    android:gravity="center"
                                     android:layout_gravity="center"
-                                    android:textSize="12sp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="2sp"
+                                    android:gravity="center"
+                                    android:paddingTop="8sp"
+                                    android:text="In Time"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/inTimeEditText"
                                     android:layout_width="130sp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:textStyle="bold"
                                     android:background="@drawable/edit_text_bg"
                                     android:focusableInTouchMode="true"
-                                    android:textSize="16sp"
+                                    android:gravity="center"
                                     android:padding="8sp"
-                                    android:textColor="#000000" />
+                                    android:textColor="#000000"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="5dp"
                                     android:layout_marginBottom="2sp"
+                                    android:gravity="center"
                                     android:paddingTop="8sp"
                                     android:text="Created Date"
-                                    android:gravity="center"
-                                    android:layout_gravity="center"
-                                    android:textSize="12sp"
-                                    android:layout_marginTop="5dp"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/inDateEditText"
                                     android:layout_width="130sp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:textStyle="bold"
                                     android:background="@drawable/edit_text_bg"
                                     android:focusableInTouchMode="true"
-                                    android:textSize="16sp"
+                                    android:gravity="center"
                                     android:padding="8sp"
-                                    android:textColor="#000000" />
+                                    android:textColor="#000000"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
                         </LinearLayout>
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
                             android:layout_marginBottom="2sp"
                             android:paddingTop="4sp"
-                            android:layout_gravity="center"
                             android:text="@string/hook_number"
-                            android:textSize="12sp"
                             android:textColor="@color/black"
+                            android:textSize="12sp"
                             android:textStyle="bold" />
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -308,16 +322,17 @@
                             android:layout_width="150sp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:gravity="center"
+                            android:layout_marginTop="4dp"
                             android:background="@drawable/edit_text_bg"
                             android:focusableInTouchMode="true"
-                            android:textSize="16sp"
+                            android:gravity="center"
                             android:hint="Token Number"
-                            android:textStyle="bold"
-                            android:padding="8sp"
                             android:inputType="number"
                             android:maxLength="4"
-                            android:textColor="#000000" />
+                            android:padding="8sp"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
 
                     </LinearLayout>
@@ -329,75 +344,80 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:orientation="vertical">
 
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="Vehicle Make"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:visibility="gone"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="8dp"/>
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_vehicleMake"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_bg"
-                        android:textSize="16sp"
-                        android:visibility="gone"
-                        android:padding="10dp"
                         android:hint="Enter Vehicle Name"
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
                         android:textColor="@color/black"
-                        android:inputType="textPersonName"/>
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="Vehicle Model"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:visibility="gone"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="8dp"/>
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_vehicleModel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_bg"
-                        android:textSize="16sp"
-                        android:padding="10dp"
-                        android:visibility="gone"
                         android:hint="Enter Vehicle Model"
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
                         android:textColor="@color/black"
-                        android:inputType="textPersonName"/>
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/btn_upload_photos"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="10dp"
                         android:backgroundTint="@color/maroon"
-                        android:text="+ Upload Photos"
-                        android:textColor="@color/white"
-                        android:layout_marginTop="16dp"/>
+                        android:text="Add Photos"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewImages"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"/>
+                        android:layout_marginTop="16dp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="Parking Lot"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:layout_marginBottom="8dp"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <Spinner
                         android:id="@+id/spinner_parkinglot"
@@ -406,46 +426,52 @@
                         android:layout_margin="3sp"
                         android:layout_marginBottom="16sp"
                         android:background="@drawable/edit_text_bg"
-                        android:padding="8dp"
                         android:outlineAmbientShadowColor="@color/maroon"
                         android:outlineSpotShadowColor="@color/maroon"
+                        android:padding="8dp"
                         android:textColor="@color/black" />
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewParkingSlots"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:layout_marginBottom="5dp"/>
+                        android:layout_marginBottom="5dp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="Notes"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:layout_marginBottom="8dp"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/notesEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/edit_text_bg"
-                        android:textSize="16sp"
-                        android:padding="10dp"
-                        android:hint="please Enter Notes"
                         android:layout_marginBottom="10dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:hint="Please Enter Notes"
+                        android:inputType="textMultiLine"
+                        android:padding="10dp"
                         android:textColor="@color/black"
-                        android:inputType="textMultiLine"/>
+                        android:textSize="16sp" />
 
                 </LinearLayout>
+
                 <Button
                     android:id="@+id/submitButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Submit"
-                    android:textColor="@color/white"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="10dp"
                     android:backgroundTint="@color/maroon"
-                    android:layout_marginTop="4dp"/>
+                    android:text="Submit"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
         </ScrollView>

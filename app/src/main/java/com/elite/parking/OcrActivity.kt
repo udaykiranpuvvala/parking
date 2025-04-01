@@ -11,6 +11,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -34,7 +35,8 @@ class OcrActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var imageView: ImageView
     private lateinit var textView: TextView
-    private lateinit var refresh: TextView
+    private lateinit var btnSubmit: Button
+    private lateinit var refresh: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +44,7 @@ class OcrActivity : AppCompatActivity() {
 
         imageView = findViewById(R.id.imageView)
         textView = findViewById(R.id.textView)
+        btnSubmit = findViewById(R.id.btnSubmit)
         refresh = findViewById(R.id.refresh)
         val captureButton: Button = findViewById(R.id.captureButton)
 
@@ -52,7 +55,25 @@ class OcrActivity : AppCompatActivity() {
             startCamera()
         }
 
-        captureButton.setOnClickListener { takePhoto() }
+        captureButton.setOnClickListener {
+            try {
+                takePhoto()
+            }catch (e:Exception){
+                e.stackTrace
+                Toast.makeText(this@OcrActivity, "Please provide valid image to Capture Number Plate", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+        btnSubmit.setOnClickListener {
+            if(!textView.text.toString().isNullOrBlank()) {
+                val resultIntent = Intent()
+                resultIntent.putExtra("key", textView.text.toString())
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
+            }else{
+                Toast.makeText(this, "Provide proper Number Plate to proceed", Toast.LENGTH_SHORT).show()
+            }
+        }
         refresh.setOnClickListener {
             imageView.setImageDrawable(null)
             textView.setText("Capture Image again")
@@ -110,13 +131,15 @@ class OcrActivity : AppCompatActivity() {
 
         recognizer.process(image)
             .addOnSuccessListener { visionText ->
-                val extractedText = visionText.text
-                val numberPlate = extractNumberPlate(extractedText)
-                textView.text = extractedText//numberPlate ?: "No valid number plate detected"
-                val resultIntent = Intent()
-                resultIntent.putExtra("key", extractedText)
-                setResult(Activity.RESULT_OK, resultIntent)
-                finish()
+                if(!visionText.text.isNullOrBlank()) {
+                    val extractedText = visionText.text
+                    val numberPlate = extractNumberPlate(extractedText)
+                    textView.text = extractedText//numberPlate ?: "No valid number plate detected"
+
+                }else{
+                    textView.text = "";
+                        Toast.makeText(this, "Please provide valid image to Capture Number Plate", Toast.LENGTH_LONG).show()
+                }
             }
             .addOnFailureListener { e ->
                 Log.e("OCR", "Text recognition failed", e)
