@@ -1,5 +1,8 @@
 package com.elite.parking
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -31,6 +34,9 @@ class HistoryFragment : Fragment() {
     private lateinit var userId: String
     private lateinit var shimmerLayout: ShimmerFrameLayout
 
+    private lateinit var childFab1: FloatingActionButton
+    private lateinit var childFab2: FloatingActionButton
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,7 +50,11 @@ class HistoryFragment : Fragment() {
         sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
         val fabAddVehicle: FloatingActionButton=view.findViewById(R.id.fabAddVehicle)
-
+        childFab1 = view.findViewById(R.id.childFab1)
+        childFab2 = view.findViewById(R.id.childFab2)
+        fabAddVehicle.setOnClickListener {
+            toggleChildFabs()
+        }
         loginResponse?.let {
             val loginData = it.content.firstOrNull()
             if (loginData != null) {
@@ -63,8 +73,12 @@ class HistoryFragment : Fragment() {
             recyclerView.visibility = View.VISIBLE
         }, 3000) // 3 seconds delay
 
-        fabAddVehicle.setOnClickListener {
+        childFab1.setOnClickListener {
             val intent = Intent(requireActivity(), CarFormActivity::class.java)
+            startActivity(intent)
+        }
+        childFab2.setOnClickListener {
+            val intent = Intent(requireActivity(), PaymentActivity::class.java)
             startActivity(intent)
         }
         initialAPICall()
@@ -103,4 +117,62 @@ class HistoryFragment : Fragment() {
         super.onResume()
         initialAPICall()
     }
+
+    private fun toggleChildFabs() {
+        if (childFab1.visibility == View.GONE) {
+            // Show child FABs with animations
+            showChildFabs()
+        } else {
+            // Hide child FABs with animations
+            hideChildFabs()
+        }
+    }
+
+    // Show child FABs with animations
+    private fun showChildFabs() {
+        childFab1.visibility = View.VISIBLE
+        childFab2.visibility = View.VISIBLE
+
+        val animator1 = ObjectAnimator.ofFloat(childFab1, "translationY", 0f, -200f)
+        val animator2 = ObjectAnimator.ofFloat(childFab2, "translationY", 0f, -400f)
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(animator1, animator2)
+        animatorSet.duration = 300
+        animatorSet.start()
+    }
+
+    // Hide child FABs with animations
+    private fun hideChildFabs() {
+        val animator1 = ObjectAnimator.ofFloat(childFab1, "translationY", -200f, 0f)
+        val animator2 = ObjectAnimator.ofFloat(childFab2, "translationY", -400f, 0f)
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(animator1, animator2)
+        animatorSet.duration = 300
+        animatorSet.start()
+
+        // Hide child FABs after the animation
+        animatorSet.addListener(object : android.animation.Animator.AnimatorListener {
+
+            override fun onAnimationStart(p0: Animator) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onAnimationEnd(p0: Animator) {
+                childFab1.visibility = View.GONE
+                childFab2.visibility = View.GONE
+            }
+
+            override fun onAnimationCancel(p0: Animator) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onAnimationRepeat(p0: Animator) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
 }
+
+

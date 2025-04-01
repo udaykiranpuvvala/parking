@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:shimmer_auto_start="true"
-        app:shimmer_duration="1500"
         app:shimmer_base_alpha="0.7"
+        app:shimmer_duration="1500"
         app:shimmer_highlight_alpha="1.0">
 
         <LinearLayout
@@ -65,12 +65,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        android:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="parent" />
 
     <!-- Floating Action Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddVehicle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -81,8 +82,48 @@
         android:src="@drawable/add"
         android:tint="@color/white"
         app:fabSize="normal"
+        app:srcCompat="@drawable/add" />-->
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/add" />
+        app:layout_constraintEnd_toEndOf="parent">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddVehicle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:contentDescription="Main FAB"
+            android:src="@drawable/add"
+            app:fabSize="normal" />
+
+        <!-- Child Floating Action Button 1 -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/childFab1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:contentDescription="Child FAB 1"
+            android:src="@drawable/car_repair"
+            android:visibility="gone"
+            app:fabSize="normal" />
+
+        <!-- Child Floating Action Button 2 -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/childFab2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:contentDescription="Child FAB 2"
+            android:src="@drawable/car_crash"
+            android:visibility="gone"
+            app:fabSize="normal" />
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,6 +28,7 @@
             android:theme="@style/ToolBar" />
         <activity
             android:name=".PaymentActivity"
+            android:theme="@style/NoToolBar"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

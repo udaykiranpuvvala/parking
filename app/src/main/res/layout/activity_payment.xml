@@ -1,54 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/textHeader"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:background="@color/maroon"
-        android:text="D WALLET"
+        android:text="Valet Parking"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/linrv"
+        app:layout_constraintTop_toBottomOf="@id/textHeader"
+        android:padding="16dp">
+
     <TextView
-        android:id="@+id/vehicle_info_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="Vehicle Information"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textHeader"/>
-
-    <!-- Vehicle Number -->
-    <TextView
-        android:id="@+id/vehicle_number_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:text="Vehicle Number"
+        android:textSize="14sp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/edit_text_bg"
-        android:focusableInTouchMode="true"
-        android:inputType="textEmailAddress"
-        android:padding="10dp"
-        android:text="AP36BX9087"
-        android:textColor="#000000"
-        android:textSize="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vehicle_info_title" />
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="8dp"/>
 
-    <!-- QR Code Scanner Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/vehicleNoEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_bg"
+            android:textSize="16sp"
+            android:padding="10dp"
+            android:maxLength="12"
+            android:hint="Enter Vehicle Number"
+            android:inputType="textCapCharacters"
+            android:textColor="@color/black"
+            android:layout_weight="0.9" />
+        <LinearLayout
+            android:id="@+id/lnrLytCamera"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginStart="2dp"
+            android:layout_weight="0.1"
+            android:padding="5dp"
+            android:background="@drawable/anpr_bg"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/imgBtnCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/camera"
+                android:layout_gravity="center"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:scaleType="centerInside"
+                android:src="@drawable/camera" />
+        </LinearLayout>
+    </LinearLayout>
+
+    </LinearLayout>
+    <!--&lt;!&ndash; QR Code Scanner Button &ndash;&gt;
     <Button
         android:id="@+id/qr_scanner_button"
         android:layout_width="wrap_content"
@@ -58,9 +93,9 @@
         android:text="Generate QR Code"
         android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vehicle_number_input" />
+        app:layout_constraintTop_toBottomOf="@id/linrv" />
 
-    <!-- Vehicle Type -->
+    &lt;!&ndash; Vehicle Type &ndash;&gt;
     <TextView
         android:id="@+id/vehicle_type_input"
         android:layout_width="0dp"
@@ -70,7 +105,6 @@
         android:focusableInTouchMode="true"
         android:inputType="textEmailAddress"
         android:padding="10dp"
-        android:text="Mahindra XUV500"
         android:textColor="#000000"
         android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +129,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/edit_text_bg"
         android:focusableInTouchMode="true"
-        android:hint="1:56 PM"
+        android:hint="Select Time"
         android:inputType="number"
         android:padding="10dp"
         android:textColor="@color/black"
@@ -103,7 +137,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/selectTimeText" />
 
-    <!-- Total Amount -->
+    &lt;!&ndash; Total Amount &ndash;&gt;
     <TextView
         android:id="@+id/total_amount_label"
         android:layout_width="wrap_content"
@@ -131,7 +165,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/total_amount_label" />
 
-    <!-- Pay Button -->
+    &lt;!&ndash; Pay Button &ndash;&gt;
     <Button
         android:id="@+id/pay_button"
         android:layout_width="0dp"
@@ -143,5 +177,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/total_amount" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+-->
+</LinearLayout>
