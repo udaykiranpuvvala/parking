@@ -15,6 +15,7 @@
         android:background="@drawable/round_image"
         android:contentDescription="Profile Image"
         android:elevation="4dp"
+        android:src="@drawable/person"
         android:scaleType="centerCrop" />
 
 
