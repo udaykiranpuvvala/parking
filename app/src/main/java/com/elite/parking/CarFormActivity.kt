@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -22,6 +23,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
@@ -29,12 +31,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.LoginActivity
+import com.elite.parking.Model.ParkingSlot
 import com.elite.parking.Model.UserSession
 import com.elite.parking.Model.VehicleCheckInRequest
 import com.elite.parking.loader.NetworkUtils
+import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.VehicleCheckInViewModel
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -43,6 +48,9 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -57,12 +65,12 @@ class CarFormActivity : AppCompatActivity() {
     private val TAKE_PHOTO_REQUEST = 1002
     private val REQUEST_CODE = 1003
 
-
+    private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
     private lateinit var vehicleNoEditText: TextInputEditText
     private var selectedVehicleType: String? = null
     private lateinit var inTimeEditText: TextView
+    private lateinit var inDateEditText: TextView
     private lateinit var hookNumberEditText: TextInputEditText
-    private lateinit var valetDriverEditText: TextInputEditText
     private lateinit var spinnerParkingLot: Spinner
     private lateinit var notesEditText: TextInputEditText
     private lateinit var vehicleModelEditText: TextInputEditText
@@ -74,14 +82,18 @@ class CarFormActivity : AppCompatActivity() {
 
     private val selectedImageUris = mutableListOf<Uri>()
     private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewParking: RecyclerView
     private lateinit var imageAdapter: ImageAdapter
     private lateinit var lnrLytCamera: LinearLayout
     private lateinit var imgBtnCamera: ImageButton
     private var imageUri: Uri? = null
     private var imageFile: File? = null
+    private lateinit var userId: String
 
+    private lateinit var parkingSlotsAdapter: ParkingSlotsAdapter
 
     private var lastSelectedLayout: LinearLayout? = null
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_form)
@@ -89,12 +101,21 @@ class CarFormActivity : AppCompatActivity() {
         vehicleNoEditText = findViewById(R.id.vehicleNoEditText)
         inTimeEditText = findViewById(R.id.inTimeEditText)
         hookNumberEditText = findViewById(R.id.hookNumber)
-        valetDriverEditText = findViewById(R.id.et_valet_driver)
         spinnerParkingLot = findViewById(R.id.spinner_parkinglot)
         notesEditText = findViewById(R.id.notesEditText)
         submitButton = findViewById(R.id.submitButton)
         vehicleModelEditText = findViewById(R.id.et_vehicleModel)
-
+        inDateEditText = findViewById(R.id.inDateEditText)
+        sharedPreferencesHelper = SharedPreferencesHelper(this)
+        val loginResponse = sharedPreferencesHelper.getLoginResponse()
+        loginResponse?.let {
+            val loginData = it.content.firstOrNull()
+            if (loginData != null) {
+                userId = loginData.uuid ?: "N/A"
+            }
+        } ?: run {
+            Toast.makeText(this, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
+        }
 
         val llSuv = findViewById<LinearLayout>(R.id.ll_suv)
         val llLuxury = findViewById<LinearLayout>(R.id.ll_luxury)
@@ -104,6 +125,7 @@ class CarFormActivity : AppCompatActivity() {
         imgBtnCamera = findViewById(R.id.imgBtnCamera)
 
         recyclerView = findViewById(R.id.recyclerViewImages)
+        recyclerViewParking = findViewById(R.id.recyclerViewParkingSlots)
         imageAdapter = ImageAdapter(this, selectedImageUris)
         recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -115,10 +137,11 @@ class CarFormActivity : AppCompatActivity() {
         // Initialize the ViewModel
         vehicleCheckInViewModel = ViewModelProvider(this).get(VehicleCheckInViewModel::class.java)
 
-        val name = UserSession.name ?: "N/A"
-        val uuld = UserSession.uuid ?: "N/A"
-
-        valetDriverEditText.setText(name)
+        val currentTime = LocalTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        val formattedTime = currentTime.format(formatter)
+        inDateEditText.setText(LocalDate.now().toString())
+        inTimeEditText.setText(formattedTime.toString())
 
 
         btnSubmit.setOnClickListener {
@@ -127,7 +150,7 @@ class CarFormActivity : AppCompatActivity() {
                     Toast.makeText(this, "Form is valid! Submitting...", Toast.LENGTH_SHORT).show()
                     val vehicleCheckInRequest = VehicleCheckInRequest(
                         parkingId = parkingLotSpinner.selectedItem.toString(),
-                        userId = uuld,
+                        userId = userId,
                         vehicleNo = vehicleNoEditText.text.toString(),
                         vehicleType = selectedVehicleType.toString(),
                         hookNo = hookNumberEditText.text.toString(),
@@ -147,49 +170,41 @@ class CarFormActivity : AppCompatActivity() {
         vehicleCheckInViewModel.vehicleCheckInResponse.observe(this, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    // Show a loading spinner
                     Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show()
                 }
 
                 is Resource.Success -> {
-                    // Handle success
                     val successMessage = resource.data?.mssg ?: "Vehicle checked in successfully"
                     Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show()
                     finish()
                 }
 
                 is Resource.Failure -> {
-                    // Handle failure
                     Toast.makeText(this, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         })
 
-        val adapter = ArrayAdapter.createFromResource(
-            this,
-            R.array.parking_lot_items,
-            android.R.layout.simple_spinner_item
-        )
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        parkingLotSpinner.adapter = adapter
-        parkingLotSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parentView: AdapterView<*>?,
-                selectedItemView: View?,
-                position: Int,
-                id: Long
-            ) {
-                // Get the selected item
-                val selectedParkingLot = parentView?.getItemAtPosition(position).toString()
+        // Initialize RecyclerView
+        recyclerViewParking.layoutManager = GridLayoutManager(this,3)
+        parkingSlotsAdapter = ParkingSlotsAdapter(this,emptyList())
+        recyclerViewParking.adapter = parkingSlotsAdapter
 
-                // You can perform actions based on the selected parking lot (e.g., store it, display it)
-                println("Selected Parking Lot: $selectedParkingLot")
+        val parkingAreas = listOf("Basement 1", "Basement 2", "Basement 3", "Basement 4")
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, parkingAreas)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerParkingLot.adapter = spinnerAdapter
 
+        spinnerParkingLot.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                // Load the parking slots based on selected parking area
+                val selectedArea = parkingAreas[position]
+                    loadParkingSlots(selectedArea)
             }
 
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // Handle case where no selection is made (optional)
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // No action needed
             }
         }
 
@@ -214,13 +229,11 @@ class CarFormActivity : AppCompatActivity() {
             selectedVehicleType = "Hatchback"
         }
         lnrLytCamera.setOnClickListener {
-//            startActivity(Intent(this@CarFormActivity, OcrActivity::class.java))
             val intent = Intent(this, OcrActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE)
         }
 
         imgBtnCamera.setOnClickListener {
-//            startActivity(Intent(this@CarFormActivity, OcrActivity::class.java))
             val intent = Intent(this, OcrActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE)
         }
@@ -391,11 +404,6 @@ class CarFormActivity : AppCompatActivity() {
             return false
         }
 
-        val valetDriver = valetDriverEditText.text.toString().trim()
-        if (valetDriver.isEmpty()) {
-            showToast("Valet Driver Name is required.")
-            return false
-        }
 
         if (spinnerParkingLot.selectedItem == null) {
             showToast("Parking Lot is required.")
@@ -424,28 +432,65 @@ class CarFormActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun createMultipartImages(): List<MultipartBody.Part> {
-        val multipartImages = mutableListOf<MultipartBody.Part>()
-        for (uri in selectedImageUris) {
-            val file = File(getRealPathFromURI(uri)) // Get the actual file path from URI
-            val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())  // Create requestBody
-            val part = MultipartBody.Part.createFormData("image[]", file.name, requestBody) // Image part
-            multipartImages.add(part)
+    private fun loadParkingSlots(parkingArea: String) {
+        val parkingSlots = when (parkingArea) {
+            "Basement 1" -> getParkingSlotsForBasement1()
+            "Basement 2" -> getParkingSlotsForBasement2()
+            "Basement 3" -> getParkingSlotsForBasement3()
+            "Basement 4" -> getParkingSlotsForBasement4()
+            else -> emptyList()
         }
-        return multipartImages
+        // Update RecyclerView with the new list
+        parkingSlotsAdapter = ParkingSlotsAdapter(this,parkingSlots)
+        recyclerViewParking.adapter = parkingSlotsAdapter
     }
-    private fun getRealPathFromURI(uri: Uri): String {
-        var cursor: Cursor? = null
-        try {
-            val proj = arrayOf(MediaStore.Images.Media.DATA)
-            cursor = contentResolver.query(uri, proj, null, null, null)
-            val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor?.moveToFirst()
-            return cursor?.getString(columnIndex ?: -1) ?: ""
-        } finally {
-            cursor?.close()
-        }
+
+    // Sample functions to get parking slots for each basement
+    private fun getParkingSlotsForBasement1(): List<ParkingSlot> {
+        return listOf(
+            ParkingSlot("B1-Slot 1", true),
+            ParkingSlot("B1-Slot 2", false),
+            ParkingSlot("B1-Slot 3", true),
+                    ParkingSlot("B1-Slot 4", true),
+        ParkingSlot("B1-Slot 5", false),
+        ParkingSlot("B1-Slot 6", true)
+
+        )
     }
+
+    private fun getParkingSlotsForBasement2(): List<ParkingSlot> {
+        return listOf(
+            ParkingSlot("B2-Slot 1", false),
+            ParkingSlot("B2-Slot 2", false),
+            ParkingSlot("B2-Slot 3", true),
+            ParkingSlot("B2-Slot 4", false),
+            ParkingSlot("B2-Slot 5", true),
+            ParkingSlot("B2-Slot 6", true),
+            ParkingSlot("B2-Slot 7", false),
+            ParkingSlot("B2-Slot 8", false),
+            ParkingSlot("B2-Slot 9", true),
+            ParkingSlot("B2-Slot 10", false),
+            ParkingSlot("B2-Slot 11", false),
+            ParkingSlot("B2-Slot 12", true)
+        )
+    }
+
+    private fun getParkingSlotsForBasement3(): List<ParkingSlot> {
+        return listOf(
+            ParkingSlot("B3-Slot 1", true),
+            ParkingSlot("B3-Slot 2", true),
+            ParkingSlot("B3-Slot 3", false)
+        )
+    }
+
+    private fun getParkingSlotsForBasement4(): List<ParkingSlot> {
+        return listOf(
+            ParkingSlot("B4-Slot 1", true),
+            ParkingSlot("B4-Slot 2", true),
+            ParkingSlot("B4-Slot 3", true)
+        )
+    }
+
 
 
 }

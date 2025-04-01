@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Vallet Parking</string>
+    <string name="app_name">Valet Parking</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="anpr">ANPR</string>

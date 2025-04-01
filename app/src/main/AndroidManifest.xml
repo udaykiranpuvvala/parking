@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/parkingcar_48"
         android:supportsRtl="true"
-        android:theme="@style/ToolBar"
+        android:theme="@style/ToolBarDark"
         tools:targetApi="31">
         <activity
             android:name=".OcrActivity"
@@ -34,7 +34,6 @@
             android:exported="false" />
         <activity
             android:name=".CarFormActivity"
-             android:theme="@style/ToolBarCar"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

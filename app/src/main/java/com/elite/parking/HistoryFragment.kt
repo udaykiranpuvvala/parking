@@ -18,12 +18,13 @@ import com.elite.parking.Model.login.Vehicle
 import com.elite.parking.apis.ApiService
 import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.repository.VehicleRepository
+import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.VehicleViewModel
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HistoryFragment : Fragment() {
-
+    private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
     private lateinit var recyclerView: RecyclerView
     private lateinit var vehicleAdapter: VehicleAdapter
     private lateinit var vehicleViewModel: VehicleViewModel
@@ -40,9 +41,18 @@ class HistoryFragment : Fragment() {
         shimmerLayout = view.findViewById(R.id.shimmerLayout)
         recyclerView = view.findViewById(R.id.vehicleRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        userId = UserSession.uuid ?: "N/A"
+        sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
+        val loginResponse = sharedPreferencesHelper.getLoginResponse()
         val fabAddVehicle: FloatingActionButton=view.findViewById(R.id.fabAddVehicle)
 
+        loginResponse?.let {
+            val loginData = it.content.firstOrNull()
+            if (loginData != null) {
+                 userId = loginData.uuid ?: "N/A"
+            }
+        } ?: run {
+            Toast.makeText(context, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
+        }
         shimmerLayout.startShimmer()
 
         // Simulate data loading (e.g., API call)

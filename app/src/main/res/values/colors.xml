@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
+    <color name="green">#4CAF50</color>
     <color name="maroon">#800000</color>
     <color name="viewColor">#D0CFCF</color>
     <color name="colorSelectedHome">#FFFF00</color> <!-- Yellow for Home -->

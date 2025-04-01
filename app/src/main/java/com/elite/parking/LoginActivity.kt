@@ -14,10 +14,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.elite.parking.Model.UserSession
+import com.elite.parking.Model.login.LoginResponse
 import com.elite.parking.Model.login.User
 import com.elite.parking.loader.NetworkUtils
 import com.elite.parking.loader.ProgressBarUtility
+import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.LoginViewModel
+import com.google.gson.Gson
 
 class LoginActivity : AppCompatActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
@@ -29,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         progressBarUtility = ProgressBarUtility(this)
         progressBarUtility.setProgressBarColor(colorRes = R.color.maroon)
+        val sharedPreferencesHelper = SharedPreferencesHelper(this)
 
         val emailInput: EditText = findViewById(R.id.email_input)
         val passwordInput: EditText = findViewById(R.id.password_input)
@@ -53,6 +57,7 @@ class LoginActivity : AppCompatActivity() {
                         response?.let {
                             if (it.status == 1) {
                                 storeUserSession(it.content[0])
+                                sharedPreferencesHelper.storeLoginResponse(response)
                                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
@@ -69,7 +74,6 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
-
 
     }
     private fun storeUserSession(user: User) {

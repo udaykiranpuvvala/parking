@@ -1,5 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+    <style name="ToolBarDark" parent="@style/Theme.Design.Light.NoActionBar">
+        <!-- Set Action Bar text color -->
+        <item name="colorPrimary">@color/maroon</item>
+        <item name="colorPrimaryDark">@color/maroon</item>
+        <item name="colorAccent">@color/maroon</item>
+        <item name="android:textColorPrimary">@color/maroon</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="ToolBar" parent="@style/Theme.Design.Light">
         <!-- Set Action Bar text color -->
         <item name="colorPrimary">@color/maroon</item>

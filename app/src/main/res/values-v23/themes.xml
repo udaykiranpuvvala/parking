@@ -29,4 +29,12 @@
         <item name="android:titleTextColor">@color/white</item>
         <item name="android:subtitleTextColor">@color/white</item>
     </style>
+
+    <style name="ToolBarDark" parent="@style/Theme.Design.Light.NoActionBar">
+        <!-- Set Action Bar text color -->
+        <item name="colorPrimary">@color/maroon</item>
+        <item name="colorPrimaryDark">@color/maroon</item>
+        <item name="colorAccent">@color/maroon</item>
+        <item name="android:textColorPrimary">@color/maroon</item>
+    </style>
 </resources>
