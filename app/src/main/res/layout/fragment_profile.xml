@@ -2,21 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
     android:background="@android:color/white"
-    android:gravity="center">
+    android:orientation="vertical"
+    android:padding="24dp">
 
     <ImageView
         android:id="@+id/ivProfileImage"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_gravity="center"
-        android:contentDescription="Profile Image"
         android:layout_marginBottom="24dp"
-        android:scaleType="centerCrop"
         android:background="@drawable/round_image"
-        android:elevation="4dp"/>
+        android:contentDescription="Profile Image"
+        android:elevation="4dp"
+        android:scaleType="centerCrop" />
 
 
     <!-- Name of the Parking Boy -->
@@ -24,85 +23,184 @@
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sankar Raj"
-        android:textSize="22sp"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
-        android:fontFamily="sans-serif-medium"/>
+        android:fontFamily="sans-serif-medium"
+        android:text="Sankar Raj"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <!-- Role/Title -->
     <TextView
         android:id="@+id/tvdesignation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Parking Boy"
-        android:textSize="18sp"
-        android:textColor="@android:color/darker_gray"
         android:layout_gravity="center"
-        android:layout_marginBottom="24dp"
-        android:fontFamily="sans-serif-light"/>
+        android:layout_marginBottom="4dp"
+        android:fontFamily="sans-serif-light"
+        android:text="Parking Boy"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="+91 9234567890"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tvAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
         android:text="Address"
-        android:textSize="16sp"
         android:textColor="@android:color/black"
-        android:layout_marginBottom="24dp" />
+        android:textSize="16sp" />
 
-    <!-- Contact Information Section -->
-    <TextView
-        android:id="@+id/tvPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Phone: +1234567890"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp" />
 
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
         android:text="Email: sankar@example.com"
-        android:textSize="16sp"
         android:textColor="@android:color/black"
-        android:layout_marginBottom="24dp" />
-
-    <!-- Parking Stats Section -->
-    <TextView
-        android:id="@+id/tvParkedVehicles"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Vehicles Parked: 50"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp" />
+        android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/tvCompletedTasks"
+        android:id="@+id/tvVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Completed Tasks: 30"
-        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="Version : 1.1.1"
         android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp" />
+        android:textSize="16sp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/viewColor" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/baseline_password" />
 
-    <!-- Logout Button -->
+        <TextView
+            android:id="@+id/tvParkedVehicles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:text="Change Password"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/update" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:text="Check App Update"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/policy" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:text="Privacy Policy"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/logout" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:text="Logout"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout"
-        android:visibility="gone"
-        android:textColor="@android:color/white"
         android:background="@drawable/rounded_button"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:text="Logout"
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -2,7 +2,6 @@ package com.elite.parking
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -18,27 +17,28 @@ class MainActivity : AppCompatActivity() {
         // Set default fragment when the app starts
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment, ProfileFragment()) // Default Fragment
+                .replace(R.id.nav_host_fragment, HistoryFragment()) // Default Fragment
                 .commit()
         }
 
-        bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
+        // Using the new setOnItemSelectedListener API
+        bottomNavView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> {
-                    // Set Home to maroon and Profile to gray
-                    setBottomNavItemColors(R.id.nav_home, R.color.colorSelected) // maroon for home
-                    setBottomNavItemColors(R.id.nav_history, R.color.  colorSelected) // gray for profile
+                    // Set Home as selected and History as unselected
+                    setBottomNavItemIcons(R.id.nav_home, R.drawable.ic_home_selected, R.drawable.ic_home_unselected)
+                    setBottomNavItemIcons(R.id.nav_history, R.drawable.ic_history_unselected, R.drawable.ic_history_selected)
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment, ProfileFragment())
+                        .replace(R.id.nav_host_fragment, ProfileFragment()) // Home Fragment
                         .commit()
                     true
                 }
                 R.id.nav_history -> {
-                    // Set Profile to maroon and Home to gray
-                    setBottomNavItemColors(R.id.nav_history, R.color. colorSelected) // maroon for profile
-                    setBottomNavItemColors(R.id.nav_home, R.color.colorSelected) // gray for home
+                    // Set History as selected and Home as unselected
+                    setBottomNavItemIcons(R.id.nav_history, R.drawable.ic_history_selected, R.drawable.ic_history_unselected)
+                    setBottomNavItemIcons(R.id.nav_home, R.drawable.ic_home_unselected, R.drawable.ic_home_selected)
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment, HistoryFragment())
+                        .replace(R.id.nav_host_fragment, HistoryFragment()) // History Fragment
                         .commit()
                     true
                 }
@@ -46,18 +46,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Set default unselected color for all items
-        setBottomNavItemColors(R.id.nav_home, R.color.colorSelected) // gray for home initially
-        setBottomNavItemColors(R.id.nav_history, R.color.colorSelected) // gray for profile initially
+        // Initial state: Set default unselected icons for both items
+        setBottomNavItemIcons(R.id.nav_home, R.drawable.ic_home_selected, R.drawable.ic_home_unselected)
+        setBottomNavItemIcons(R.id.nav_history, R.drawable.ic_history_selected, R.drawable.ic_history_unselected)
     }
 
-    private fun setBottomNavItemColors(itemId: Int, colorResId: Int) {
-        val color = ContextCompat.getColor(this, colorResId)
+    private fun setBottomNavItemIcons(itemId: Int, selectedIconResId: Int, unselectedIconResId: Int) {
+        val item = bottomNavView.menu.findItem(itemId)
 
-        bottomNavView.menu.findItem(itemId)?.let { item ->
-            // Change the color of the icon and text for the selected/unselected item
-            item.icon?.setTint(color) // Set the icon color
-            bottomNavView.setItemTextColor(ContextCompat.getColorStateList(this, colorResId)) // Set text color
+        // Set the selected icon for selected item, unselected for the rest
+        if (item?.isChecked == true) {
+            item.icon = resources.getDrawable(selectedIconResId, theme)
+        } else {
+            item.icon = resources.getDrawable(unselectedIconResId, theme)
         }
     }
 }

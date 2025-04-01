@@ -4,10 +4,16 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
     <color name="maroon">#800000</color>
+    <color name="viewColor">#D0CFCF</color>
     <color name="colorSelectedHome">#FFFF00</color> <!-- Yellow for Home -->
     <color name="colorSelectedProfile">#FFFF00</color> <!-- Vrashwhite (light gray) for Profile -->
     <color name="colorUnselectedItem">#9E9E9E</color> <!-- Unselected color -->
     <color name="colorSelected">#800000</color> <!-- Maroon color for selected item -->
     <color name="colorUnselected">#808080</color> <!-- Gray color for unselected items -->
     <color name="shimmerColor">#EFEFEF</color> <!-- Light gray for shimmer -->
+
+    <color name="colorBackground">#FFFFFF</color> <!-- Custom background color for BottomNavigation -->
+    <color name="colorIconTint">#800000</color> <!-- Maroon color for icon -->
+    <color name="colorText">#800000</color> <!-- Maroon color for text -->
+    <color name="colorRipple">#800000</color> <!-- Maroon color for text -->
 </resources>

@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginTop="10dp"
             android:spacing="16dp">
 
             <!-- Vehicle Section -->
@@ -52,7 +53,9 @@
                         android:layout_height="wrap_content"
                         android:text="Vehicle Number"
                         android:textSize="14sp"
+                        android:layout_marginTop="10dp"
                         android:textStyle="bold"
+
                         android:textColor="@color/black"
                         android:layout_marginBottom="8dp"/>
 
@@ -68,9 +71,9 @@
                         android:background="@drawable/edit_text_bg"
                         android:textSize="16sp"
                         android:padding="10dp"
+                        android:inputType="textCapCharacters"
                         android:textColor="@color/black"
-                        android:layout_weight="0.9"
-                        android:inputType="text"/>
+                        android:layout_weight="0.9" />
                         <LinearLayout
                             android:id="@+id/lnrLytCamera"
                             android:layout_width="0dp"
@@ -136,9 +139,9 @@
 
                             <ImageButton
                                 android:id="@+id/btn_suv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/car_repair"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:src="@drawable/suv"
                                 android:background="?android:attr/selectableItemBackgroundBorderless"
                                 android:scaleType="centerInside"
                                 android:contentDescription="SUV"/>
@@ -162,9 +165,9 @@
 
                             <ImageButton
                                 android:id="@+id/btn_luxury"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/car_repair"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:src="@drawable/luxury"
                                 android:background="?android:attr/selectableItemBackgroundBorderless"
                                 android:scaleType="centerInside"
                                 android:contentDescription="Luxury"/>
@@ -188,9 +191,9 @@
 
                             <ImageButton
                                 android:id="@+id/btn_sedan"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/car_repair"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:src="@drawable/sedan"
                                 android:background="?android:attr/selectableItemBackgroundBorderless"
                                 android:scaleType="centerInside"
                                 android:contentDescription="Sedan"/>
@@ -212,9 +215,9 @@
                             android:orientation="vertical">
                             <ImageButton
                                 android:id="@+id/btn_hatchback"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/car_repair"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:src="@drawable/hatchback"
                                 android:background="?android:attr/selectableItemBackgroundBorderless"
                                 android:scaleType="centerInside"
                                 android:contentDescription="Hatchback"/>
@@ -232,9 +235,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2sp"
                         android:paddingTop="8sp"
-                        android:text="IN TIME"
+                        android:text="IN TIME(Hr &amp;&amp; Min)"
                         android:gravity="center"
                         android:textSize="12sp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -269,10 +273,10 @@
                         android:gravity="center"
                         android:background="@drawable/edit_text_bg"
                         android:focusableInTouchMode="true"
-                        android:inputType="number"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:padding="8sp"
+                        android:inputType="textCapCharacters"
                         android:textColor="#000000" />
 
 
@@ -281,7 +285,11 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Additional Sections -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -331,6 +339,7 @@
                 android:text="Vehicle Model"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 android:layout_marginBottom="8dp"/>
 
@@ -341,6 +350,7 @@
                 android:background="@drawable/edit_text_bg"
                 android:textSize="16sp"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:hint="Enter Vehicle Model"
                 android:textColor="@color/black"
                 android:inputType="textPersonName"/>
@@ -398,8 +408,11 @@
                 android:background="@drawable/edit_text_bg"
                 android:textSize="16sp"
                 android:padding="10dp"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/black"
                 android:inputType="textMultiLine"/>
+
+            </LinearLayout>
 
          <!--   <CheckBox
                 android:id="@+id/cb_senior_citizen"
@@ -426,5 +439,5 @@
         android:text="Submit"
         android:textColor="@color/white"
         android:backgroundTint="@color/maroon"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="4dp"/>
 </LinearLayout>

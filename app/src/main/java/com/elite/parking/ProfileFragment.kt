@@ -1,5 +1,6 @@
 package com.elite.parking
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -30,8 +31,10 @@ class ProfileFragment : Fragment() {
         val tvMobile: TextView = view.findViewById(R.id.tvPhone)
         val tvdesignation: TextView = view.findViewById(R.id.tvdesignation)
         val tvAddress: TextView = view.findViewById(R.id.tvAddress)
+        val version: TextView= view.findViewById(R.id.tvVersion)
 
-        // Set the values in the respective TextViews
+        val androidVersion = "Android Version: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})"
+        version.text = androidVersion
         tvName.text = name
         tvEmail.text = email
         tvMobile.text = mobile

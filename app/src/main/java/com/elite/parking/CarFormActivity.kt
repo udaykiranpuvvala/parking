@@ -401,11 +401,11 @@ class CarFormActivity : AppCompatActivity() {
             showToast("Parking Lot is required.")
             return false
         }
-        val model = vehicleModelEditText.text.toString().trim()
+        /*val model = vehicleModelEditText.text.toString().trim()
         if (model.isEmpty()) {
             showToast("Vehicle Model is required.")
             return false
-        }
+        }*/
         val notes = notesEditText.text.toString().trim()
         if (notes.isEmpty()) {
             showToast("Notes is required.")
