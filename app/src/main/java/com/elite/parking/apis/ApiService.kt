@@ -2,6 +2,7 @@ package com.elite.parking.apis
 
 import com.elite.parking.Model.VehicleCheckInRequest
 import com.elite.parking.Model.VehicleCheckInResponse
+import com.elite.parking.Model.VehicleDetailResponse
 import com.elite.parking.Model.login.LoginRequest
 import com.elite.parking.Model.login.LoginResponse
 import com.elite.parking.Model.login.VehicleResponse
@@ -18,6 +19,9 @@ interface ApiService {
 
     @GET("dservicevaletparkingapi/vehicleDetails/getByUserId/{userId}")
     fun getVehicleDetails(@Path("userId") userId: String): Call<VehicleResponse>
+
+    @GET("dservicevaletparkingapi/vehicleDetails/getById/{id}")
+     fun getVehicleDetailsById(@Path("id") vehicleId: String): Call<VehicleDetailResponse>
 
     @POST("dservicevaletparkingapi/vehicleDetails/checkIn")
     fun checkIn(@Body vehicleCheckInRequest: VehicleCheckInRequest): Call<VehicleCheckInResponse>
