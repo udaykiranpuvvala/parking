@@ -7,11 +7,14 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -24,6 +27,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -37,17 +41,21 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.LoginActivity
-import com.elite.parking.Model.ParkingSlot
 import com.elite.parking.Model.UserSession
 import com.elite.parking.Model.VehicleCheckInRequest
+import com.elite.parking.apis.ApiService.Companion.api
 import com.elite.parking.loader.NetworkUtils
+import com.elite.parking.repository.FileUploadRepository
 import com.elite.parking.storage.SharedPreferencesHelper
+import com.elite.parking.viewModel.FileUploadViewModel
+import com.elite.parking.viewModel.ParkingViewModel
 import com.elite.parking.viewModel.VehicleCheckInViewModel
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -63,6 +71,8 @@ class CarFormActivity : AppCompatActivity() {
         private const val CAMERA_PERMISSION_CODE = 101
     }
 
+    private val selectedImages = mutableListOf<Uri>()
+    private lateinit var fileUploadViewModel: FileUploadViewModel
     private val PICK_IMAGES_REQUEST = 1001
     private val TAKE_PHOTO_REQUEST = 1002
     private val REQUEST_CODE = 1003
@@ -91,10 +101,12 @@ class CarFormActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private var imageFile: File? = null
     private lateinit var userId: String
+    private lateinit var token: String
     private lateinit var parkingLotNumber: String
     private lateinit var dialog: AlertDialog
 
-    private lateinit var parkingSlotsAdapter: ParkingSlotsAdapter
+    private val parkingViewModel: ParkingViewModel by viewModels()
+    private lateinit var parkingAdapter: SectionedParkingAdapter
 
     private var lastSelectedLayout: LinearLayout? = null
     @RequiresApi(Build.VERSION_CODES.O)
@@ -111,12 +123,28 @@ class CarFormActivity : AppCompatActivity() {
         inDateEditText = findViewById(R.id.inDateEditText)
         parkingSlot = findViewById(R.id.parkingSlot)
         sharedPreferencesHelper = SharedPreferencesHelper(this)
-
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
+
+
+        val repository = FileUploadRepository(api)
+        fileUploadViewModel = ViewModelProvider(this, ViewModelFactory(repository))[FileUploadViewModel::class.java]
+
+
+        fileUploadViewModel.uploadResult.observe(this) { result ->
+            result.onSuccess { imageUrl ->
+                Toast.makeText(this, "Upload Successful!", Toast.LENGTH_SHORT).show()
+                selectedImages.add(Uri.parse(imageUrl))  // Add uploaded image URL
+                imageAdapter.notifyDataSetChanged()
+            }
+            result.onFailure {
+                Toast.makeText(this, "Upload Failed: ${it.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
         loginResponse?.let {
             val loginData = it.content.firstOrNull()
             if (loginData != null) {
                 userId = loginData.uuid ?: "N/A"
+                token = loginData.token ?: "N/A"
             }
         } ?: run {
             Toast.makeText(this, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
@@ -171,7 +199,7 @@ class CarFormActivity : AppCompatActivity() {
                         modifiedDate = "2025-03-28",
                         status = 1
                     )
-                    vehicleCheckInViewModel.checkIn(vehicleCheckInRequest)
+                    vehicleCheckInViewModel.checkIn(token,vehicleCheckInRequest)
                 }
             }else{
                 Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show()
@@ -198,7 +226,7 @@ class CarFormActivity : AppCompatActivity() {
         parkingSlot.setOnClickListener {
             showParkingDialog()
         }
-        btnUploadPhotos.setOnClickListener { showPopupMenu(it) }
+        btnUploadPhotos.setOnClickListener { checkCameraPermission() }
 
         llSuv.setOnClickListener {
             setSelected(llSuv)
@@ -253,60 +281,6 @@ class CarFormActivity : AppCompatActivity() {
             timePickerDialog.show()
         }
     }
-
-    private fun showPopupMenu(view: View) {
-        val popupMenu = PopupMenu(this, view)
-        popupMenu.menuInflater.inflate(R.menu.menu_image_picker, popupMenu.menu)
-        popupMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menu_camera -> checkCameraPermission()
-                R.id.menu_gallery -> openImagePicker()
-            }
-            true
-        }
-        popupMenu.show()
-    }
-
-    // Handle Camera Permission & Open Camera
-    private fun checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            openCamera()
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.CAMERA),
-                CAMERA_PERMISSION_CODE
-            )
-        }
-    }
-
-    private val cameraLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-//            val photo = result.data?.extras?.get("data") as Bitmap
-                //imageView.setImageBitmap(photo)
-//            selectedImageUris.add()
-                imageUri?.let {
-                    selectedImageUris.add(it)
-                } ?: Toast.makeText(this, "Failed to get image URI", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    private fun openCamera() {
-        try {
-            imageFile = createImageFile()
-            imageUri = FileProvider.getUriForFile(this, "$packageName.provider", imageFile!!)
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-            cameraLauncher.launch(intent)
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Toast.makeText(this, "Failed to create file", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun setSelected(selectedLayout: LinearLayout) {
         // If the selected item is already selected, do nothing
         if (selectedLayout == lastSelectedLayout) return
@@ -314,64 +288,6 @@ class CarFormActivity : AppCompatActivity() {
         selectedLayout.setBackgroundResource(R.drawable.selector_bg)  // Set selected state
         lastSelectedLayout = selectedLayout
     }
-
-    private fun openImagePicker() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // Allow multiple selections
-        startActivityForResult(intent, PICK_IMAGES_REQUEST)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                // Handle image picker result (gallery)
-                PICK_IMAGES_REQUEST -> {
-                    if (data != null) {
-                        if (data.clipData != null) {
-                            // Multiple images selected
-                            val count = data.clipData!!.itemCount
-                            for (i in 0 until count) {
-                                val imageUri = data.clipData!!.getItemAt(i).uri
-                                selectedImageUris.add(imageUri)
-                            }
-                        } else if (data.data != null) {
-                            // Single image selected
-                            selectedImageUris.add(data.data!!)
-                        }
-                    }
-                }
-
-                // Handle image from camera capture
-                /*TAKE_PHOTO_REQUEST -> {
-                    val photoUri = data?.data
-                    if (photoUri != null) {
-                        selectedImageUris.add(photoUri)
-                    }
-                }*/
-                REQUEST_CODE -> {
-
-                    val resultValIntent = data?.getStringExtra("key")
-                    if (resultValIntent != null) {
-                        vehicleNoEditText.setText("" + resultValIntent)
-                    } else {
-                        Toast.makeText(this, "Number is null", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            imageAdapter.notifyDataSetChanged()  // Notify the adapter that data has changed
-        }
-    }
-
-    private fun createImageFile(): File {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile("IMG_$timeStamp", ".jpg", storageDir).apply {
-            deleteOnExit() // Auto-delete if needed
-        }
-    }
-
     private fun validateForm(): Boolean {
         // Validate Vehicle Number
         val vehicleNo = vehicleNoEditText.text.toString().trim()
@@ -421,78 +337,157 @@ class CarFormActivity : AppCompatActivity() {
     }
 
     private fun showParkingDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_parking_slots, null)
-        val dialogBuilder = AlertDialog.Builder(this)
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_parking_slots, null)
+        val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .setCancelable(true)
+            .create()
 
-        // Initialize RecyclerView
-        val recyclerViewParking: RecyclerView = dialogView.findViewById(R.id.recyclerViewParking)
+        val recyclerView: RecyclerView = dialogView.findViewById(R.id.recyclerViewParking)
+        val closeButton : ImageView = dialogView.findViewById(R.id.close_button)
 
-        recyclerViewParking.layoutManager = GridLayoutManager(this, 3)
-
-        val parkingSlotsAdapter = ParkingSlotsAdapter(
-            this,
-            getAllParkingSlots(),
-            object : OnParkingSlotSelectedListener {
-                override fun onParkingSlotSelected(parkingSlot: ParkingSlot) {
-                    parkingLotNumber =parkingSlot.name
-                    Toast.makeText(this@CarFormActivity, "You Selected Slot is : ${parkingSlot.name}", Toast.LENGTH_SHORT).show()
-                }
-            },
-            dialogBuilder.create()  // Pass the dialog reference to the adapter
-        )
-
-        recyclerViewParking.adapter = parkingSlotsAdapter
-        val dialog = dialogBuilder.create()
-
-        val closeButton: ImageView = dialogView.findViewById(R.id.close_button)
         closeButton.setOnClickListener {
             dialog.dismiss()
         }
+        //recyclerView.layoutManager = GridLayoutManager(this,3)
+
+
+        recyclerView.layoutManager = GridLayoutManager(this, 3).apply {
+            spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return when (parkingAdapter.getItemViewType(position)) {
+                        SectionedParkingAdapter.TYPE_HEADER -> 3 // Headers take full row
+                        else -> 1 // Items take 1 column
+                    }
+                }
+            }
+        }
+
+        parkingAdapter = SectionedParkingAdapter(this, emptyList()) { selectedSlot ->
+            parkingLotNumber= "Floor: ${selectedSlot.floorNo}  No : ${selectedSlot.parkingNo}"
+            Toast.makeText(this, "Selected Slot:  ${selectedSlot.floorNo}  :  ${selectedSlot.parkingNo}", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        recyclerView.adapter = parkingAdapter
+
+        val authToken = token
+        parkingViewModel.fetchParkingSlots(authToken)
+
+        parkingViewModel.parkingSlots.observe(this) { slots ->
+            parkingAdapter.updateData(slots)
+        }
+
         dialog.show()
     }
 
 
-
-
-
-    // Combine parking slots from all areas into one list
-    private fun getAllParkingSlots(): List<ParkingSlot> {
-        return getParkingSlotsForBasement1() + getParkingSlotsForBasement2() +
-                getParkingSlotsForBasement3() + getParkingSlotsForBasement4()
+    // Handle Camera Permission & Open Camera
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            openCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                CAMERA_PERMISSION_CODE
+            )
+        }
     }
 
-    // Sample functions to get parking slots for each basement
-    private fun getParkingSlotsForBasement1(): List<ParkingSlot> {
-        return listOf(
-            ParkingSlot("B1-Slot 1", true),
-            ParkingSlot("B1-Slot 2", false),
-            ParkingSlot("B1-Slot 3", true)
-        )
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                imageUri?.let {
+                    selectedImageUris.add(it)
+                } ?: Toast.makeText(this, "Failed to get image URI", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private fun openCamera() {
+        try {
+            imageFile = createImageFile()
+            imageUri = FileProvider.getUriForFile(this, "$packageName.provider", imageFile!!)
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+            cameraLauncher.launch(intent)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(this, "Failed to create file", Toast.LENGTH_SHORT).show()
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                // Handle image picker result (gallery)
+                PICK_IMAGES_REQUEST -> {
+                    if (data != null) {
+                        if (data.clipData != null) {
+                            // Multiple images selected
+                            val count = data.clipData!!.itemCount
+                            for (i in 0 until count) {
+                                val imageUri = data.clipData!!.getItemAt(i).uri
+                                selectedImages.add(data.clipData!!.getItemAt(i).uri)
+                                val bitmapFile = convertUriToFile(imageUri)  // Convert URI to file
+                                selectedImageUris.add(imageUri)
+                                uploadCapturedImage()
+                            }
+                        } else if (data.data != null) {
+                            // Single image selected
+                            selectedImageUris.add(data.data!!)
+                            val imageUri = data.data!!
+                            selectedImages.add(imageUri)
+                            val bitmapFile = convertUriToFile(imageUri)
+                            uploadCapturedImage()
+                        }
+                    }
+                }
+
+                REQUEST_CODE -> {
+
+                    val resultValIntent = data?.getStringExtra("key")
+                    if (resultValIntent != null) {
+                        vehicleNoEditText.setText("" + resultValIntent)
+                    } else {
+                        Toast.makeText(this, "Number is null", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            imageAdapter.notifyDataSetChanged()  // Notify the adapter that data has changed
+        }
+    }
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("IMG_$timeStamp", ".jpg", storageDir).apply {
+            deleteOnExit() // Auto-delete if needed
+        }
+    }
+    private fun saveBitmapToFile(bitmap: Bitmap): File {
+        val file = File(cacheDir, "captured_image.png")
+        val outputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+        return file
     }
 
-    private fun getParkingSlotsForBasement2(): List<ParkingSlot> {
-        return listOf(
-            ParkingSlot("B2-Slot 1", false),
-            ParkingSlot("B2-Slot 2", true),
-            ParkingSlot("B2-Slot 3", false)
-        )
+    private fun convertUriToFile(imageUri: Uri): File {
+        val inputStream = contentResolver.openInputStream(imageUri)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+
+        // Save the bitmap to a file
+        return saveBitmapToFile(bitmap)
     }
 
-    private fun getParkingSlotsForBasement3(): List<ParkingSlot> {
-        return listOf(
-            ParkingSlot("B3-Slot 1", true),
-            ParkingSlot("B3-Slot 2", false)
-        )
+    private fun uploadCapturedImage() {
+        imageFile?.let { file ->
+            val token = token
+            fileUploadViewModel.uploadImage(token, file)
+        } ?: Toast.makeText(this, "No image to upload", Toast.LENGTH_SHORT).show()
     }
-
-    private fun getParkingSlotsForBasement4(): List<ParkingSlot> {
-        return listOf(
-            ParkingSlot("B4-Slot 1", true),
-            ParkingSlot("B4-Slot 2", false)
-        )
-    }
-
-
 }

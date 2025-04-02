@@ -8,7 +8,6 @@ import com.elite.parking.Model.VehicleCheckInRequest
 import com.elite.parking.Model.VehicleCheckInResponse
 import com.elite.parking.Resource
 import com.elite.parking.apis.ApiService
-import com.elite.parking.repository.VehicleCheckInRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,11 +17,11 @@ class VehicleCheckInViewModel : ViewModel() {
     private val _vehicleCheckInResponse = MutableLiveData<Resource<VehicleCheckInResponse>>()
     val vehicleCheckInResponse: LiveData<Resource<VehicleCheckInResponse>> get() = _vehicleCheckInResponse
 
-    fun checkIn(vehicleCheckInRequest: VehicleCheckInRequest) {
+    fun checkIn(authToken: String, vehicleCheckInRequest: VehicleCheckInRequest) {
         _vehicleCheckInResponse.value = Resource.Loading()
 
         // Make the API call
-        ApiService.api.checkIn(vehicleCheckInRequest).enqueue(object : Callback<VehicleCheckInResponse> {
+        ApiService.api.checkIn("Bearer $authToken",vehicleCheckInRequest).enqueue(object : Callback<VehicleCheckInResponse> {
             override fun onResponse(
                 call: Call<VehicleCheckInResponse>,
                 response: Response<VehicleCheckInResponse>

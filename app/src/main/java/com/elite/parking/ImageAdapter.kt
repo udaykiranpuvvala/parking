@@ -23,10 +23,17 @@ class ImageAdapter(private val context: Context, private val imageUris: MutableL
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val uri = imageUris[position]
-        holder.imageView.setImageURI(uri)  // Set the image URI to the ImageView
+        Glide.with(context)
+            .load(imageUris[position])
+            .placeholder(R.drawable.car3)
+            .into(holder.imageView)
     }
 
     override fun getItemCount(): Int {
         return imageUris.size
     }
+  /*  fun updateImages(newUri: String) {
+        imageUris.add(newUri)
+        notifyDataSetChanged()
+    }*/
 }

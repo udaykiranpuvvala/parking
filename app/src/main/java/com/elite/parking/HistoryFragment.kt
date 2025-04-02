@@ -32,6 +32,7 @@ class HistoryFragment : Fragment() {
     private lateinit var vehicleAdapter: VehicleAdapter
     private lateinit var vehicleViewModel: VehicleViewModel
     private lateinit var userId: String
+    private lateinit var authToken: String
     private lateinit var shimmerLayout: ShimmerFrameLayout
 
     private lateinit var childFab1: FloatingActionButton
@@ -49,7 +50,7 @@ class HistoryFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
-        val fabAddVehicle: FloatingActionButton=view.findViewById(R.id.fabAddVehicle)
+        val fabAddVehicle: FloatingActionButton = view.findViewById(R.id.fabAddVehicle)
         childFab1 = view.findViewById(R.id.childFab1)
         childFab2 = view.findViewById(R.id.childFab2)
         fabAddVehicle.setOnClickListener {
@@ -58,7 +59,8 @@ class HistoryFragment : Fragment() {
         loginResponse?.let {
             val loginData = it.content.firstOrNull()
             if (loginData != null) {
-                 userId = loginData.uuid ?: "N/A"
+                userId = loginData.uuid ?: "N/A"
+                authToken = loginData.token ?: "N/A"
             }
         } ?: run {
             Toast.makeText(context, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
@@ -90,11 +92,14 @@ class HistoryFragment : Fragment() {
         // Initialize ViewModel
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
         val repository = VehicleRepository(apiService)
-        vehicleViewModel = ViewModelProvider(this, VehicleViewModelFactory(repository)).get(VehicleViewModel::class.java)
+        vehicleViewModel = ViewModelProvider(
+            this,
+            VehicleViewModelFactory(repository)
+        ).get(VehicleViewModel::class.java)
 
         // Observe LiveData for vehicle list
         vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->
-            vehicleAdapter = VehicleAdapter(requireActivity(),vehicleList)
+            vehicleAdapter = VehicleAdapter(requireActivity(), vehicleList)
             recyclerView.adapter = vehicleAdapter
         })
 
@@ -110,7 +115,7 @@ class HistoryFragment : Fragment() {
         })
 
         // Fetch vehicle details
-        vehicleViewModel.fetchVehicleDetails(userId)
+        vehicleViewModel.fetchVehicleDetails(userId, authToken)
     }
 
     override fun onResume() {

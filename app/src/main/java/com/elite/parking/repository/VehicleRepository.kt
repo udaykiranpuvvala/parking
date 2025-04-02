@@ -5,7 +5,7 @@ import com.elite.parking.apis.ApiService
 import retrofit2.Call
 
 class VehicleRepository(private val apiService: ApiService) {
-    fun getVehicleDetails(userId: String): Call<VehicleResponse> {
-        return apiService.getVehicleDetails(userId)
+    fun getVehicleDetails(userId: String,authToken : String): Call<VehicleResponse> {
+        return apiService.getVehicleDetails(userId,"Bearer $authToken")
     }
 }

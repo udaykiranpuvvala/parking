@@ -21,10 +21,10 @@ class VehicleViewModel(private val repository: VehicleRepository) : ViewModel() 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    fun fetchVehicleDetails(userId: String) {
+    fun fetchVehicleDetails(userId: String,authToken: String) {
         _isLoading.value = true
 
-        repository.getVehicleDetails(userId).enqueue(object : Callback<VehicleResponse> {
+        repository.getVehicleDetails(userId, authToken).enqueue(object : Callback<VehicleResponse> {
             override fun onResponse(call: Call<VehicleResponse>, response: Response<VehicleResponse>) {
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
