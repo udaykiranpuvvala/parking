@@ -145,7 +145,12 @@ class CarFormActivity : AppCompatActivity() {
         val currentTime = LocalTime.now()
         val formatter = DateTimeFormatter.ofPattern("HH:mm")
         val formattedTime = currentTime.format(formatter)
-        inDateEditText.setText(LocalDate.now().toString())
+
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val formattedDate = dateFormat.format(currentDate)
+
+        inDateEditText.setText(formattedDate.toString())
         inTimeEditText.setText(formattedTime.toString())
 
 

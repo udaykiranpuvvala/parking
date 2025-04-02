@@ -38,7 +38,7 @@
                 android:spacing="16dp">
 
                 <!-- Vehicle Section -->
-                <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -55,18 +55,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:layout_marginBottom="8dp"
                             android:text="Vehicle Number"
-                            android:textColor="@color/black"
                             android:textSize="12sp"
-                            android:textStyle="bold" />
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="8dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:weightSum="1">
-
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/vehicleNoEditText"
                                 android:layout_width="0dp"
@@ -251,7 +249,7 @@
                                     android:layout_marginBottom="2sp"
                                     android:gravity="center"
                                     android:paddingTop="8sp"
-                                    android:text="IN TIME"
+                                    android:text="In Time"
                                     android:textColor="@color/black"
                                     android:textSize="12sp"
                                     android:textStyle="bold" />
@@ -304,7 +302,6 @@
                                     android:textStyle="bold" />
                             </LinearLayout>
                         </LinearLayout>
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -342,6 +339,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:orientation="vertical">
 
 
@@ -386,6 +384,8 @@
                         android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
                         android:textSize="16sp"
                         android:visibility="gone" />
 

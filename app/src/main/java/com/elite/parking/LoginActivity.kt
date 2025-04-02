@@ -52,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
                 if (NetworkUtils.isNetworkAvailable(this)) {
                     hideKeyboard()
                     progressBarUtility.show(parentLayout)
+//                    loginViewModel.login("9492445605", "12345", 1)
                     loginViewModel.login(email, password, 1)
                     loginViewModel.apiResponse.observe(this, Observer { response ->
                         response?.let {
