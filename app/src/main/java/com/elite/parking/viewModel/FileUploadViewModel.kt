@@ -15,7 +15,9 @@ class FileUploadViewModel(private val repository: FileUploadRepository) : ViewMo
     val uploadResult: LiveData<Result<String>> = _uploadResult
 
     fun uploadImage(token: String, file: File) {
+        Log.e("Response Body","Step 2 uploadImage()")
         viewModelScope.launch {
+            Log.e("Response Body","Step 3 launch")
             val result = repository.uploadImage(token, file)
             _uploadResult.postValue(result)
         }

@@ -2,11 +2,10 @@ package com.elite.parking
 
 import android.app.Activity
 import android.Manifest
-import android.R.attr.fragment
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -14,16 +13,12 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,7 +26,6 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -40,8 +34,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.elite.parking.LoginActivity
-import com.elite.parking.Model.UserSession
 import com.elite.parking.Model.VehicleCheckInRequest
 import com.elite.parking.apis.ApiService.Companion.api
 import com.elite.parking.loader.NetworkUtils
@@ -51,14 +43,11 @@ import com.elite.parking.viewModel.FileUploadViewModel
 import com.elite.parking.viewModel.ParkingViewModel
 import com.elite.parking.viewModel.VehicleCheckInViewModel
 import com.google.android.material.textfield.TextInputEditText
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -134,6 +123,9 @@ class CarFormActivity : AppCompatActivity() {
             result.onSuccess { imageUrl ->
                 Toast.makeText(this, "Upload Successful!", Toast.LENGTH_SHORT).show()
                 selectedImages.add(Uri.parse(imageUrl))  // Add uploaded image URL
+                selectedImages.forEach {
+                    Log.e("Images","Added Images"+imageUrl)
+                }
                 imageAdapter.notifyDataSetChanged()
             }
             result.onFailure {
@@ -401,7 +393,8 @@ class CarFormActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 imageUri?.let {
-                    selectedImageUris.add(it)
+//                    selectedImageUris.add(it)
+                    uploadCapturedImage(it)
                 } ?: Toast.makeText(this, "Failed to get image URI", Toast.LENGTH_SHORT).show()
             }
         }
@@ -433,15 +426,17 @@ class CarFormActivity : AppCompatActivity() {
                                 selectedImages.add(data.clipData!!.getItemAt(i).uri)
                                 val bitmapFile = convertUriToFile(imageUri)  // Convert URI to file
                                 selectedImageUris.add(imageUri)
-                                uploadCapturedImage()
+                                showToast("Picker Image 1")
+//                                uploadCapturedImage()
                             }
                         } else if (data.data != null) {
+                            showToast("Picker Image 2")
                             // Single image selected
                             selectedImageUris.add(data.data!!)
                             val imageUri = data.data!!
                             selectedImages.add(imageUri)
                             val bitmapFile = convertUriToFile(imageUri)
-                            uploadCapturedImage()
+//                            uploadCapturedImage()
                         }
                     }
                 }
@@ -484,10 +479,37 @@ class CarFormActivity : AppCompatActivity() {
         return saveBitmapToFile(bitmap)
     }
 
-    private fun uploadCapturedImage() {
+    private fun uploadCapturedImage(uri: Uri) {
+        Log.e("Response Body","Step 1 uploadCapturedImage()")
         imageFile?.let { file ->
             val token = token
-            fileUploadViewModel.uploadImage(token, file)
+            val fileFromUriC = uriToFile(this,uri);
+            if (fileFromUriC != null) {
+                fileUploadViewModel.uploadImage(token, fileFromUriC)
+            }else{
+                showToast("Image is issue")
+            }
         } ?: Toast.makeText(this, "No image to upload", Toast.LENGTH_SHORT).show()
+    }
+    fun uriToFile(context: Context, uri: Uri): File? {
+        val contentResolver = context.contentResolver
+        val fileName = "temp_image_${System.currentTimeMillis()}.jpg" // Unique name
+        Log.e("Upload Image","Filename : $fileName")
+        val file = File(context.cacheDir, fileName) // Store in cache directory
+
+        try {
+            val inputStream: InputStream? = contentResolver.openInputStream(uri)
+            val outputStream = FileOutputStream(file)
+
+            inputStream?.use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output) // Copy content
+                }
+            }
+            return file
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
     }
 }

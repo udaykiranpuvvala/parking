@@ -24,7 +24,7 @@
         android:id="@+id/captureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorSelected"
+        android:background="@color/maroon"
         android:padding="10dp"
         android:text="Capture Number Plate"
         android:textColor="@color/white" />
@@ -54,7 +54,7 @@
             android:layout_marginTop="10dp"
             android:src="@android:drawable/ic_menu_rotate"
             android:text="Refresh"
-            android:tint="@color/colorSelected" />
+            android:tint="@color/maroon" />
 
     </LinearLayout>
 
@@ -63,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_margin="20dp"
-        android:background="@color/colorSelected"
+        android:background="@color/maroon"
         android:padding="8dp"
         android:text="Submit Number Plate"
         android:textAllCaps="false"
