@@ -14,16 +14,16 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ApiService {
-    @POST("dservicevaletparkingapi/auth/user/loginByMobilePassword")
+    @POST("valetparkingapi/auth/user/loginByMobilePassword")
     fun loginByMobilePassword(@Body request: LoginRequest): Call<LoginResponse>
 
-    @GET("dservicevaletparkingapi/vehicleDetails/getByUserId/{userId}")
+    @GET("valetparkingapi/vehicleDetails/getByUserId/{userId}")
     fun getVehicleDetails(@Path("userId") userId: String): Call<VehicleResponse>
 
-    @GET("dservicevaletparkingapi/vehicleDetails/getById/{id}")
+    @GET("valetparkingapi/vehicleDetails/getById/{id}")
      fun getVehicleDetailsById(@Path("id") vehicleId: String): Call<VehicleDetailResponse>
 
-    @POST("dservicevaletparkingapi/vehicleDetails/checkIn")
+    @POST("valetparkingapi/vehicleDetails/checkIn")
     fun checkIn(@Body vehicleCheckInRequest: VehicleCheckInRequest): Call<VehicleCheckInResponse>
 
     companion object {
