@@ -9,12 +9,27 @@
     <color name="colorSelectedHome">#FFFF00</color> <!-- Yellow for Home -->
     <color name="colorSelectedProfile">#FFFF00</color> <!-- Vrashwhite (light gray) for Profile -->
     <color name="colorUnselectedItem">#9E9E9E</color> <!-- Unselected color -->
-    <color name="colorSelected">#800000</color> <!-- Maroon color for selected item -->
-    <color name="colorUnselected">#808080</color> <!-- Gray color for unselected items -->
+<!--    <color name="colorSelected">#800000</color> &lt;!&ndash; Maroon color for selected item &ndash;&gt;-->
+<!--    <color name="colorUnselected">#808080</color> &lt;!&ndash; Gray color for unselected items &ndash;&gt;-->
     <color name="shimmerColor">#EFEFEF</color> <!-- Light gray for shimmer -->
 
-    <color name="colorBackground">#FFFFFF</color> <!-- Custom background color for BottomNavigation -->
-    <color name="colorIconTint">#800000</color> <!-- Maroon color for icon -->
-    <color name="colorText">#800000</color> <!-- Maroon color for text -->
-    <color name="colorRipple">#800000</color> <!-- Maroon color for text -->
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorIconTint">#800000</color>
+    <color name="colorText">#800000</color>
+    <color name="colorRipple">#800000</color>
+
+<!--    <color name="colorIconTint">#B0BEC5</color> &lt;!&ndash; Light Gray for unselected icons &ndash;&gt;-->
+<!--    <color name="colorText">#FFFFFF</color> &lt;!&ndash; White for text &ndash;&gt;-->
+<!--    <color name="colorBackground">#212121</color> &lt;!&ndash; Dark Background Color &ndash;&gt;-->
+<!--    <color name="colorRipple">#FF4081</color> &lt;!&ndash; Ripple effect color &ndash;&gt;-->
+<!--    <color name="colorAccent">#00C853</color> &lt;!&ndash; Accent color for active item &ndash;&gt;-->
+
+
+    <!-- Selected Colors -->
+    <color name="colorSelected">#FFFFFF</color> <!-- Green for selected icons -->
+    <color name="colorSelectedText">#FFFFFF</color> <!-- Green for selected text -->
+
+    <!-- Unselected Colors -->
+    <color name="colorUnselected">#000000</color> <!-- Light Gray for unselected icons -->
+    <color name="colorUnselectedText">#000000</color> <!-- Light Gray for unselected text -->
 </resources>

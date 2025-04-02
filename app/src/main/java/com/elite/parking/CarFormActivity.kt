@@ -18,12 +18,14 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
@@ -70,8 +72,8 @@ class CarFormActivity : AppCompatActivity() {
     private var selectedVehicleType: String? = null
     private lateinit var inTimeEditText: TextView
     private lateinit var inDateEditText: TextView
+    private lateinit var parkingSlot: Button
     private lateinit var hookNumberEditText: TextInputEditText
-    private lateinit var spinnerParkingLot: Spinner
     private lateinit var notesEditText: TextInputEditText
     private lateinit var vehicleModelEditText: TextInputEditText
     private lateinit var submitButton: Button
@@ -89,6 +91,8 @@ class CarFormActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private var imageFile: File? = null
     private lateinit var userId: String
+    private lateinit var parkingLotNumber: String
+    private lateinit var dialog: AlertDialog
 
     private lateinit var parkingSlotsAdapter: ParkingSlotsAdapter
 
@@ -101,12 +105,13 @@ class CarFormActivity : AppCompatActivity() {
         vehicleNoEditText = findViewById(R.id.vehicleNoEditText)
         inTimeEditText = findViewById(R.id.inTimeEditText)
         hookNumberEditText = findViewById(R.id.hookNumber)
-        spinnerParkingLot = findViewById(R.id.spinner_parkinglot)
         notesEditText = findViewById(R.id.notesEditText)
         submitButton = findViewById(R.id.submitButton)
         vehicleModelEditText = findViewById(R.id.et_vehicleModel)
         inDateEditText = findViewById(R.id.inDateEditText)
+        parkingSlot = findViewById(R.id.parkingSlot)
         sharedPreferencesHelper = SharedPreferencesHelper(this)
+
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
         loginResponse?.let {
             val loginData = it.content.firstOrNull()
@@ -132,7 +137,7 @@ class CarFormActivity : AppCompatActivity() {
         recyclerView.adapter = imageAdapter
 
         val btnUploadPhotos: Button = findViewById(R.id.btn_upload_photos)
-        val parkingLotSpinner: Spinner = findViewById(R.id.spinner_parkinglot)
+       // val parkingLotSpinner: Spinner = findViewById(R.id.spinner_parkinglot)
         val btnSubmit: Button = findViewById(R.id.submitButton)
         // Initialize the ViewModel
         vehicleCheckInViewModel = ViewModelProvider(this).get(VehicleCheckInViewModel::class.java)
@@ -149,7 +154,7 @@ class CarFormActivity : AppCompatActivity() {
                 if (validateForm()) {
                     Toast.makeText(this, "Form is valid! Submitting...", Toast.LENGTH_SHORT).show()
                     val vehicleCheckInRequest = VehicleCheckInRequest(
-                        parkingId = parkingLotSpinner.selectedItem.toString(),
+                        parkingId = parkingLotNumber,
                         userId = userId,
                         vehicleNo = vehicleNoEditText.text.toString(),
                         vehicleType = selectedVehicleType.toString(),
@@ -185,29 +190,9 @@ class CarFormActivity : AppCompatActivity() {
             }
         })
 
-
-        // Initialize RecyclerView
-        recyclerViewParking.layoutManager = GridLayoutManager(this,3)
-        parkingSlotsAdapter = ParkingSlotsAdapter(this,emptyList())
-        recyclerViewParking.adapter = parkingSlotsAdapter
-
-        val parkingAreas = listOf("Basement 1", "Basement 2", "Basement 3", "Basement 4")
-        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, parkingAreas)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerParkingLot.adapter = spinnerAdapter
-
-        spinnerParkingLot.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                // Load the parking slots based on selected parking area
-                val selectedArea = parkingAreas[position]
-                    loadParkingSlots(selectedArea)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // No action needed
-            }
+        parkingSlot.setOnClickListener {
+            showParkingDialog()
         }
-
         btnUploadPhotos.setOnClickListener { showPopupMenu(it) }
 
         llSuv.setOnClickListener {
@@ -405,7 +390,7 @@ class CarFormActivity : AppCompatActivity() {
         }
 
 
-        if (spinnerParkingLot.selectedItem == null) {
+        if (parkingLotNumber.isEmpty()) {
             showToast("Parking Lot is required.")
             return false
         }
@@ -426,23 +411,51 @@ class CarFormActivity : AppCompatActivity() {
         }
         return true
     }
-
-    // Helper method to show a toast message
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun loadParkingSlots(parkingArea: String) {
-        val parkingSlots = when (parkingArea) {
-            "Basement 1" -> getParkingSlotsForBasement1()
-            "Basement 2" -> getParkingSlotsForBasement2()
-            "Basement 3" -> getParkingSlotsForBasement3()
-            "Basement 4" -> getParkingSlotsForBasement4()
-            else -> emptyList()
-        }
-        // Update RecyclerView with the new list
-        parkingSlotsAdapter = ParkingSlotsAdapter(this,parkingSlots)
+    private fun showParkingDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_parking_slots, null)
+        val dialogBuilder = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(true)
+
+        // Initialize RecyclerView
+        val recyclerViewParking: RecyclerView = dialogView.findViewById(R.id.recyclerViewParking)
+
+        recyclerViewParking.layoutManager = GridLayoutManager(this, 3)
+
+        val parkingSlotsAdapter = ParkingSlotsAdapter(
+            this,
+            getAllParkingSlots(),
+            object : OnParkingSlotSelectedListener {
+                override fun onParkingSlotSelected(parkingSlot: ParkingSlot) {
+                    parkingLotNumber =parkingSlot.name
+                    Toast.makeText(this@CarFormActivity, "You Selected Slot is : ${parkingSlot.name}", Toast.LENGTH_SHORT).show()
+                }
+            },
+            dialogBuilder.create()  // Pass the dialog reference to the adapter
+        )
+
         recyclerViewParking.adapter = parkingSlotsAdapter
+        val dialog = dialogBuilder.create()
+
+        val closeButton: ImageView = dialogView.findViewById(R.id.close_button)
+        closeButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+
+
+
+
+    // Combine parking slots from all areas into one list
+    private fun getAllParkingSlots(): List<ParkingSlot> {
+        return getParkingSlotsForBasement1() + getParkingSlotsForBasement2() +
+                getParkingSlotsForBasement3() + getParkingSlotsForBasement4()
     }
 
     // Sample functions to get parking slots for each basement
@@ -450,47 +463,31 @@ class CarFormActivity : AppCompatActivity() {
         return listOf(
             ParkingSlot("B1-Slot 1", true),
             ParkingSlot("B1-Slot 2", false),
-            ParkingSlot("B1-Slot 3", true),
-                    ParkingSlot("B1-Slot 4", true),
-        ParkingSlot("B1-Slot 5", false),
-        ParkingSlot("B1-Slot 6", true)
-
+            ParkingSlot("B1-Slot 3", true)
         )
     }
 
     private fun getParkingSlotsForBasement2(): List<ParkingSlot> {
         return listOf(
             ParkingSlot("B2-Slot 1", false),
-            ParkingSlot("B2-Slot 2", false),
-            ParkingSlot("B2-Slot 3", true),
-            ParkingSlot("B2-Slot 4", false),
-            ParkingSlot("B2-Slot 5", true),
-            ParkingSlot("B2-Slot 6", true),
-            ParkingSlot("B2-Slot 7", false),
-            ParkingSlot("B2-Slot 8", false),
-            ParkingSlot("B2-Slot 9", true),
-            ParkingSlot("B2-Slot 10", false),
-            ParkingSlot("B2-Slot 11", false),
-            ParkingSlot("B2-Slot 12", true)
+            ParkingSlot("B2-Slot 2", true),
+            ParkingSlot("B2-Slot 3", false)
         )
     }
 
     private fun getParkingSlotsForBasement3(): List<ParkingSlot> {
         return listOf(
             ParkingSlot("B3-Slot 1", true),
-            ParkingSlot("B3-Slot 2", true),
-            ParkingSlot("B3-Slot 3", false)
+            ParkingSlot("B3-Slot 2", false)
         )
     }
 
     private fun getParkingSlotsForBasement4(): List<ParkingSlot> {
         return listOf(
             ParkingSlot("B4-Slot 1", true),
-            ParkingSlot("B4-Slot 2", true),
-            ParkingSlot("B4-Slot 3", true)
+            ParkingSlot("B4-Slot 2", false)
         )
     }
-
 
 
 }
