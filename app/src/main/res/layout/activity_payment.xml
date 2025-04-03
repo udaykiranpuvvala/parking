@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textHeader">
@@ -52,11 +52,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.9"
-                android:background="@drawable/edit_text_bg"
+                android:background="@drawable/background_shape"
                 android:hint="Enter Number"
                 android:inputType="textCapCharacters"
-                android:maxLength="16"
-                android:padding="10dp"
+                android:maxLength="14"
+                android:padding="8dp"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -92,7 +92,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="8dp">
 
@@ -100,6 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:layout_marginBottom="60dp"
                     android:padding="16dp">
 
                     <!-- Parking ID -->
@@ -119,7 +122,7 @@
                             android:layout_height="wrap_content"
                             android:text="Parking ID"
                             android:textColor="#757575"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_marginStart="8dp"/>
 
                         <TextView
@@ -129,7 +132,7 @@
                             android:id="@+id/parkingId"
                             android:textAlignment="textEnd"
                             android:textColor="#212121"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"/>
                     </LinearLayout>
 
@@ -146,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:text="Vehicle Information"
                         android:textColor="@color/maroon"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="12dp"/>
 
@@ -166,7 +169,7 @@
                             android:layout_height="wrap_content"
                             android:text="Vehicle Number"
                             android:textColor="#757575"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_marginStart="8dp"/>
 
                         <TextView
@@ -176,7 +179,7 @@
                             android:id="@+id/vehicleNumber"
                             android:textAlignment="textEnd"
                             android:textColor="#212121"
-                            android:textSize="16sp"/>
+                            android:textSize="14sp"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -195,7 +198,7 @@
                             android:layout_height="wrap_content"
                             android:text="Vehicle Type"
                             android:textColor="#757575"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_marginStart="8dp"/>
 
                         <TextView
@@ -205,7 +208,7 @@
                             android:id="@+id/vehicleType"
                             android:textAlignment="textEnd"
                             android:textColor="#212121"
-                            android:textSize="16sp"/>
+                            android:textSize="14sp"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -224,7 +227,7 @@
                             android:layout_height="wrap_content"
                             android:text="Hook Number"
                             android:textColor="#757575"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_marginStart="8dp"/>
 
                         <TextView
@@ -234,7 +237,7 @@
                             android:id="@+id/hookNumber"
                             android:textAlignment="textEnd"
                             android:textColor="#212121"
-                            android:textSize="16sp"/>
+                            android:textSize="14sp"/>
                     </LinearLayout>
 
                     <!-- Divider -->
@@ -250,7 +253,7 @@
                         android:layout_height="wrap_content"
                         android:text="Time Information"
                         android:textColor="@color/maroon"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="12dp"/>
 
@@ -270,7 +273,7 @@
                             android:layout_height="wrap_content"
                             android:text="In Time"
                             android:textColor="#757575"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_marginStart="8dp"/>
 
                         <TextView
@@ -280,7 +283,7 @@
                             android:textAlignment="textEnd"
                             android:id="@+id/checkinTime"
                             android:textColor="#212121"
-                            android:textSize="16sp"/>
+                            android:textSize="14sp"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -299,7 +302,7 @@
                             android:layout_height="wrap_content"
                             android:text="Created Date"
                             android:textColor="#757575"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_marginStart="8dp"/>
 
                         <TextView
@@ -309,7 +312,7 @@
                             android:textAlignment="textEnd"
                             android:textColor="#212121"
                             android:id="@+id/createdDate"
-                            android:textSize="16sp"/>
+                            android:textSize="14sp"/>
                     </LinearLayout>
 
                     <!-- Divider -->
@@ -325,7 +328,7 @@
                         android:layout_height="wrap_content"
                         android:text="Notes"
                         android:textColor="@color/maroon"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp"/>
 
@@ -335,7 +338,7 @@
                         android:text="Parked near entrance"
                         android:textColor="#212121"
                         android:textSize="16sp"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         android:background="#FAFAFA"
                         android:id="@+id/parkingNote"
                         android:layout_marginBottom="16dp"/>
@@ -346,13 +349,13 @@
                         android:layout_height="wrap_content"
                         android:text="Vehicle Image"
                         android:textColor="@color/maroon"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp"/>
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="wrap_content"
                         android:scaleType="centerCrop"
                         android:id="@+id/image"
                         android:contentDescription="Vehicle image"

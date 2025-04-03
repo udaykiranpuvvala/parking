@@ -3,12 +3,14 @@ package com.elite.parking
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.elite.parking.Model.VehicleViewModelItemFactory
@@ -17,6 +19,7 @@ import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.repository.VehicleRepository
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.VehicleViewModel
+import com.elite.parking.viewModel.VehicleViewModel.VehicleDetailViewModel
 import com.google.android.material.textfield.TextInputEditText
 
 class PaymentActivity : AppCompatActivity() {
@@ -40,6 +43,9 @@ class PaymentActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
+    private lateinit var vehicleDetailViewModel: VehicleDetailViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
@@ -58,6 +64,37 @@ class PaymentActivity : AppCompatActivity() {
 
         sharedPreferencesHelper = SharedPreferencesHelper(this)
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
+
+      //  vehicleDetailViewModel = ViewModelProvider(this).get(VehicleDetailViewModel::class.java)
+
+        // Observe LiveData for updates
+//        vehicleDetailViewModel.isLoading.observe(this, Observer { isLoading ->
+//            // Show or hide loading indicator based on isLoading
+//            //progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+//        })
+//
+//        vehicleDetailViewModel.error.observe(this, Observer { errorMessage ->
+//            // Show error message in case of failure
+//            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+//        })
+
+//        vehicleDetailViewModel.vehicleDetail.observe(this, Observer { vehicleDetailResponse ->
+//            // Update the UI with vehicle detail data
+//            vehicleDetailResponse?.let {
+//                // Update the UI with vehicle details
+//                //vehicleDetail = it.content.firstOrNull()  // Assuming only one vehicle in the response
+//            }
+//        })
+
+        // Trigger the check-out when a button is clicked
+       // checkOutButton.setOnClickListener {
+            val checkInId = "802adaf8-d3a6-4580-9810-a3d9d5ff0831" // Get this from your data source
+            val checkOutTime = "2025-03-28 18:00:00"
+           // vehicleDetailViewModel.checkOutVehicle(authToken, checkInId, checkOutTime)
+       // }
+
+
+
         lnrLytCamera.setOnClickListener {
             val intent = Intent(this, OcrActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE)
@@ -135,7 +172,7 @@ class PaymentActivity : AppCompatActivity() {
         })
 
         // Fetch vehicle details
-        vehicleViewModel.fetchVehicleDetails("802adaf8-d3a6-4580-9810-a3d9d5ff0831", authToken)
+        vehicleViewModel.fetchVehicleDetails("672a6e8d-dba2-41c8-bbfd-ca9d298ca734", authToken)
     }
 
 }

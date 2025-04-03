@@ -3,6 +3,7 @@ package com.elite.parking.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.elite.parking.Model.CheckOutRequest
 import com.elite.parking.Model.VehicleDetail
 import com.elite.parking.Model.VehicleDetailResponse
 import com.elite.parking.Model.login.Vehicle
@@ -75,4 +76,32 @@ class VehicleViewModel{
             })
         }
     }
+
+
+    class VehicleDetailViewModel(private val repository: VehicleRepository) : ViewModel() {
+
+        private val _vehicleDetail = MutableLiveData<VehicleDetailResponse>()
+        val vehicleDetail: LiveData<VehicleDetailResponse> get() = _vehicleDetail
+
+        private val _isLoading = MutableLiveData<Boolean>()
+        val isLoading: LiveData<Boolean> get() = _isLoading
+
+        private val _error = MutableLiveData<String>()
+        val error: LiveData<String> get() = _error
+
+        fun checkOutVehicle(authToken: String, checkInId: String, checkOutTime: String) {
+            _isLoading.value = true
+            val checkOutRequest = CheckOutRequest(checkInId, checkOutTime)
+
+            repository.checkOutVehicle(authToken, checkOutRequest).observeForever { response ->
+                _isLoading.value = false
+                if (response != null) {
+                    _vehicleDetail.postValue(response)
+                } else {
+                    _error.postValue("Failed to check out the vehicle.")
+                }
+            }
+        }
+    }
+
 }

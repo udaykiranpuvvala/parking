@@ -1,5 +1,6 @@
 package com.elite.parking.apis
 
+import com.elite.parking.Model.CheckOutRequest
 import com.elite.parking.Model.LogoutRequest
 import com.elite.parking.Model.LogoutResponse
 import com.elite.parking.Model.UploadResponse
@@ -37,6 +38,9 @@ interface ApiService {
         @Header("Authorization") authToken: String,
         @Body vehicleCheckInRequest: VehicleCheckInRequest
     ): Call<VehicleCheckInResponse>
+
+    @POST("aletparkingapi/vehicleDetails/checkOut")
+    fun checkOut(@Header("Authorization") authToken: String, @Body request: CheckOutRequest): Call<VehicleDetailResponse>
 
     companion object {
         val api: ApiService = RetrofitClient.create(ApiService::class.java)
