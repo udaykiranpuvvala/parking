@@ -90,12 +90,13 @@
         android:layout_width="0dp"
         android:layout_weight="0.5"
         android:gravity="center"
+        android:layout_gravity="center"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/hookNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="8"
+            android:text="10"
             android:textSize="20sp"
             android:textColor="#333333"
             android:layout_marginBottom="2dp"
@@ -108,19 +109,6 @@
             android:textSize="10sp"
             android:textStyle="bold"
             android:textColor="@color/black" />
-        <TextView
-            android:id="@+id/login_button"
-            android:layout_width="100dp"
-            android:gravity="center"
-            android:layout_height="30dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/edit_text_bg"
-            android:text="PAY"
-            android:textStyle="bold"
-            android:backgroundTint="#F1F1F1"
-            android:textSize="12dp"
-            android:textColor="@color/maroon"
-            />
     </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
