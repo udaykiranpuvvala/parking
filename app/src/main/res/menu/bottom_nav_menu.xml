@@ -3,11 +3,13 @@
         android:id="@+id/nav_history"
         android:enabled="true"
         android:icon="@drawable/ic_history_unselected"
+        android:background="@drawable/nav_item_background_line"
         android:title="History" />
     <item
         android:id="@+id/nav_home"
         android:enabled="true"
         android:icon="@drawable/ic_home_unselected"
+        android:background="@drawable/nav_item_background_line"
         android:title="Profile" />
 </menu>
 
