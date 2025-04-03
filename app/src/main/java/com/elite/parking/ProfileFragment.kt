@@ -13,22 +13,36 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.elite.parking.Model.LogoutRequest
 import com.elite.parking.Model.UserSession
+import com.elite.parking.Model.UserSession.token
+import com.elite.parking.Model.VehicleCheckInRequest
+import com.elite.parking.Resource
 import com.elite.parking.SplashScreenActivity
 import com.elite.parking.apis.ApiService
 import com.elite.parking.apis.RetrofitClient
+import com.elite.parking.loader.NetworkUtils
 import com.elite.parking.repository.AuthRepository
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.AuthViewModel
+import com.elite.parking.viewModel.LoginViewModel
+import com.elite.parking.viewModel.VehicleCheckInViewModel
 import org.json.JSONException
 import org.json.JSONObject
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import kotlin.String
 
 class ProfileFragment : Fragment() {
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
     private lateinit var authToken: String
     private lateinit var userId: String
+
+    private lateinit var logoutViewModel: AuthViewModel
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,11 +62,51 @@ class ProfileFragment : Fragment() {
         val logout: TextView= view.findViewById(R.id.logout)
 
 
+        logoutViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+
+        logoutViewModel.response.observe(viewLifecycleOwner, Observer { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+
+                }
+
+                is Resource.Success -> {
+                    val successMessage = resource.data?.mssg ?: "Vehicle checked in successfully"
+                    Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
+                   // finish()
+                    sharedPreferencesHelper.clearLoginData()
+                    val intent = Intent(activity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+
+                is Resource.Failure -> {
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+
+
         logout.setOnClickListener {
 
-            sharedPreferencesHelper.clearLoginData()
-            val intent = Intent(activity, LoginActivity::class.java)
-            startActivity(intent)
+            val formattedTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val currentTime = LocalTime.now()
+                val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                currentTime.format(formatter)
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            if (NetworkUtils.isNetworkAvailable(requireContext())) {
+                val logoutRequest = LogoutRequest(
+                    userId = userId,
+                    activityTime = formattedTime.toString()?:"",
+                    osType = 3,
+                )
+                logoutViewModel.logout(authToken,logoutRequest)
+            }else{
+                Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         loginResponse?.let {
@@ -81,13 +135,5 @@ class ProfileFragment : Fragment() {
 
         return view
     }
-    fun getCurrentTime(): String {
-        val current = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDateTime.now()
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        return current.format(formatter)
-    }
+
 }

@@ -30,7 +30,7 @@ class HistoryFragment : Fragment() {
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
     private lateinit var recyclerView: RecyclerView
     private lateinit var vehicleAdapter: VehicleAdapter
-    private lateinit var vehicleViewModel: VehicleViewModel
+    private lateinit var vehicleViewModel: VehicleViewModel.VehicleViewModelList
     private lateinit var userId: String
     private lateinit var authToken: String
     private lateinit var shimmerLayout: ShimmerFrameLayout
@@ -93,7 +93,7 @@ class HistoryFragment : Fragment() {
         vehicleViewModel = ViewModelProvider(
             this,
             VehicleViewModelFactory(repository)
-        ).get(VehicleViewModel::class.java)
+        ).get(VehicleViewModel.VehicleViewModelList::class.java)
 
         // Observe LiveData for vehicle list
         vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->

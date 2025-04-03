@@ -171,7 +171,7 @@ class SectionedParkingAdapter(
                         itemHolder.slotTextView.setTextColor(ContextCompat.getColor(context, R.color.black))
                     }
                 } else {
-                    itemHolder.slotTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.red))
+                    itemHolder.slotTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.viewColor))
                     itemHolder.slotTextView.setTextColor(ContextCompat.getColor(context, R.color.white))
                 }
             }

@@ -24,6 +24,7 @@ object NetworkUtils {
         }
     }
 
+
     // Function to check if connected to Wi-Fi
     fun isWifiConnected(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

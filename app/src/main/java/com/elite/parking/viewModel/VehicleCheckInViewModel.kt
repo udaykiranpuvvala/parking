@@ -17,7 +17,7 @@ class VehicleCheckInViewModel : ViewModel() {
     private val _vehicleCheckInResponse = MutableLiveData<Resource<VehicleCheckInResponse>>()
     val vehicleCheckInResponse: LiveData<Resource<VehicleCheckInResponse>> get() = _vehicleCheckInResponse
 
-    fun checkIn(authToken: String, vehicleCheckInRequest: VehicleCheckInRequest) {
+     fun checkIn(authToken: String, vehicleCheckInRequest: VehicleCheckInRequest) {
         _vehicleCheckInResponse.value = Resource.Loading()
 
         // Make the API call

@@ -1,5 +1,10 @@
 package com.elite.parking.Model.login
 
+data class VehicleResponse(
+    val mssg: String,
+    val content: List<List<Vehicle>>,
+    val status: Int
+)
 data class Vehicle(
     val uuid: String,
     val parkingId: String,
@@ -16,8 +21,3 @@ data class Vehicle(
     val status: Int
 )
 
-data class VehicleResponse(
-    val mssg: String,
-    val content: List<List<Vehicle>>,
-    val status: Int
-)

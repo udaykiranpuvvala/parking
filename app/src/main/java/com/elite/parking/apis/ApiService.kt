@@ -5,6 +5,7 @@ import com.elite.parking.Model.LogoutResponse
 import com.elite.parking.Model.UploadResponse
 import com.elite.parking.Model.VehicleCheckInRequest
 import com.elite.parking.Model.VehicleCheckInResponse
+import com.elite.parking.Model.VehicleDetail
 import com.elite.parking.Model.VehicleDetailResponse
 import com.elite.parking.Model.login.LoginRequest
 import com.elite.parking.Model.login.LoginResponse
@@ -23,16 +24,13 @@ import retrofit2.http.Path
 
 interface ApiService {
     @POST("valetparkingapi/auth/user/loginByMobilePassword")
-    fun loginByMobilePassword(@Body request: LoginRequest): Call<LoginResponse>
+      fun loginByMobilePassword(@Body request: LoginRequest): Call<LoginResponse>
 
     @GET("valetparkingapi/vehicleDetails/getByUserId/{userId}")
-    fun getVehicleDetails(
-        @Path("userId") userId: String,
-        @Header("Authorization") authToken: String
-    ): Call<VehicleResponse>
+    fun getVehicleDetails(@Path("userId") userId: String, @Header("Authorization") authToken: String): Call<VehicleResponse>
 
     @GET("valetparkingapi/vehicleDetails/getById/{id}")
-    fun getVehicleDetailsById(@Path("id") vehicleId: String): Call<VehicleDetailResponse>
+    fun getVehicleDetailsById(@Path("id") vehicleId: String,@Header("Authorization") authToken: String): Call<VehicleDetailResponse>
 
     @POST("valetparkingapi/vehicleDetails/checkIn")
     fun checkIn(
@@ -58,5 +56,5 @@ interface ApiService {
     ): Response<UploadResponse>
 
     @POST("valetparkingapi/auth/user/logout")
-    suspend fun logout(@Header("Authorization") token: String, @Body request: LogoutRequest): Response<LogoutResponse>
+     fun logout(@Header("Authorization") authToken: String, @Body logoutRequest: LogoutRequest): Call<LogoutResponse>
 }

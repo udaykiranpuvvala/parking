@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
-    <color name="green">#4CAF50</color>
+    <color name="green">#8BD58D</color>
     <color name="maroon">#800000</color>
     <color name="viewColor">#D0CFCF</color>
     <color name="colorSelectedHome">#FFFF00</color> <!-- Yellow for Home -->
@@ -17,6 +17,7 @@
     <color name="colorIconTint">#800000</color>
     <color name="colorText">#800000</color>
     <color name="colorRipple">#800000</color>
+    <color name="maroonlite">#CE8989</color>
 
 <!--    <color name="colorIconTint">#B0BEC5</color> &lt;!&ndash; Light Gray for unselected icons &ndash;&gt;-->
 <!--    <color name="colorText">#FFFFFF</color> &lt;!&ndash; White for text &ndash;&gt;-->

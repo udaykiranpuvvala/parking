@@ -41,7 +41,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="3dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="4dp">
 
@@ -70,11 +70,11 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.9"
-                                android:background="@drawable/edit_text_bg"
+                                android:background="@drawable/background_shape"
                                 android:hint="Enter Vehicle Number"
                                 android:inputType="textCapCharacters"
                                 android:maxLength="12"
-                                android:padding="10dp"
+                                android:padding="8dp"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
 
@@ -102,133 +102,167 @@
                             </LinearLayout>
                         </LinearLayout>
 
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="10dp"
                             android:text="Vehicle Type"
                             android:textSize="12sp"
-                            android:textStyle="bold" />
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="8dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:orientation="horizontal"
-                            android:spacing="4dp">
+                            android:gravity="center"
+                            android:layout_marginBottom="16dp">
 
-                            <!-- Vehicle Type Buttons -->
-                            <LinearLayout
-                                android:id="@+id/ll_suv"
+                            <!-- SUV -->
+                            <androidx.cardview.widget.CardView
+
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="2dp">
+                                android:layout_margin="2dp"
+                                app:cardCornerRadius="8dp"
+                                app:strokeColor="@color/white"
+                                app:strokeWidth="1dp">
 
-                                <ImageView
-                                    android:id="@+id/btn_suv"
-                                    android:layout_width="36dp"
-                                    android:layout_height="36dp"
-                                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                                    android:contentDescription="SUV"
-                                    android:scaleType="centerInside"
-                                    android:src="@drawable/suv" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:id="@+id/ll_suv"
                                     android:gravity="center"
-                                    android:text="SUV"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
+                                    android:padding="12dp">
 
-                            <LinearLayout
-                                android:id="@+id/ll_luxury"
+                                    <ImageView
+                                        android:id="@+id/btn_suv"
+                                        android:layout_width="39dp"
+                                        android:layout_height="40dp"
+                                        android:contentDescription="SUV"
+                                        android:src="@drawable/suv" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="SUV"
+                                        android:textSize="10sp"
+                                        android:layout_marginTop="4dp"/>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <!-- Luxury -->
+                            <androidx.cardview.widget.CardView
+
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="2dp">
+                                android:layout_margin="2dp"
+                                app:cardCornerRadius="8dp"
+                                app:strokeColor="@color/white"
+                                app:strokeWidth="1dp">
 
-                                <ImageView
-                                    android:id="@+id/btn_luxury"
-                                    android:layout_width="36dp"
-                                    android:layout_height="36dp"
-                                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                                    android:contentDescription="Luxury"
-                                    android:scaleType="centerInside"
-                                    android:src="@drawable/luxury" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:orientation="vertical"
                                     android:gravity="center"
-                                    android:text="Luxury"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
+                                    android:id="@+id/ll_luxury"
+                                    android:padding="12dp">
 
-                            <LinearLayout
-                                android:id="@+id/ll_sedan"
+                                    <ImageView
+                                        android:id="@+id/btn_luxury"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:src="@drawable/luxury"
+                                        android:contentDescription="Luxury"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Luxury"
+                                        android:textSize="10sp"
+                                        android:layout_marginTop="4dp"/>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <!-- Sedan -->
+                            <androidx.cardview.widget.CardView
+
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="2dp">
+                                android:layout_margin="2dp"
+                                app:cardCornerRadius="8dp"
+                                app:strokeColor="@color/white"
+                                app:strokeWidth="1dp">
 
-                                <ImageView
-                                    android:id="@+id/btn_sedan"
-                                    android:layout_width="36dp"
-                                    android:layout_height="36dp"
-                                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                                    android:contentDescription="Sedan"
-                                    android:scaleType="centerInside"
-                                    android:src="@drawable/sedan" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:orientation="vertical"
                                     android:gravity="center"
-                                    android:text="Sedan"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
+                                    android:id="@+id/ll_sedan"
+                                    android:padding="12dp">
 
-                            <LinearLayout
-                                android:id="@+id/ll_hatchback"
+                                    <ImageView
+                                        android:id="@+id/btn_sedan"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:src="@drawable/sedan"
+                                        android:contentDescription="Sedan"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Sedan"
+                                        android:textSize="10sp"
+                                        android:layout_marginTop="4dp"/>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <!-- Hatchback -->
+                            <androidx.cardview.widget.CardView
+
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="2dp">
+                                android:layout_margin="2dp"
+                                app:cardCornerRadius="8dp"
+                                app:strokeColor="@color/white"
+                                app:strokeWidth="1dp">
 
-                                <ImageView
-                                    android:id="@+id/btn_hatchback"
-                                    android:layout_width="36dp"
-                                    android:layout_height="36dp"
-                                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                                    android:contentDescription="Hatchback"
-                                    android:scaleType="centerInside"
-                                    android:src="@drawable/hatchback" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:orientation="vertical"
                                     android:gravity="center"
-                                    android:text="Hatchback"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
+                                    android:id="@+id/ll_hatchback"
+                                    android:padding="12dp">
+
+                                    <ImageView
+                                        android:id="@+id/btn_hatchback"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:src="@drawable/hatchback"
+                                        android:contentDescription="Hatchback"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Hatchback"
+                                        android:textSize="10sp"
+                                        android:singleLine="true"
+                                        android:layout_marginTop="4dp"/>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:weightSum="2">
@@ -244,26 +278,24 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="2sp"
+                                    android:layout_marginBottom="5sp"
                                     android:gravity="center"
                                     android:paddingTop="8sp"
                                     android:text="In Time"
                                     android:textColor="@color/black"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
+                                    android:textSize="12sp"/>
 
                                 <TextView
                                     android:id="@+id/inTimeEditText"
                                     android:layout_width="130sp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:background="@drawable/edit_text_bg"
+                                    android:background="@drawable/background_shape"
                                     android:focusableInTouchMode="true"
                                     android:gravity="center"
                                     android:padding="8sp"
                                     android:textColor="#000000"
-                                    android:textSize="16sp"
+                                    android:textSize="14sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
 
@@ -278,26 +310,24 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="2sp"
+                                    android:layout_marginBottom="5sp"
                                     android:gravity="center"
                                     android:paddingTop="8sp"
                                     android:text="Created Date"
                                     android:textColor="@color/black"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:id="@+id/inDateEditText"
                                     android:layout_width="130sp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:background="@drawable/edit_text_bg"
+                                    android:background="@drawable/background_shape"
                                     android:focusableInTouchMode="true"
                                     android:gravity="center"
                                     android:padding="8sp"
                                     android:textColor="#000000"
-                                    android:textSize="16sp"
+                                    android:textSize="14sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
                         </LinearLayout>
@@ -305,18 +335,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="2sp"
+                            android:layout_marginBottom="5sp"
                             android:paddingTop="10sp"
+                            android:textColor="@color/black"
                             android:text="@string/hook_number"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
+                            android:textSize="12sp"/>
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/hookNumber"
                             android:layout_width="150sp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:background="@drawable/edit_text_bg"
+                            android:background="@drawable/background_shape"
                             android:focusableInTouchMode="true"
                             android:gravity="center"
                             android:hint="Token Number"
@@ -439,16 +469,15 @@
                         android:layout_marginBottom="8dp"
                         android:text="Notes"
                         android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textSize="12sp" />
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/notesEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:hint="Please Enter Notes"
+                        android:background="@drawable/background_shape"
+                        android:hint="Enter Notes"
                         android:inputType="textMultiLine"
                         android:padding="10dp"
                         android:textColor="@color/black"
