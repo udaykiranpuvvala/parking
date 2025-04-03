@@ -53,9 +53,7 @@ class HistoryFragment : Fragment() {
         val fabAddVehicle: FloatingActionButton = view.findViewById(R.id.fabAddVehicle)
         childFab1 = view.findViewById(R.id.childFab1)
         childFab2 = view.findViewById(R.id.childFab2)
-        fabAddVehicle.setOnClickListener {
-            toggleChildFabs()
-        }
+        toggleChildFabs()
         loginResponse?.let {
             val loginData = it.content.firstOrNull()
             if (loginData != null) {
@@ -138,19 +136,19 @@ class HistoryFragment : Fragment() {
         childFab1.visibility = View.VISIBLE
         childFab2.visibility = View.VISIBLE
 
-        val animator1 = ObjectAnimator.ofFloat(childFab1, "translationY", 0f, -200f)
-        val animator2 = ObjectAnimator.ofFloat(childFab2, "translationY", 0f, -400f)
+        val animator1 = ObjectAnimator.ofFloat(childFab1, "translationY", 0f, -10f)
+        val animator2 = ObjectAnimator.ofFloat(childFab2, "translationY", 0f, -200f)
 
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(animator1, animator2)
-        animatorSet.duration = 300
+        animatorSet.duration = 600
         animatorSet.start()
     }
 
     // Hide child FABs with animations
     private fun hideChildFabs() {
-        val animator1 = ObjectAnimator.ofFloat(childFab1, "translationY", -200f, 0f)
-        val animator2 = ObjectAnimator.ofFloat(childFab2, "translationY", -400f, 0f)
+        val animator1 = ObjectAnimator.ofFloat(childFab1, "translationY", -10f, 0f)
+        val animator2 = ObjectAnimator.ofFloat(childFab2, "translationY", -200f, 0f)
 
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(animator1, animator2)

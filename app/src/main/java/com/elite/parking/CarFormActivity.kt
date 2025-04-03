@@ -71,10 +71,9 @@ class CarFormActivity : AppCompatActivity() {
     private var selectedVehicleType: String? = null
     private lateinit var inTimeEditText: TextView
     private lateinit var inDateEditText: TextView
-    private lateinit var parkingSlot: Button
+    private lateinit var parkingSlot: LinearLayout
     private lateinit var hookNumberEditText: TextInputEditText
     private lateinit var notesEditText: TextInputEditText
-    private lateinit var vehicleModelEditText: TextInputEditText
     private lateinit var submitButton: Button
 
 
@@ -91,8 +90,8 @@ class CarFormActivity : AppCompatActivity() {
     private var imageFile: File? = null
     private lateinit var userId: String
     private lateinit var token: String
-    private lateinit var parkingLotNumber: String
-    private lateinit var dialog: AlertDialog
+    private  var parkingLotNumber: String=""
+    private  var parkingimageUrl: String=""
 
     private val parkingViewModel: ParkingViewModel by viewModels()
     private lateinit var parkingAdapter: SectionedParkingAdapter
@@ -108,7 +107,6 @@ class CarFormActivity : AppCompatActivity() {
         hookNumberEditText = findViewById(R.id.hookNumber)
         notesEditText = findViewById(R.id.notesEditText)
         submitButton = findViewById(R.id.submitButton)
-        vehicleModelEditText = findViewById(R.id.et_vehicleModel)
         inDateEditText = findViewById(R.id.inDateEditText)
         parkingSlot = findViewById(R.id.parkingSlot)
         sharedPreferencesHelper = SharedPreferencesHelper(this)
@@ -116,16 +114,17 @@ class CarFormActivity : AppCompatActivity() {
 
 
         val repository = FileUploadRepository(api)
-        fileUploadViewModel = ViewModelProvider(this, ViewModelFactory(repository))[FileUploadViewModel::class.java]
+        fileUploadViewModel = ViewModelProvider(this, ViewModelFactory.ViewModelFactoryFileUploadRepository(repository))[FileUploadViewModel::class.java]
 
 
         fileUploadViewModel.uploadResult.observe(this) { result ->
             result.onSuccess { imageUrl ->
-                Toast.makeText(this, "Upload Successful!", Toast.LENGTH_SHORT).show()
-                selectedImages.add(Uri.parse(imageUrl))  // Add uploaded image URL
-                selectedImages.forEach {
-                    Log.e("Images","Added Images"+imageUrl)
-                }
+                Toast.makeText(this, "image Upload Successful!", Toast.LENGTH_SHORT).show()
+                //selectedImages.add(Uri.parse(imageUrl.content.url))  // Add uploaded image URL
+               /* selectedImages.forEach {
+                    Log.e("Images","Added Images"+result)
+                }*/
+                parkingimageUrl=imageUrl.content.url
                 imageAdapter.notifyDataSetChanged()
             }
             result.onFailure {
@@ -156,7 +155,7 @@ class CarFormActivity : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = imageAdapter
 
-        val btnUploadPhotos: Button = findViewById(R.id.btn_upload_photos)
+        val btnUploadPhotos: LinearLayout = findViewById(R.id.btn_upload_photos)
        // val parkingLotSpinner: Spinner = findViewById(R.id.spinner_parkinglot)
         val btnSubmit: Button = findViewById(R.id.submitButton)
         // Initialize the ViewModel
@@ -186,9 +185,9 @@ class CarFormActivity : AppCompatActivity() {
                         hookNo = hookNumberEditText.text.toString(),
                         notes = notesEditText.text.toString(),
                         inTime = inTimeEditText.text.toString(),
-                        imageUrl = "",
-                        createdDate = "2025-03-28",
-                        modifiedDate = "2025-03-28",
+                        imageUrl = parkingimageUrl,
+                        createdDate = inDateEditText.text.toString(),
+                        modifiedDate = "",
                         status = 1
                     )
                     vehicleCheckInViewModel.checkIn(token,vehicleCheckInRequest)
@@ -307,6 +306,11 @@ class CarFormActivity : AppCompatActivity() {
             showToast("Parking Lot is required.")
             return false
         }
+
+        if (parkingimageUrl.isEmpty()) {
+            showToast("Please Capture Image")
+            return false
+        }
         /*val model = vehicleModelEditText.text.toString().trim()
         if (model.isEmpty()) {
             showToast("Vehicle Model is required.")
@@ -393,7 +397,7 @@ class CarFormActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 imageUri?.let {
-//                    selectedImageUris.add(it)
+                    selectedImageUris.add(it)
                     uploadCapturedImage(it)
                 } ?: Toast.makeText(this, "Failed to get image URI", Toast.LENGTH_SHORT).show()
             }
@@ -427,7 +431,6 @@ class CarFormActivity : AppCompatActivity() {
                                 val bitmapFile = convertUriToFile(imageUri)  // Convert URI to file
                                 selectedImageUris.add(imageUri)
                                 showToast("Picker Image 1")
-//                                uploadCapturedImage()
                             }
                         } else if (data.data != null) {
                             showToast("Picker Image 2")
@@ -436,7 +439,7 @@ class CarFormActivity : AppCompatActivity() {
                             val imageUri = data.data!!
                             selectedImages.add(imageUri)
                             val bitmapFile = convertUriToFile(imageUri)
-//                            uploadCapturedImage()
+//
                         }
                     }
                 }

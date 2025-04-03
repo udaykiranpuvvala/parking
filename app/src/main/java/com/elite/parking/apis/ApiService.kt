@@ -1,5 +1,7 @@
 package com.elite.parking.apis
 
+import com.elite.parking.Model.LogoutRequest
+import com.elite.parking.Model.LogoutResponse
 import com.elite.parking.Model.UploadResponse
 import com.elite.parking.Model.VehicleCheckInRequest
 import com.elite.parking.Model.VehicleCheckInResponse
@@ -24,27 +26,37 @@ interface ApiService {
     fun loginByMobilePassword(@Body request: LoginRequest): Call<LoginResponse>
 
     @GET("valetparkingapi/vehicleDetails/getByUserId/{userId}")
-    fun getVehicleDetails(@Path("userId") userId: String,@Header("Authorization") authToken: String): Call<VehicleResponse>
+    fun getVehicleDetails(
+        @Path("userId") userId: String,
+        @Header("Authorization") authToken: String
+    ): Call<VehicleResponse>
 
     @GET("valetparkingapi/vehicleDetails/getById/{id}")
-     fun getVehicleDetailsById(@Path("id") vehicleId: String): Call<VehicleDetailResponse>
+    fun getVehicleDetailsById(@Path("id") vehicleId: String): Call<VehicleDetailResponse>
 
     @POST("valetparkingapi/vehicleDetails/checkIn")
-    fun checkIn(@Header("Authorization") authToken: String, @Body vehicleCheckInRequest: VehicleCheckInRequest): Call<VehicleCheckInResponse>
+    fun checkIn(
+        @Header("Authorization") authToken: String,
+        @Body vehicleCheckInRequest: VehicleCheckInRequest
+    ): Call<VehicleCheckInResponse>
 
     companion object {
         val api: ApiService = RetrofitClient.create(ApiService::class.java)
     }
 
     @GET("valetparkingapi/parking/getAllAvailableSlots")
-    suspend fun getAvailableSlots(@Header("Authorization") authToken: String
+    suspend fun getAvailableSlots(
+        @Header("Authorization") authToken: String
     ): Response<ParkingResponse>
 
 
-        @Multipart
-        @POST("valetparkingapi/local/uploadFile")
-        suspend fun uploadImage(
-            @Header("Authorization") token: String,
-            @Part file: MultipartBody.Part
-        ): Response<UploadResponse>
+    @Multipart
+    @POST("valetparkingapi/local/uploadFile")
+    suspend fun uploadImage(
+        @Header("Authorization") token: String,
+        @Part file: MultipartBody.Part
+    ): Response<UploadResponse>
+
+    @POST("valetparkingapi/auth/user/logout")
+    suspend fun logout(@Header("Authorization") token: String, @Body request: LogoutRequest): Response<LogoutResponse>
 }

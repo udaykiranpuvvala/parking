@@ -109,7 +109,6 @@
                             android:layout_marginTop="16dp"
                             android:layout_marginBottom="8dp"
                             android:text="Vehicle Type"
-                            android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="bold" />
 
@@ -309,7 +308,6 @@
                             android:layout_marginBottom="2sp"
                             android:paddingTop="10sp"
                             android:text="@string/hook_number"
-                            android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="bold" />
 
@@ -342,100 +340,85 @@
                     android:layout_marginEnd="10dp"
                     android:orientation="vertical">
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Vehicle Make"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_vehicleMake"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_text_bg"
-                        android:hint="Enter Vehicle Name"
-                        android:inputType="textPersonName"
-                        android:padding="10dp"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Vehicle Model"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_vehicleModel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_text_bg"
-                        android:hint="Enter Vehicle Model"
-                        android:inputType="textPersonName"
-                        android:padding="10dp"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:visibility="gone" />
-                        android:textSize="16sp"
-                        android:visibility="gone" />
-
-                    <LinearLayout
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_margin="5dp"
-                            android:background="@color/maroon"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="4dp">
-
-                            <Button
+                            android:orientation="horizontal"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:weightSum="2">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_margin="5dp"
+                                android:backgroundTint="@color/white"
                                 android:id="@+id/btn_upload_photos"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:orientation="vertical"
+                                android:background="@color/maroon">
+
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/cameracolored"/>
+                            <TextView
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@color/maroon"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
                                 android:text="+ Upload Photos"
                                 android:textSize="10dp"
                                 android:maxLines="2"
-                                android:textColor="@color/white" />
-                        </androidx.cardview.widget.CardView>
+                                android:layout_marginTop="5dp"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
 
-                        <androidx.cardview.widget.CardView
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_weight="0.01"
+                                android:layout_height="match_parent"
+                                android:background="@color/viewColor"/>
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_margin="5dp"
-                            android:background="@color/maroon"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="4dp">
+                            android:id="@+id/parkingSlot"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:backgroundTint="@color/white"
+                            android:orientation="vertical"
+                            android:background="@color/maroon">
 
-                            <Button
-                                android:id="@+id/parkingSlot"
+                            <ImageView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/parkingcolored"/>
+                            <TextView
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@color/maroon"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
                                 android:text="Select Parking Lot"
-                                android:maxLines="2"
                                 android:textSize="10dp"
-                                android:textColor="@color/white" />
-                        </androidx.cardview.widget.CardView>
-                    </LinearLayout>
+                                android:maxLines="2"
+                                android:layout_marginTop="5dp"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewImages"
@@ -465,7 +448,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:background="@drawable/edit_text_bg"
-                        android:hint="please Enter Notes"
+                        android:hint="Please Enter Notes"
                         android:inputType="textMultiLine"
                         android:padding="10dp"
                         android:textColor="@color/black"

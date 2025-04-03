@@ -44,7 +44,11 @@ class VehicleAdapter(private val context: Context,private val vehicleList: List<
             parkingId.text = vehicle.parkingId
             status.text = if (vehicle.status == 1) "Parked" else "Left"
 
-            Glide.with(context).load(R.drawable.car3).into(imageView)
+            Glide.with(itemView.context)
+                .load(vehicle.imageUrl)
+                .placeholder(R.drawable.car3)
+                .error(R.drawable.car3)
+                .into(imageView)
         }
     }
 }

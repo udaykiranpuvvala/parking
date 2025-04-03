@@ -4,20 +4,32 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.util.TimeUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.elite.parking.Model.UserSession
 import com.elite.parking.SplashScreenActivity
+import com.elite.parking.apis.ApiService
+import com.elite.parking.apis.RetrofitClient
+import com.elite.parking.repository.AuthRepository
 import com.elite.parking.storage.SharedPreferencesHelper
+import com.elite.parking.viewModel.AuthViewModel
 import org.json.JSONException
 import org.json.JSONObject
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class ProfileFragment : Fragment() {
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
+    private lateinit var authToken: String
+    private lateinit var userId: String
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,12 +47,13 @@ class ProfileFragment : Fragment() {
         val version: TextView= view.findViewById(R.id.tvVersion)
         val logout: TextView= view.findViewById(R.id.logout)
 
+
         logout.setOnClickListener {
-           sharedPreferencesHelper.clearLoginData()
+
+            sharedPreferencesHelper.clearLoginData()
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
         }
-
 
         loginResponse?.let {
             val loginData = it.content.firstOrNull()
@@ -50,6 +63,8 @@ class ProfileFragment : Fragment() {
                 val mobile = loginData.mobileNumber ?: "N/A"
                 val address = loginData.address ?: "N/A"
                 val designation = loginData.designation ?: "N/A"
+                authToken = loginData.token
+                userId = loginData.uuid
 
                 tvName.text = name
                 tvEmail.text = email
@@ -65,5 +80,14 @@ class ProfileFragment : Fragment() {
 
 
         return view
+    }
+    fun getCurrentTime(): String {
+        val current = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.now()
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return current.format(formatter)
     }
 }

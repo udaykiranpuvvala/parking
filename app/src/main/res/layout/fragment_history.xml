@@ -97,6 +97,7 @@
             android:layout_margin="16dp"
             android:contentDescription="Main FAB"
             android:src="@drawable/add"
+            android:visibility="gone"
             app:fabSize="normal" />
 
         <!-- Child Floating Action Button 1 -->
