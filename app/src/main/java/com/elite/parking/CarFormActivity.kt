@@ -90,6 +90,7 @@ class CarFormActivity : AppCompatActivity() {
     private var imageFile: File? = null
     private lateinit var userId: String
     private lateinit var token: String
+    private lateinit var companyId: String
     private  var parkingLotNumber: String=""
     private  var parkingimageUrl: String=""
 
@@ -106,7 +107,7 @@ class CarFormActivity : AppCompatActivity() {
         inTimeEditText = findViewById(R.id.inTimeEditText)
         hookNumberEditText = findViewById(R.id.hookNumber)
         notesEditText = findViewById(R.id.notesEditText)
-        submitButton = findViewById(R.id.submitButton)
+        submitButton = findViewById(R.id.checkOutButton)
         inDateEditText = findViewById(R.id.inDateEditText)
         parkingSlot = findViewById(R.id.parkingSlot)
         sharedPreferencesHelper = SharedPreferencesHelper(this)
@@ -136,6 +137,7 @@ class CarFormActivity : AppCompatActivity() {
             if (loginData != null) {
                 userId = loginData.uuid ?: "N/A"
                 token = loginData.token ?: "N/A"
+                companyId = loginData.companyId ?: "N/A"
             }
         } ?: run {
             Toast.makeText(this, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
@@ -157,7 +159,7 @@ class CarFormActivity : AppCompatActivity() {
 
         val btnUploadPhotos: LinearLayout = findViewById(R.id.btn_upload_photos)
        // val parkingLotSpinner: Spinner = findViewById(R.id.spinner_parkinglot)
-        val btnSubmit: Button = findViewById(R.id.submitButton)
+        val btnSubmit: Button = findViewById(R.id.checkOutButton)
         // Initialize the ViewModel
         vehicleCheckInViewModel = ViewModelProvider(this).get(VehicleCheckInViewModel::class.java)
 
@@ -182,6 +184,7 @@ class CarFormActivity : AppCompatActivity() {
                         userId = userId,
                         vehicleNo = vehicleNoEditText.text.toString(),
                         vehicleType = selectedVehicleType.toString(),
+                        companyId = "",
                         hookNo = hookNumberEditText.text.toString(),
                         notes = notesEditText.text.toString(),
                         inTime = inTimeEditText.text.toString(),
@@ -368,7 +371,7 @@ class CarFormActivity : AppCompatActivity() {
         recyclerView.adapter = parkingAdapter
 
         val authToken = token
-        parkingViewModel.fetchParkingSlots(authToken)
+        parkingViewModel.fetchParkingSlots(companyId,authToken)
 
         parkingViewModel.parkingSlots.observe(this) { slots ->
             parkingAdapter.updateData(slots)

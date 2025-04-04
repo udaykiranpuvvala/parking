@@ -5,6 +5,7 @@ data class VehicleCheckInRequest(
     val userId: String,
     val vehicleNo: String,
     val vehicleType: String,
+    val companyId: String,
     val hookNo: String,
     val notes: String,
     val inTime: String,

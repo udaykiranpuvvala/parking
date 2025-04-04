@@ -3,6 +3,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.elite.parking.Model.CheckOutRequest
 import com.elite.parking.Model.VehicleDetailResponse
+import com.elite.parking.Model.VehicleDetailsByHookNumberRequest
 import com.elite.parking.Model.login.VehicleResponse
 import com.elite.parking.apis.ApiService
 import retrofit2.Call
@@ -37,4 +38,5 @@ class VehicleRepository(private val apiService: ApiService) {
         })
         return result
     }
+
 }

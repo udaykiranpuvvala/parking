@@ -9,7 +9,7 @@ import retrofit2.Response
 
 class ParkingRepository (private val apiService: ApiService) {
 
-    suspend fun getAvailableParkingSlots(authToken: String): Response<ParkingResponse> {
-        return apiService.getAvailableSlots("Bearer $authToken")
+    suspend fun getAvailableParkingSlots(companyId : String,authToken: String): Response<ParkingResponse> {
+        return apiService.getAvailableSlots(companyId,"Bearer $authToken")
     }
 }

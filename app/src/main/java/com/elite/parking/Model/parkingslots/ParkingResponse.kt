@@ -10,8 +10,9 @@ data class ParkingSlot(
     val uuid: String,
     val blockNo: String,
     val floorNo: String,
+    val companyId: String,
     val parkingNo: String,
-    val availabilityStatus: Int, // 2 means available
+    val availabilityStatus: Int, // 2 means notavailable
     val type: String,
     val status: Int
 )

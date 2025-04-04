@@ -127,7 +127,7 @@ class SectionedParkingAdapter(
                 if (position != RecyclerView.NO_POSITION) {
                     val parkingSlotItem = items[position] as? ListItem.ParkingSlotItem
                     parkingSlotItem?.let { slotItem ->
-                        if (slotItem.slot.availabilityStatus == 2) {
+                        if (slotItem.slot.availabilityStatus == 1) {
                             updateSelectedSlot(position)
                             onSlotSelected(slotItem.slot)
                         }
@@ -162,7 +162,7 @@ class SectionedParkingAdapter(
                 val itemHolder = holder as ItemViewHolder
                 itemHolder.slotTextView.text = "Block: ${parkingSlot.blockNo}"
 
-                if (parkingSlot.availabilityStatus == 2) {
+                if (parkingSlot.availabilityStatus == 1) {
                     if (position == selectedPosition) {
                         itemHolder.slotTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.maroon))
                         itemHolder.slotTextView.setTextColor(ContextCompat.getColor(context, R.color.white))

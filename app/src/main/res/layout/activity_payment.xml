@@ -52,7 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.9"
-                android:background="@drawable/background_shape"
+                android:background="@drawable/edittext_border"
                 android:hint="Enter Number"
                 android:inputType="textCapCharacters"
                 android:maxLength="14"
@@ -84,80 +84,83 @@
             </LinearLayout>
 
         </LinearLayout>
+
+
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#F5F5F5">
+            android:background="@color/white">
 
-            <androidx.cardview.widget.CardView
+          <!--  <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginBottom="60dp"
+                    android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Parking ID -->
+                    &lt;!&ndash; Parking ID &ndash;&gt;
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="12dp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/parkingcar_48"/>
+                            android:src="@drawable/parkingcar_48" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
                             android:text="Parking ID"
                             android:textColor="#757575"
-                            android:textSize="12sp"
-                            android:layout_marginStart="8dp"/>
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/parkingId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="P12345"
-                            android:id="@+id/parkingId"
                             android:textAlignment="textEnd"
                             android:textColor="#212121"
                             android:textSize="14sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- Divider -->
+                    &lt;!&ndash; Divider &ndash;&gt;
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:layout_marginBottom="12dp"/>
+                        android:layout_marginBottom="12dp"
+                        android:background="#E0E0E0" />
 
-                    <!-- Vehicle Info Section -->
+                    &lt;!&ndash; Vehicle Info Section &ndash;&gt;
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
                         android:text="Vehicle Information"
                         android:textColor="@color/maroon"
                         android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="12dp"/>
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -167,101 +170,101 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
                             android:text="Vehicle Number"
                             android:textColor="#757575"
-                            android:textSize="12sp"
-                            android:layout_marginStart="8dp"/>
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/vehicleNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="ABC1234"
-                            android:id="@+id/vehicleNumber"
                             android:textAlignment="textEnd"
                             android:textColor="#212121"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/car3"/>
+                            android:src="@drawable/car3" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
                             android:text="Vehicle Type"
                             android:textColor="#757575"
-                            android:textSize="12sp"
-                            android:layout_marginStart="8dp"/>
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/vehicleType"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Car"
-                            android:id="@+id/vehicleType"
                             android:textAlignment="textEnd"
                             android:textColor="#212121"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="12dp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/token"/>
+                            android:src="@drawable/token" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
                             android:text="Hook Number"
                             android:textColor="#757575"
-                            android:textSize="12sp"
-                            android:layout_marginStart="8dp"/>
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/hookNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="H001"
-                            android:id="@+id/hookNumber"
                             android:textAlignment="textEnd"
                             android:textColor="#212121"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
                     </LinearLayout>
 
-                    <!-- Divider -->
+                    &lt;!&ndash; Divider &ndash;&gt;
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:layout_marginBottom="12dp"/>
+                        android:layout_marginBottom="12dp"
+                        android:background="#E0E0E0" />
 
-                    <!-- Time Information -->
+                    &lt;!&ndash; Time Information &ndash;&gt;
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
                         android:text="Time Information"
                         android:textColor="@color/maroon"
                         android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="12dp"/>
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -271,26 +274,26 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
                             android:text="In Time"
                             android:textColor="#757575"
-                            android:textSize="12sp"
-                            android:layout_marginStart="8dp"/>
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/checkinTime"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="2025-03-28 08:30:00"
                             android:textAlignment="textEnd"
-                            android:id="@+id/checkinTime"
                             android:textColor="#212121"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -300,164 +303,462 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
                             android:text="Created Date"
                             android:textColor="#757575"
-                            android:textSize="12sp"
-                            android:layout_marginStart="8dp"/>
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/createdDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="2025-03-28"
                             android:textAlignment="textEnd"
                             android:textColor="#212121"
-                            android:id="@+id/createdDate"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
                     </LinearLayout>
 
-                    <!-- Divider -->
+                    &lt;!&ndash; Divider &ndash;&gt;
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:layout_marginBottom="12dp"/>
+                        android:layout_marginBottom="12dp"
+                        android:background="#E0E0E0" />
 
-                    <!-- Notes Section -->
+                    &lt;!&ndash; Notes Section &ndash;&gt;
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="Notes"
                         android:textColor="@color/maroon"
                         android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp"/>
+                        android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/parkingNote"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="#FAFAFA"
+                        android:padding="10dp"
                         android:text="Parked near entrance"
                         android:textColor="#212121"
-                        android:textSize="16sp"
-                        android:padding="10dp"
-                        android:background="#FAFAFA"
-                        android:id="@+id/parkingNote"
-                        android:layout_marginBottom="16dp"/>
+                        android:textSize="16sp" />
 
-                    <!-- Image Placeholder -->
+                    &lt;!&ndash; Image Placeholder &ndash;&gt;
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="Vehicle Image"
                         android:textColor="@color/maroon"
                         android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp"/>
+                        android:textStyle="bold" />
 
                     <ImageView
+                        android:id="@+id/image"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
-                        android:id="@+id/image"
                         android:contentDescription="Vehicle image"
-                        android:src="@drawable/car3"/>
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/car3" />
 
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>-->
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/parkingCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Always visible section -->
+                    <LinearLayout
+                        android:id="@+id/headerSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <!-- Parking ID -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/parkingcar_48" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Parking ID"
+                                android:textColor="#757575"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/parkingId"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="P12345"
+                                android:textAlignment="textEnd"
+                                android:textColor="#212121"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Vehicle Info Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/licenseplate" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Vehicle Number"
+                                android:textColor="#757575"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/vehicleNumber"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="ABC1234"
+                                android:textAlignment="textEnd"
+                                android:textColor="#212121"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <!-- Expand/Collapse Button -->
+                        <Button
+                            android:id="@+id/expandButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:drawableEnd="@drawable/ic_expand_more"
+                            android:text="Show Details"
+                            android:textColor="@color/maroon" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/expandableSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:visibility="gone">
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="12dp"
+                            android:background="#E0E0E0" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/car3" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Vehicle Type"
+                                android:textColor="#757575"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/vehicleType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Car"
+                                android:textAlignment="textEnd"
+                                android:textColor="#212121"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <!-- Hook Number -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/token" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Hook Number"
+                                android:textColor="#757575"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/hookNumber"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="H001"
+                                android:textAlignment="textEnd"
+                                android:textColor="#212121"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <!-- Divider -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="12dp"
+                            android:background="#E0E0E0" />
+
+                        <!-- Time Information -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:text="Time Information"
+                            android:textColor="@color/maroon"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_time" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="In Time"
+                                android:textColor="#757575"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/checkinTime"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="2025-03-28 08:30:00"
+                                android:textAlignment="textEnd"
+                                android:textColor="#212121"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/camera" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Created Date"
+                                android:textColor="#757575"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/createdDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="2025-03-28"
+                                android:textAlignment="textEnd"
+                                android:textColor="#212121"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <!-- Divider -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="12dp"
+                            android:background="#E0E0E0" />
+
+                        <!-- Notes Section -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:text="Notes"
+                            android:textColor="@color/maroon"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/parkingNote"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:background="#FAFAFA"
+                            android:padding="10dp"
+                            android:text="Parked near entrance"
+                            android:textColor="#212121"
+                            android:textSize="16sp" />
+
+                        <!-- Image Placeholder -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:text="Vehicle Image"
+                            android:textColor="@color/maroon"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/image"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="Vehicle image"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/car3" />
+                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF">
+
+                <!-- Input Section -->
+                <LinearLayout
+                    android:id="@+id/inputSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="CheckOut Time"
+                        android:textColor="#000000"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/timeEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:hint="Tap to select time"
+                        android:inputType="none"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:background="@drawable/edittext_border"
+                        android:padding="12dp"/>
+
+                    <Button
+                        android:id="@+id/checkOutButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:background="@drawable/rounded_button"
+                        android:text=" CheckOut"
+                        android:textAllCaps="false"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/successSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:background="#FFFFFF"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/checkmarkImage"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:src="@drawable/check"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Time Confirmed!"
+                            android:textColor="@color/maroon"
+                            android:textSize="22sp"
+                            android:layout_marginTop="16dp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/confirmedTimeText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12:30 PM"
+                            android:textColor="#000000"
+                            android:textSize="20sp"
+                            android:layout_marginTop="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your CheckOut is confirmed"
+                            android:textColor="#666666"
+                            android:textSize="16sp"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
-    <!--&lt;!&ndash; QR Code Scanner Button &ndash;&gt;
-    <Button
-        android:id="@+id/qr_scanner_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/maroon"
-        android:text="Generate QR Code"
-        android:textColor="@android:color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linrv" />
-
-    &lt;!&ndash; Vehicle Type &ndash;&gt;
-    <TextView
-        android:id="@+id/vehicle_type_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/edit_text_bg"
-        android:focusableInTouchMode="true"
-        android:inputType="textEmailAddress"
-        android:padding="10dp"
-        android:textColor="#000000"
-        android:textSize="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/qr_scanner_button" />
-
-    <TextView
-        android:id="@+id/selectTimeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="Select Exit Time"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vehicle_type_input" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/parking_time_input"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/edit_text_bg"
-        android:focusableInTouchMode="true"
-        android:hint="Select Time"
-        android:inputType="number"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:textSize="14dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/selectTimeText" />
-
-    &lt;!&ndash; Total Amount &ndash;&gt;
-    <TextView
-        android:id="@+id/total_amount_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Total Amount"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/parking_time_input" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/total_amount"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/edit_text_bg"
-        android:focusableInTouchMode="true"
-        android:hint="Enter Amount"
-        android:inputType="number"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:textSize="14dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/total_amount_label" />
-
-    &lt;!&ndash; Pay Button &ndash;&gt;
-    <Button
-        android:id="@+id/pay_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@color/maroon"
-        android:text="Pay"
-        android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/total_amount" />
--->
 </LinearLayout>

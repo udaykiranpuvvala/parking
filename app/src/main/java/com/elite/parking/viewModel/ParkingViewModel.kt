@@ -20,10 +20,10 @@ class ParkingViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
-    fun fetchParkingSlots(authToken: String) {
+    fun fetchParkingSlots(companyId : String,authToken: String) {
         viewModelScope.launch {
             try {
-                val response = repository.getAvailableParkingSlots(authToken)
+                val response = repository.getAvailableParkingSlots(companyId,authToken)
                 if (response.isSuccessful && response.body() != null) {
                     val slots = response.body()!!.content
                     val groupedList = groupByFloor(slots)

@@ -8,6 +8,7 @@ import com.elite.parking.Model.VehicleCheckInRequest
 import com.elite.parking.Model.VehicleCheckInResponse
 import com.elite.parking.Model.VehicleDetail
 import com.elite.parking.Model.VehicleDetailResponse
+import com.elite.parking.Model.VehicleDetailsByHookNumberRequest
 import com.elite.parking.Model.login.LoginRequest
 import com.elite.parking.Model.login.LoginResponse
 import com.elite.parking.Model.login.VehicleResponse
@@ -22,6 +23,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @POST("valetparkingapi/auth/user/loginByMobilePassword")
@@ -39,17 +41,18 @@ interface ApiService {
         @Body vehicleCheckInRequest: VehicleCheckInRequest
     ): Call<VehicleCheckInResponse>
 
-    @POST("aletparkingapi/vehicleDetails/checkOut")
+    @POST("valetparkingapi/vehicleDetails/checkOut")
     fun checkOut(@Header("Authorization") authToken: String, @Body request: CheckOutRequest): Call<VehicleDetailResponse>
+
+    @POST("valetparkingapi/vehicleDetails/getVehicleDetailsByHookNoOrVehicleNo")
+     fun getVehicleDetailsbyHookNumber(@Header("Authorization") token: String, @Body request: VehicleDetailsByHookNumberRequest): Call<VehicleDetailResponse>
+
 
     companion object {
         val api: ApiService = RetrofitClient.create(ApiService::class.java)
     }
-
-    @GET("valetparkingapi/parking/getAllAvailableSlots")
-    suspend fun getAvailableSlots(
-        @Header("Authorization") authToken: String
-    ): Response<ParkingResponse>
+    @GET("valetparkingapi/parking/getAllAvailableSlots/{companyId}")
+    suspend fun getAvailableSlots(@Path("companyId") companyId: String ,@Header("Authorization") authToken: String): Response<ParkingResponse>
 
 
     @Multipart
