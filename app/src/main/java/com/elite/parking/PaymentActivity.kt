@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -35,6 +36,12 @@ import com.elite.parking.viewModel.VehicleCheckInViewModel
 import com.elite.parking.viewModel.VehicleViewModel
 import com.elite.parking.viewModel.VehicleViewModel.VehicleDetailCheckOutViewModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.zxing.integration.android.IntentIntegrator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -45,12 +52,10 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var vehicleViewModel: VehicleViewModel.VehicleViewModelListItem
     private lateinit var vehicleDetailCheckOutViewModel: VehicleViewModel.VehicleDetailCheckOutViewModel
     private val REQUEST_CODE = 1003
-    private lateinit var lnrLytCamera: LinearLayout
-    private lateinit var imgBtnCamera: ImageButton
-    private lateinit var vehicleNoEditText: TextInputEditText
     private lateinit var userId: String
     private lateinit var authToken: String
     private lateinit var vehicleuuId: String
+    private lateinit var companyId: String
 
     private lateinit var parkingId: TextView
     private lateinit var vehicleNumber: TextView
@@ -67,6 +72,11 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var successSection: RelativeLayout
     private lateinit var checkmarkImage: ImageView
     private lateinit var confirmedTimeText: TextView
+    private lateinit var tokenEditText: EditText
+    private lateinit var searchButton: ImageButton
+    private lateinit var barcodeButton: ImageButton
+    private lateinit var lnrCheckOut: LinearLayout
+    private lateinit var parkingCard: CardView
     private var isExpanded = false
 
     private var selectedHour = -1
@@ -79,9 +89,6 @@ class PaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
-        lnrLytCamera = findViewById(R.id.lnrLytCamera)
-        imgBtnCamera = findViewById(R.id.imgBtnCamera)
-        vehicleNoEditText = findViewById(R.id.vehicleNoEditText)
 
         parkingId = findViewById(R.id.parkingId)
         vehicleNumber = findViewById(R.id.vehicleNumber)
@@ -101,20 +108,27 @@ class PaymentActivity : AppCompatActivity() {
         confirmedTimeText = findViewById(R.id.confirmedTimeText)
         val expandButton = findViewById<Button>(R.id.expandButton)
         val expandableSection = findViewById<LinearLayout>(R.id.expandableSection)
-
+        tokenEditText = findViewById(R.id.tokenEditText)
+        searchButton = findViewById(R.id.searchButton)
+        barcodeButton = findViewById(R.id.barcodeButton)
+        parkingCard = findViewById(R.id.parkingCard)
+        lnrCheckOut = findViewById(R.id.lnrCheckOut)
 
 
         sharedPreferencesHelper = SharedPreferencesHelper(this)
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
 
-
-        lnrLytCamera.setOnClickListener {
-            val intent = Intent(this, OcrActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE)
+        searchButton.setOnClickListener {
+            val token = tokenEditText.text.toString().trim()
+            if (token.isNotEmpty()) {
+                searchToken(token)
+            } else {
+                Toast.makeText(this, "Please enter a token number", Toast.LENGTH_SHORT).show()
+            }
         }
-        imgBtnCamera.setOnClickListener {
-            val intent = Intent(this, OcrActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE)
+
+        barcodeButton.setOnClickListener {
+            startBarcodeScanner()
         }
         expandButton.setOnClickListener {
             isExpanded = !isExpanded
@@ -151,34 +165,81 @@ class PaymentActivity : AppCompatActivity() {
             if (loginData != null) {
                 userId = loginData.uuid ?: "N/A"
                 authToken = loginData.token ?: "N/A"
+                companyId = loginData.companyId ?: "N/A"
             }
         } ?: run {
             Toast.makeText(this, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
         }
-        getVehicleDetailsByHookNumber()
 
+        vehicledetailsByHookNumberViewModel = ViewModelProvider(this).get(VehicleViewModel.VehicleDetailsbyHookNumberViewModel::class.java)
+        vehicledetailsByHookNumberViewModel.vehicleCheckInResponse.observe(
+            this,
+            Observer { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show()
+                    }
 
-    }
+                    is Resource.Success -> {
+                        val successMessage = resource.data?.mssg ?: "Vehicle Data Fetched in successfully"
+                        Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show()
 
+                        // Check if content is not null and contains at least one item
+                        val content = resource.data?.content
+                        if (content != null && content.isNotEmpty()) {
+                            val vehicleDetails = content[0]
+                            lnrCheckOut.visibility= View.VISIBLE
+                            parkingCard.visibility= View.VISIBLE
+                            // Populate the UI with vehicle details
+                            parkingId.setText(vehicleDetails.parkingId ?: "")
+                            vehicleNumber.setText(vehicleDetails.vehicleNo ?: "")
+                            vehicleType.setText(vehicleDetails.vehicleType ?: "")
+                            hookNumber.setText(vehicleDetails.hookNo ?: "")
+                            checkinTime.setText(vehicleDetails.inTime ?: "")
+                            createdDate.setText(vehicleDetails.createdDate ?: "")
+                            parkingNote.setText(vehicleDetails.uuid ?: "")
+                            vehicleuuId = vehicleDetails.parkingId ?: ""
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
+                            // Load image using Glide
+                            Glide.with(this)
+                                .load(vehicleDetails.imageUrl)
+                                .placeholder(R.drawable.car3)
+                                .error(R.drawable.car3)
+                                .into(image)
+                        } else {
+                            lnrCheckOut.visibility= View.GONE
+                            parkingCard.visibility= View.GONE
+                            Toast.makeText(this, "No vehicle details available", Toast.LENGTH_SHORT).show()
+                        }
+                    }
 
-                REQUEST_CODE -> {
-
-                    val resultValIntent = data?.getStringExtra("key")
-                    if (resultValIntent != null) {
-                        vehicleNoEditText.setText("" + resultValIntent)
-                    } else {
-                        Toast.makeText(this, "Number is null", Toast.LENGTH_SHORT).show()
+                    is Resource.Failure -> {
+                        Toast.makeText(this, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
-            }
-        }
+            })
+
+
     }
 
+
+    /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+         super.onActivityResult(requestCode, resultCode, data)
+         if (resultCode == Activity.RESULT_OK) {
+             when (requestCode) {
+
+                 REQUEST_CODE -> {
+
+                     val resultValIntent = data?.getStringExtra("key")
+                     if (resultValIntent != null) {
+                       //  vehicleNoEditText.setText("" + resultValIntent)
+                     } else {
+                         Toast.makeText(this, "Number is null", Toast.LENGTH_SHORT).show()
+                     }
+                 }
+             }
+         }
+     }*/
 
 
     private fun checkOutAPICall(timeInput: String) {
@@ -205,15 +266,16 @@ class PaymentActivity : AppCompatActivity() {
                     if (vehicleDetailResponse.status != 0) {
                         checkOutButton.isEnabled = false
                         showSuccessAnimation()
-                    }else{
+                    } else {
                         checkOutButton.isEnabled = true
-                        checkOutButton.text="CheckOut"
+                        checkOutButton.text = "CheckOut"
                         Toast.makeText(this, vehicleDetailResponse.mssg, Toast.LENGTH_SHORT).show()
                     }
                 }
             })
 
-        val checkInId = "802adaf8-d3a6-4580-9810-a3d9d5ff0831" // Get this from your data source // Get this from your data source
+        val checkInId =
+            "802adaf8-d3a6-4580-9810-a3d9d5ff0831" // Get this from your data source // Get this from your data source
         val checkOutTime = timeInput
         vehicleDetailCheckOutViewModel.checkOutVehicle(authToken, checkInId, checkOutTime)
 
@@ -288,10 +350,6 @@ class PaymentActivity : AppCompatActivity() {
 
             }
         }*/
-        // Simulate network call
-        /*Handler(Looper.getMainLooper()).postDelayed({
-            showSuccessAnimation(formattedTime)
-        }, 1500)*/
     }
 
     private fun showSuccessAnimation() {
@@ -306,6 +364,12 @@ class PaymentActivity : AppCompatActivity() {
 
         // Animate the checkmark
         animateCheckmark()
+        GlobalScope.launch {
+            delay(2000)
+            withContext(Dispatchers.Main) {
+              finish()
+            }
+        }
     }
 
     private fun animateCheckmark() {
@@ -362,55 +426,13 @@ class PaymentActivity : AppCompatActivity() {
         checkmarkImage.startAnimation(scaleDown)
     }
 
-    private fun getVehicleDetailsByHookNumber(){
-        vehicledetailsByHookNumberViewModel = ViewModelProvider(this).get(VehicleViewModel.VehicleDetailsbyHookNumberViewModel::class.java)
-        if (NetworkUtils.isNetworkAvailable(this)) {
-
-            val request = VehicleDetailsByHookNumberRequest(
-                companyId = "020740ed-1a85-4b84-93de-55d2a98a58de",
-                hookNo = "369",
-                vehicleNo = "",
-            )
-            vehicledetailsByHookNumberViewModel.getVehicleDetailsbyHookNumber(authToken, request)
-        }
-
-        vehicledetailsByHookNumberViewModel.vehicleCheckInResponse.observe(this, Observer { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show()
-                }
-
-                is Resource.Success -> {
-                    val successMessage = resource.data?.mssg ?: "Vehicle checked in successfully"
-                    Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show()
-                    if (resource.data != null) {
-                        parkingId.setText(resource.data.content.get(0).parkingId ?: "")
-                        vehicleNumber.setText(resource.data.content.get(0).vehicleNo ?: "")
-                        vehicleType.setText(resource.data.content.get(0).vehicleType ?: "")
-                        hookNumber.setText(resource.data.content.get(0).hookNo ?: "")
-                        checkinTime.setText(resource.data.content.get(0).inTime ?: "")
-                        createdDate.setText(resource.data.content.get(0).createdDate ?: "")
-                        parkingNote.setText(resource.data.content.get(0).uuid ?: "")
-                        vehicleuuId=resource.data.content.get(0).parkingId ?: ""
-                        Glide.with(this)
-                            .load(resource.data.content.get(0).imageUrl)
-                            .placeholder(R.drawable.car3)
-                            .error(R.drawable.car3)
-                            .into(image)
-                    }
-                }
-
-                is Resource.Failure -> {
-                    Toast.makeText(this, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-    }
-
     private fun initialAPICall() {
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
         val repository = VehicleRepository(apiService)
-        vehicleViewModel = ViewModelProvider(this, VehicleViewModelItemFactory(repository)).get(VehicleViewModel.VehicleViewModelListItem::class.java)
+        vehicleViewModel = ViewModelProvider(
+            this,
+            VehicleViewModelItemFactory(repository)
+        ).get(VehicleViewModel.VehicleViewModelListItem::class.java)
         vehicleViewModel.vehicleListItem.observe(this, { vehicleList ->
             if (vehicleList != null) {
                 parkingId.setText(vehicleList.get(0).parkingId ?: "")
@@ -420,7 +442,7 @@ class PaymentActivity : AppCompatActivity() {
                 checkinTime.setText(vehicleList.get(0).inTime ?: "")
                 createdDate.setText(vehicleList.get(0).createdDate ?: "")
                 parkingNote.setText(vehicleList.get(0).notes ?: "")
-                vehicleuuId=vehicleList.get(0).uuid ?: ""
+                vehicleuuId = vehicleList.get(0).uuid ?: ""
                 Glide.with(this)
                     .load(vehicleList.get(0).imageUrl)
                     .placeholder(R.drawable.car3)
@@ -443,5 +465,48 @@ class PaymentActivity : AppCompatActivity() {
 
         // Fetch vehicle details
         vehicleViewModel.fetchVehicleDetails("672a6e8d-dba2-41c8-bbfd-ca9d298ca734", authToken)
+    }
+
+    private fun searchToken(tokenNumber: String) {
+        if (NetworkUtils.isNetworkAvailable(this)) {
+
+            val request = VehicleDetailsByHookNumberRequest(
+                companyId = companyId,
+                hookNo = tokenNumber,
+                vehicleNo = "",
+            )
+            vehicledetailsByHookNumberViewModel.getVehicleDetailsbyHookNumber(authToken, request)
+        }
+    }
+
+    private fun startBarcodeScanner() {
+        val integrator = IntentIntegrator(this)
+        integrator.setPrompt("Scan a token barcode")
+        integrator.setBeepEnabled(true)
+        integrator.setOrientationLocked(true)
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+        integrator.initiateScan()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents != null) {
+                // Handle successful scan
+                val scannedToken = result.contents
+                tokenEditText.setText(scannedToken)
+                searchToken(scannedToken)
+            } else {
+                Toast.makeText(this, "Scan cancelled", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // Optional: Clear the search when returning to the activity
+    override fun onResume() {
+        super.onResume()
+        tokenEditText.setText("")
     }
 }

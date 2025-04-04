@@ -16,6 +16,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -67,7 +68,7 @@ class CarFormActivity : AppCompatActivity() {
     private val REQUEST_CODE = 1003
 
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
-    private lateinit var vehicleNoEditText: TextInputEditText
+    private lateinit var vehicleNoEditText: EditText
     private var selectedVehicleType: String? = null
     private lateinit var inTimeEditText: TextView
     private lateinit var inDateEditText: TextView
@@ -147,7 +148,7 @@ class CarFormActivity : AppCompatActivity() {
         val llLuxury = findViewById<LinearLayout>(R.id.ll_luxury)
         val llSedan = findViewById<LinearLayout>(R.id.ll_sedan)
         val llHatchback = findViewById<LinearLayout>(R.id.ll_hatchback)
-        lnrLytCamera = findViewById(R.id.lnrLytCamera)
+       // lnrLytCamera = findViewById(R.id.lnrLytCamera)
         imgBtnCamera = findViewById(R.id.imgBtnCamera)
 
         recyclerView = findViewById(R.id.recyclerViewImages)
@@ -240,10 +241,10 @@ class CarFormActivity : AppCompatActivity() {
             setSelected(llHatchback)
             selectedVehicleType = "Hatchback"
         }
-        lnrLytCamera.setOnClickListener {
+     /*   lnrLytCamera.setOnClickListener {
             val intent = Intent(this, OcrActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE)
-        }
+        }*/
 
         imgBtnCamera.setOnClickListener {
             val intent = Intent(this, OcrActivity::class.java)

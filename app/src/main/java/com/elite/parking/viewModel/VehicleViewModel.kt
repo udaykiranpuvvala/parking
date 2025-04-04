@@ -148,7 +148,6 @@ class VehicleViewModel {
 
                     override fun onFailure(call: Call<VehicleDetailResponse>, t: Throwable) {
                         _vehicleCheckInResponse.value = Resource.Failure("Failure: ${t.message}")
-                        Log.e("VehicleCheckIn", "API Call Failure: ${t.message}")
                     }
                 })
         }
