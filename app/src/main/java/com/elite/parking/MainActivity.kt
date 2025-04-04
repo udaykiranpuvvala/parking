@@ -50,6 +50,21 @@ class MainActivity : AppCompatActivity() {
         addTopIndicator(R.id.nav_history)
         bottomNavView.setOnNavigationItemSelectedListener { item ->
             addTopIndicator(item.itemId)
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.nav_host_fragment, ProfileFragment())
+                        .commit()
+                    true
+                }
+                R.id.nav_history -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.nav_host_fragment, HistoryFragment())
+                        .commit()
+                    true
+                }
+                else -> false
+            }
             true
         }
 

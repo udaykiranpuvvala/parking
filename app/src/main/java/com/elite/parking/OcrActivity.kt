@@ -138,7 +138,7 @@ class OcrActivity : AppCompatActivity() {
 
                 }else{
                     textView.text = "";
-                        Toast.makeText(this, "Please provide valid image to Capture Number Plate", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Please provide valid image to Capture Number Plate", Toast.LENGTH_LONG).show()
                 }
             }
             .addOnFailureListener { e ->

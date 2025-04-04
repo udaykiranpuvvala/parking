@@ -197,7 +197,7 @@ class PaymentActivity : AppCompatActivity() {
                             hookNumber.setText(vehicleDetails.hookNo ?: "")
                             checkinTime.setText(vehicleDetails.inTime ?: "")
                             createdDate.setText(vehicleDetails.createdDate ?: "")
-                            parkingNote.setText(vehicleDetails.uuid ?: "")
+                            parkingNote.setText(vehicleDetails.notes ?: "")
                             vehicleuuId = vehicleDetails.parkingId ?: ""
 
                             // Load image using Glide
