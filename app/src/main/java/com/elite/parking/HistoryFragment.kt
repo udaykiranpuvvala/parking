@@ -15,9 +15,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.elite.parking.Model.UserSession
 import com.elite.parking.Model.VehicleViewModelFactory
-import com.elite.parking.Model.login.Vehicle
 import com.elite.parking.apis.ApiService
 import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.repository.VehicleRepository
@@ -26,7 +24,7 @@ import com.elite.parking.viewModel.VehicleViewModel
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class HistoryFragment : Fragment() {
+class HistoryFragment : Fragment()  {
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
     private lateinit var recyclerView: RecyclerView
     private lateinit var vehicleAdapter: VehicleAdapter
@@ -90,16 +88,25 @@ class HistoryFragment : Fragment() {
         // Initialize ViewModel
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
         val repository = VehicleRepository(apiService)
-        vehicleViewModel = ViewModelProvider(
-            this,
-            VehicleViewModelFactory(repository)
-        ).get(VehicleViewModel.VehicleViewModelList::class.java)
+        vehicleViewModel = ViewModelProvider(this, VehicleViewModelFactory(repository)).get(VehicleViewModel.VehicleViewModelList::class.java)
 
         // Observe LiveData for vehicle list
-        vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->
+       /* vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->
             vehicleAdapter = VehicleAdapter(requireActivity(), vehicleList)
             recyclerView.adapter = vehicleAdapter
+        })*/
+        vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->
+            vehicleAdapter = VehicleAdapter(requireContext(), vehicleList) { vehicle ->
+
+                Toast.makeText(context, "Clicked on ${vehicle.vehicleNo}", Toast.LENGTH_SHORT).show()
+                // Example: Navigate to a detail screen
+                val intent = Intent(requireActivity(), PaymentActivity::class.java)
+                intent.putExtra("vehicleUuid", vehicle.uuid)
+                startActivity(intent)
+            }
+            recyclerView.adapter = vehicleAdapter
         })
+
 
         // Observe loading state
         vehicleViewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->
@@ -176,6 +183,9 @@ class HistoryFragment : Fragment() {
             }
         })
     }
+
+
+
 }
 
 

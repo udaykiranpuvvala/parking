@@ -3,6 +3,7 @@ package com.elite.parking
 import android.app.Activity
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateInterpolator
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
@@ -44,6 +46,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 import kotlin.jvm.java
@@ -54,7 +58,7 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var vehicleDetailCheckOutViewModel: VehicleViewModel.VehicleDetailCheckOutViewModel
     private val REQUEST_CODE = 1003
     private lateinit var userId: String
-    private lateinit var authToken: String
+    private  var authToken: String=""
     private lateinit var vehicleuuId: String
     private lateinit var companyId: String
 
@@ -87,6 +91,7 @@ class PaymentActivity : AppCompatActivity() {
 
     private lateinit var vehicledetailsByHookNumberViewModel: VehicleViewModel.VehicleDetailsbyHookNumberViewModel
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
@@ -114,10 +119,24 @@ class PaymentActivity : AppCompatActivity() {
         barcodeButton = findViewById(R.id.barcodeButton)
         parkingCard = findViewById(R.id.parkingCard)
         lnrCheckOut = findViewById(R.id.lnrCheckOut)
-
-
         sharedPreferencesHelper = SharedPreferencesHelper(this)
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
+
+        loginResponse?.let {
+            val loginData = it.content.firstOrNull()
+            if (loginData != null) {
+                userId = loginData.uuid ?: "N/A"
+                authToken = loginData.token ?: "N/A"
+                companyId = loginData.companyId ?: "N/A"
+            }
+        } ?: run {
+            Toast.makeText(this, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
+        }
+
+        val vehicleUuid = intent.getStringExtra("vehicleUuid")
+        if(vehicleUuid!=""){
+            initialAPICall(vehicleUuid.toString())
+        }
 
         searchButton.setOnClickListener {
             val token = tokenEditText.text.toString().trim()
@@ -131,6 +150,10 @@ class PaymentActivity : AppCompatActivity() {
         barcodeButton.setOnClickListener {
             startBarcodeScanner()
         }
+        val currentTime = LocalTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        val formattedTime = currentTime.format(formatter)
+        timeEditText.setText(formattedTime.toString())
         expandButton.setOnClickListener {
             isExpanded = !isExpanded
 
@@ -161,16 +184,7 @@ class PaymentActivity : AppCompatActivity() {
             }
         }
 
-        loginResponse?.let {
-            val loginData = it.content.firstOrNull()
-            if (loginData != null) {
-                userId = loginData.uuid ?: "N/A"
-                authToken = loginData.token ?: "N/A"
-                companyId = loginData.companyId ?: "N/A"
-            }
-        } ?: run {
-            Toast.makeText(this, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
-        }
+
 
         vehicledetailsByHookNumberViewModel = ViewModelProvider(this).get(VehicleViewModel.VehicleDetailsbyHookNumberViewModel::class.java)
         vehicledetailsByHookNumberViewModel.vehicleCheckInResponse.observe(
@@ -426,16 +440,16 @@ class PaymentActivity : AppCompatActivity() {
         checkmarkImage.startAnimation(scaleDown)
     }
 
-    private fun initialAPICall() {
+    private fun initialAPICall(vehicleUuid: String) {
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
         val repository = VehicleRepository(apiService)
-        vehicleViewModel = ViewModelProvider(
-            this,
-            VehicleViewModelItemFactory(repository)
+        vehicleViewModel = ViewModelProvider(this, VehicleViewModelItemFactory(repository)
         ).get(VehicleViewModel.VehicleViewModelListItem::class.java)
         vehicleViewModel.vehicleListItem.observe(this, { vehicleList ->
             ProgressBarUtility.dismissProgressDialog()
             if (vehicleList != null) {
+                lnrCheckOut.visibility= View.VISIBLE
+                parkingCard.visibility= View.VISIBLE
                 parkingId.setText(vehicleList.get(0).parkingId ?: "")
                 vehicleNumber.setText(vehicleList.get(0).vehicleNo ?: "")
                 vehicleType.setText(vehicleList.get(0).vehicleType ?: "")
@@ -464,7 +478,7 @@ class PaymentActivity : AppCompatActivity() {
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         })
 
-        vehicleViewModel.fetchVehicleDetails(vehicleuuId, authToken)
+        vehicleViewModel.fetchVehicleDetails(vehicleUuid, authToken)
     }
 
     private fun searchToken(tokenNumber: String) {
