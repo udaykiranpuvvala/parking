@@ -30,6 +30,7 @@ import com.elite.parking.Resource
 import com.elite.parking.apis.ApiService
 import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.loader.NetworkUtils
+import com.elite.parking.loader.ProgressBarUtility
 import com.elite.parking.repository.VehicleRepository
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.VehicleCheckInViewModel
@@ -177,12 +178,12 @@ class PaymentActivity : AppCompatActivity() {
             Observer { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-                        Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show()
+                        ProgressBarUtility.showProgressDialog(this)
                     }
 
                     is Resource.Success -> {
                         val successMessage = resource.data?.mssg ?: "Vehicle Data Fetched in successfully"
-                        Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show()
+                        ProgressBarUtility.dismissProgressDialog()
 
                         // Check if content is not null and contains at least one item
                         val content = resource.data?.content
@@ -214,6 +215,7 @@ class PaymentActivity : AppCompatActivity() {
                     }
 
                     is Resource.Failure -> {
+                        ProgressBarUtility.dismissProgressDialog()
                         Toast.makeText(this, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -250,19 +252,19 @@ class PaymentActivity : AppCompatActivity() {
                 VehicleDetailCheckOutViewModel::class.java
             )
         vehicleDetailCheckOutViewModel.isLoading.observe(this, Observer { isLoading ->
-            checkOutButton.text = "Processing..."
+            ProgressBarUtility.showProgressDialog(this)
         })
 
         vehicleDetailCheckOutViewModel.error.observe(this, Observer { errorMessage ->
-            // Show error message in case of failure
+            ProgressBarUtility.dismissProgressDialog()
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         })
 
         vehicleDetailCheckOutViewModel.vehicleDetail.observe(
             this,
             Observer { vehicleDetailResponse ->
-                // Update the UI with vehicle detail data
                 vehicleDetailResponse?.let {
+                    ProgressBarUtility.dismissProgressDialog()
                     if (vehicleDetailResponse.status != 0) {
                         checkOutButton.isEnabled = false
                         showSuccessAnimation()
@@ -274,10 +276,8 @@ class PaymentActivity : AppCompatActivity() {
                 }
             })
 
-        val checkInId =
-            "802adaf8-d3a6-4580-9810-a3d9d5ff0831" // Get this from your data source // Get this from your data source
         val checkOutTime = timeInput
-        vehicleDetailCheckOutViewModel.checkOutVehicle(authToken, checkInId, checkOutTime)
+        vehicleDetailCheckOutViewModel.checkOutVehicle(authToken, vehicleuuId, checkOutTime)
 
     }
 
@@ -434,6 +434,7 @@ class PaymentActivity : AppCompatActivity() {
             VehicleViewModelItemFactory(repository)
         ).get(VehicleViewModel.VehicleViewModelListItem::class.java)
         vehicleViewModel.vehicleListItem.observe(this, { vehicleList ->
+            ProgressBarUtility.dismissProgressDialog()
             if (vehicleList != null) {
                 parkingId.setText(vehicleList.get(0).parkingId ?: "")
                 vehicleNumber.setText(vehicleList.get(0).vehicleNo ?: "")
@@ -454,17 +455,16 @@ class PaymentActivity : AppCompatActivity() {
 
         // Observe loading state
         vehicleViewModel.isLoading.observe(this, { isLoading ->
-            // Show or hide loading indicator
-            // e.g., loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+            ProgressBarUtility.showProgressDialog(this)
         })
 
         // Observe error state
         vehicleViewModel.error.observe(this, { errorMessage ->
+            ProgressBarUtility.dismissProgressDialog()
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         })
 
-        // Fetch vehicle details
-        vehicleViewModel.fetchVehicleDetails("672a6e8d-dba2-41c8-bbfd-ca9d298ca734", authToken)
+        vehicleViewModel.fetchVehicleDetails(vehicleuuId, authToken)
     }
 
     private fun searchToken(tokenNumber: String) {
@@ -493,14 +493,15 @@ class PaymentActivity : AppCompatActivity() {
 
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
-            if (result.contents != null) {
-                // Handle successful scan
-                val scannedToken = result.contents
-                tokenEditText.setText(scannedToken)
-                searchToken(scannedToken)
+            if (result.contents == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this, "Scan cancelled", Toast.LENGTH_SHORT).show()
+                tokenEditText.setText(result.contents)
+                searchToken(result.contents)
+                Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 

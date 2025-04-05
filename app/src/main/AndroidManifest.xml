@@ -25,10 +25,9 @@
         <activity
             android:name=".OcrActivity"
             android:exported="false"
-            android:theme="@style/ToolBar" />
+            />
         <activity
             android:name=".PaymentActivity"
-            android:theme="@style/NoToolBar"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -38,11 +37,9 @@
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/NoToolBar"
             android:exported="false" />
         <activity
             android:name=".SplashScreenActivity"
-            android:theme="@style/NoToolBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

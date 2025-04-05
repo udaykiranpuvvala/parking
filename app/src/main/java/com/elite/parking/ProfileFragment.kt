@@ -9,8 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,11 +27,13 @@ import com.elite.parking.SplashScreenActivity
 import com.elite.parking.apis.ApiService
 import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.loader.NetworkUtils
+import com.elite.parking.loader.ProgressBarUtility
 import com.elite.parking.repository.AuthRepository
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.AuthViewModel
 import com.elite.parking.viewModel.LoginViewModel
 import com.elite.parking.viewModel.VehicleCheckInViewModel
+import com.google.zxing.client.android.BuildConfig
 import org.json.JSONException
 import org.json.JSONObject
 import java.time.LocalDateTime
@@ -41,7 +47,6 @@ class ProfileFragment : Fragment() {
     private lateinit var userId: String
 
     private lateinit var logoutViewModel: AuthViewModel
-
 
 
     override fun onCreateView(
@@ -59,19 +64,18 @@ class ProfileFragment : Fragment() {
         val tvdesignation: TextView = view.findViewById(R.id.tvdesignation)
         val tvAddress: TextView = view.findViewById(R.id.tvAddress)
         val version: TextView= view.findViewById(R.id.tvVersion)
-        val logout: TextView= view.findViewById(R.id.logout)
-
-
+        val logout: Button= view.findViewById(R.id.btnLogout)
         logoutViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
         logoutViewModel.response.observe(viewLifecycleOwner, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> {
-
+                    ProgressBarUtility.showProgressDialog(requireContext())
                 }
 
                 is Resource.Success -> {
                     val successMessage = resource.data?.mssg ?: "Vehicle checked in successfully"
+                    ProgressBarUtility.dismissProgressDialog()
                     Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
                    // finish()
                     sharedPreferencesHelper.clearLoginData()
@@ -88,21 +92,8 @@ class ProfileFragment : Fragment() {
 
 
         logout.setOnClickListener {
-
-            val formattedTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val currentTime = LocalTime.now()
-                val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-                currentTime.format(formatter)
-            } else {
-                TODO("VERSION.SDK_INT < O")
-            }
             if (NetworkUtils.isNetworkAvailable(requireContext())) {
-                val logoutRequest = LogoutRequest(
-                    userId = userId,
-                    activityTime = formattedTime.toString()?:"",
-                    osType = 3,
-                )
-                logoutViewModel.logout(authToken,logoutRequest)
+                showLogoutDialog()
             }else{
                 Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show()
             }
@@ -129,11 +120,52 @@ class ProfileFragment : Fragment() {
         } ?: run {
             Toast.makeText(context, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
         }
-        val androidVersion = "Android Version: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})"
-        version.text = androidVersion
+        val gradleVersion =/* BuildConfig.GRADLE_VERSION*/"1.1.1"
+        val gradleVersionText = "Version: $gradleVersion"
+        version.text = gradleVersionText
 
 
         return view
+    }
+
+    private fun showLogoutDialog() {
+        // Create an AlertDialog builder
+        val builder = AlertDialog.Builder(requireContext())
+
+        // Set dialog title and message
+        builder.setTitle("Logout")
+        builder.setMessage("Do you want to logout?")
+
+        // Set positive button (Logout)
+        builder.setPositiveButton("Yes") { dialog, which ->
+            val formattedTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val currentTime = LocalTime.now()
+                val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                currentTime.format(formatter)
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            if (NetworkUtils.isNetworkAvailable(requireContext())) {
+                val logoutRequest = LogoutRequest(
+                    userId = userId,
+                    activityTime = formattedTime.toString()?:"",
+                    osType = 3,
+                )
+                logoutViewModel.logout(authToken,logoutRequest)
+            }else{
+                Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        // Set negative button (Cancel)
+        builder.setNegativeButton("No") { dialog, which ->
+            // Dismiss the dialog and do nothing
+            dialog.dismiss()
+        }
+
+        // Show the AlertDialog
+        builder.show()
     }
 
 }

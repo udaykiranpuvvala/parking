@@ -24,21 +24,18 @@ import com.google.gson.Gson
 
 class LoginActivity : AppCompatActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
-    private lateinit var progressBarUtility: ProgressBarUtility
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
-        progressBarUtility = ProgressBarUtility(this)
-        progressBarUtility.setProgressBarColor(colorRes = R.color.maroon)
         val sharedPreferencesHelper = SharedPreferencesHelper(this)
 
         val emailInput: EditText = findViewById(R.id.email_input)
         val passwordInput: EditText = findViewById(R.id.password_input)
         val loginButton: Button = findViewById(R.id.login_button)
         val forgotPassword: TextView = findViewById(R.id.forgot_password)
-        val parentLayout: FrameLayout = findViewById(android.R.id.content) // This gets the root layout of your activity
+        val parentLayout: FrameLayout = findViewById(android.R.id.content)
 
         loginButton.setOnClickListener {
             val email = emailInput.text.toString()
@@ -51,8 +48,7 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 if (NetworkUtils.isNetworkAvailable(this)) {
                     hideKeyboard()
-                    progressBarUtility.show(parentLayout)
-//                    loginViewModel.login("9492445605", "12345", 1)
+                    ProgressBarUtility.showProgressDialog(this)
                     loginViewModel.login(email, password, 1)
                     loginViewModel.apiResponse.observe(this, Observer { response ->
                         response?.let {
@@ -62,9 +58,9 @@ class LoginActivity : AppCompatActivity() {
                                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
-                                progressBarUtility.hide()
+                                ProgressBarUtility.dismissProgressDialog()
                             } else {
-                                progressBarUtility.hide()
+                                ProgressBarUtility.dismissProgressDialog()
                                 Toast.makeText(this, "Login failed: ${it.mssg}", Toast.LENGTH_SHORT)
                                     .show()
                             }

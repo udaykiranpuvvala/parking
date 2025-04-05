@@ -36,5 +36,6 @@
         <item name="colorPrimaryDark">@color/maroon</item>
         <item name="colorAccent">@color/maroon</item>
         <item name="android:textColorPrimary">@color/maroon</item>
+        <item name="android:statusBarColor">@color/maroon</item>
     </style>
 </resources>

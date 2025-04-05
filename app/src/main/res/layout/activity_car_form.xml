@@ -76,7 +76,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:hint="Enter Vehicle number"
-                                android:inputType="textEmailAddress"
+                                android:inputType="text"
                                 android:maxLines="1"
                                 android:maxLength="12"
                                 android:textSize="16sp"
@@ -101,7 +101,13 @@
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:contentDescription="Scan barcode"/>
                         </LinearLayout>
-
+                        <TextView
+                            android:id="@+id/validationResultText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -285,6 +291,10 @@
                                     android:textColor="@color/black"
                                     android:textSize="12sp"/>
 
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:id="@+id/lnrInTime"
+                                    android:layout_height="wrap_content">
                                 <TextView
                                     android:id="@+id/inTimeEditText"
                                     android:layout_width="130sp"
@@ -297,6 +307,8 @@
                                     android:textColor="#000000"
                                     android:textSize="14sp"
                                     android:textStyle="bold" />
+
+                                </LinearLayout>
                             </LinearLayout>
 
                             <LinearLayout
@@ -341,21 +353,47 @@
                             android:text="@string/hook_number"
                             android:textSize="12sp"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/hookNumber"
-                            android:layout_width="150sp"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:background="@drawable/search_bar_background"
-                            android:focusableInTouchMode="true"
-                            android:gravity="center"
-                            android:hint="Token Number"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:padding="8sp"
-                            android:textColor="#000000"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:background="@drawable/search_bar_background">
+
+                            <!-- Token Number EditText -->
+                            <EditText
+                                android:id="@+id/hookNumber"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Enter Token number"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textSize="16sp"
+                                android:padding="4dp"
+                                android:background="@null"
+                                android:textColor="#212121"
+                                android:textColorHint="#757575"/>
+
+                            <!-- Divider -->
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="24dp"
+                                android:layout_marginHorizontal="8dp"
+                                android:background="#E0E0E0"/>
+
+                            <!-- Barcode Scanner Button -->
+                            <ImageButton
+                                android:id="@+id/barcodeButton"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_barcode_scanner"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:contentDescription="Scan barcode"/>
+                        </LinearLayout>
 
 
                     </LinearLayout>
@@ -446,6 +484,19 @@
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:text=""
+                                android:visibility="gone"
+                                android:id="@+id/selectedSlotNumber"
+                                android:textSize="10dp"
+                                android:maxLines="2"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textColor="@color/green" />
                         </LinearLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>

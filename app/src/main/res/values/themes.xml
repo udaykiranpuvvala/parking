@@ -8,6 +8,7 @@
         <item name="android:textColorPrimary">@color/maroon</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/maroon</item>
     </style>
 
     <style name="ToolBar" parent="@style/Theme.Design.Light">

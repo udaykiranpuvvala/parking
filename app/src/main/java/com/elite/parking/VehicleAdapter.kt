@@ -27,21 +27,21 @@ class VehicleAdapter(private val context: Context,private val vehicleList: List<
 
     inner class VehicleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val vehicleNo: TextView = itemView.findViewById(R.id.vehicleNo)
-        private val vehicleType: TextView = itemView.findViewById(R.id.vehicleType)
-        private val notes: TextView = itemView.findViewById(R.id.notes)
+       // private val vehicleType: TextView = itemView.findViewById(R.id.vehicleType)
+        //private val notes: TextView = itemView.findViewById(R.id.notes)
         private val inTime: TextView = itemView.findViewById(R.id.inTime)
         private val status: TextView = itemView.findViewById(R.id.status)
         private val hookNumber: TextView = itemView.findViewById(R.id.hookNumber)
-        private val parkingId: TextView = itemView.findViewById(R.id.parkingId)
+       // private val parkingId: TextView = itemView.findViewById(R.id.parkingId)
         private val imageView: ImageView = itemView.findViewById(R.id.imageView)
 
         fun bind(vehicle: Vehicle) {
             vehicleNo.text = vehicle.vehicleNo
-            vehicleType.text = vehicle.vehicleType
-            notes.text = vehicle.notes
+            //vehicleType.text = vehicle.vehicleType
+           // notes.text = vehicle.notes
             inTime.text = vehicle.inTime
             hookNumber.text = vehicle.hookNo
-            parkingId.text = vehicle.parkingId
+            //parkingId.text = vehicle.parkingId
             status.text = if (vehicle.status == 1) "Parked" else "Left"
 
             Glide.with(itemView.context)
