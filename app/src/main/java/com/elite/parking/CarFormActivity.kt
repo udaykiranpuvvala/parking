@@ -79,6 +79,7 @@ class CarFormActivity : AppCompatActivity() {
     private lateinit var vehicleNoEditText: EditText
     private var selectedVehicleType: String? = null
     private lateinit var inTimeEditText: TextView
+    private lateinit var toolBarback: TextView
     private lateinit var lnrInTime: LinearLayout
     private lateinit var selectedSlotNumber: TextView
     private lateinit var validationResultText: TextView
@@ -122,6 +123,7 @@ class CarFormActivity : AppCompatActivity() {
         validationResultText = findViewById(R.id.validationResultText)
         vehicleNoEditText = findViewById(R.id.vehicleNoEditText)
         inTimeEditText = findViewById(R.id.inTimeEditText)
+        toolBarback = findViewById(R.id.toolBarback)
         lnrInTime = findViewById(R.id.lnrInTime)
         hookNumberEditText = findViewById(R.id.hookNumber)
         notesEditText = findViewById(R.id.notesEditText)
@@ -137,7 +139,9 @@ class CarFormActivity : AppCompatActivity() {
         val repository = FileUploadRepository(api)
         fileUploadViewModel = ViewModelProvider(this, ViewModelFactory.ViewModelFactoryFileUploadRepository(repository))[FileUploadViewModel::class.java]
 
-
+        toolBarback.setOnClickListener {
+            finish()
+        }
         fileUploadViewModel.uploadResult.observe(this) { result ->
             result.onSuccess { imageUrl ->
                 ProgressBarUtility.dismissProgressDialog()

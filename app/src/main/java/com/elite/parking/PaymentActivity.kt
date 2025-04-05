@@ -81,6 +81,7 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var successSection: RelativeLayout
     private lateinit var checkmarkImage: ImageView
     private lateinit var confirmedTimeText: TextView
+    private lateinit var toolBarback: TextView
     private lateinit var tokenEditText: EditText
     private lateinit var searchButton: ImageButton
     private lateinit var barcodeButton: ImageButton
@@ -109,6 +110,7 @@ class PaymentActivity : AppCompatActivity() {
         createdDate = findViewById(R.id.createdDate)
         parkingNote = findViewById(R.id.parkingNote)
         image = findViewById(R.id.image)
+        toolBarback = findViewById(R.id.toolBarback)
 
 
         timeEditText = findViewById(R.id.timeEditText)
@@ -143,7 +145,9 @@ class PaymentActivity : AppCompatActivity() {
         if(!TextUtils.isEmpty(vehicleUuid)){
             initialAPICall(vehicleUuid.toString())
         }
-
+        toolBarback.setOnClickListener {
+            finish()
+        }
         searchButton.setOnClickListener {
             val token = tokenEditText.text.toString().trim()
             if (token.isNotEmpty()) {
