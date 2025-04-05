@@ -59,11 +59,11 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.11.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
 
-//    implementation("androidx.camera:camera-core:1.4.0-beta01")
-//    implementation("androidx.camera:camera-camera2:1.4.0-beta01")
-//    implementation("androidx.camera:camera-lifecycle:1.4.0-beta01")
-//    implementation("androidx.camera:camera-view:1.4.0-beta01")
-//    implementation("com.google.mlkit:text-recognition:16.0.0")
+    implementation("androidx.camera:camera-core:1.4.0-beta01")
+    implementation("androidx.camera:camera-camera2:1.4.0-beta01")
+    implementation("androidx.camera:camera-lifecycle:1.4.0-beta01")
+    implementation("androidx.camera:camera-view:1.4.0-beta01")
+    implementation("com.google.mlkit:text-recognition:16.0.0")
 
 
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
@@ -78,4 +78,6 @@ dependencies {
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
 
+//    implementation ("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
+//    implementation("com.google.mlkit:text-recognition:16.0.0")
 }

@@ -44,6 +44,10 @@
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
+            android:name=".Camera.CameraActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name=".SplashScreenActivity"
             android:screenOrientation="portrait"
             android:exported="true">
