@@ -1,6 +1,7 @@
 package com.elite.parking
 
 import android.content.Context
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ class VehicleAdapter(
     inner class VehicleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val vehicleNo: TextView = itemView.findViewById(R.id.vehicleNo)
         private val inTime: TextView = itemView.findViewById(R.id.inTime)
+        private val outTime: TextView = itemView.findViewById(R.id.outTime)
         private val status: TextView = itemView.findViewById(R.id.status)
         private val hookNumber: TextView = itemView.findViewById(R.id.hookNumber)
         private val imageView: ShapeableImageView = itemView.findViewById(R.id.imageView)
@@ -40,7 +42,13 @@ class VehicleAdapter(
 
         fun bind(vehicle: Vehicle) {
             vehicleNo.text = vehicle.vehicleNo
-            inTime.text = vehicle.inTime
+            inTime.text = "In Time : "+vehicle.inTime
+            if(!TextUtils.isEmpty(vehicle.outTime)){
+                outTime.visibility= View.VISIBLE
+                outTime.text = "Out Time : "+vehicle.outTime
+            }else{
+                outTime.visibility= View.GONE
+            }
             hookNumber.text = vehicle.hookNo
             status.text = if (vehicle.status == 1) "Parked" else "Left"
             if (vehicle.status == 1) {

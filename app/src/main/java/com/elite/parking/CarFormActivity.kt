@@ -58,6 +58,7 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -88,6 +89,8 @@ class CarFormActivity : AppCompatActivity() {
     private lateinit var notesEditText: TextInputEditText
     private lateinit var submitButton: Button
 
+    private var selectedHour = -1
+    private var selectedMinute = -1
 
     private lateinit var vehicleCheckInViewModel: VehicleCheckInViewModel
 
@@ -182,16 +185,12 @@ class CarFormActivity : AppCompatActivity() {
         // Initialize the ViewModel
         vehicleCheckInViewModel = ViewModelProvider(this).get(VehicleCheckInViewModel::class.java)
 
-        val currentTime = LocalTime.now()
-        val formatter = DateTimeFormatter.ofPattern("HH:mm")
-        val formattedTime = currentTime.format(formatter)
-
         val currentDate = Date()
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val formattedDate = dateFormat.format(currentDate)
 
         inDateEditText.setText(formattedDate.toString())
-        inTimeEditText.setText(formattedTime.toString())
+        inTimeEditText.setText(getFormattedTime())
         vehicleNoEditText.filters = arrayOf(InputFilter.AllCaps())
 
         vehicleNoEditText.addTextChangedListener(object : TextWatcher {
@@ -292,29 +291,38 @@ class CarFormActivity : AppCompatActivity() {
         }
 
         lnrInTime.setOnClickListener {
-            // Get the current time
             val calendar = Calendar.getInstance()
-            val hour = calendar.get(Calendar.HOUR_OF_DAY) // Get hour in 24-hour format
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
             val minute = calendar.get(Calendar.MINUTE)
 
-            // Create a TimePickerDialog
             val timePickerDialog = TimePickerDialog(
                 this,
-                { _, selectedHour, selectedMinute ->
-                    // Format the time in HH:mm format
-                    val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
+                { _, hourOfDay, minuteOfHour ->
+                    // Store selected time
+                    selectedHour = hourOfDay
+                    selectedMinute = minuteOfHour
 
-                    // Set the selected time to the EditText
+                    // Update EditText with formatted time
+                    val formattedTime = formatTime(hourOfDay, minuteOfHour)
                     inTimeEditText.setText(formattedTime)
+
                 },
-                hour, // Current hour
-                minute, // Current minute
-                true // Use 24-hour format
+                hour,
+                minute,
+                false // 24-hour format based on device settings
             )
 
-            // Show the TimePickerDialog
+            timePickerDialog.setTitle("Select Booking Time")
             timePickerDialog.show()
         }
+
+    }
+    private fun formatTime(hour: Int, minute: Int): String {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+        }
+        return SimpleDateFormat("h:mm a", Locale.getDefault()).format(calendar.time)
     }
     private fun setSelected(selectedLayout: LinearLayout) {
         // If the selected item is already selected, do nothing
@@ -604,5 +612,19 @@ class CarFormActivity : AppCompatActivity() {
             validationResultText.visibility= View.VISIBLE
             validationResultText.setTextColor(resources.getColor(android.R.color.holo_red_dark))
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getFormattedTime(): String {
+        val currentTime = LocalTime.now()
+
+        // Builder pattern for more control
+        val formatter = DateTimeFormatterBuilder()
+            .appendPattern("hh:mm")  // 12-hour format
+            .appendLiteral(" ")
+            .appendPattern("a")      // AM/PM marker
+            .toFormatter(Locale.getDefault())  // Respects device locale
+
+        return currentTime.format(formatter)
     }
 }

@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
@@ -48,6 +49,7 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 import java.util.Calendar
 import java.util.Locale
 import kotlin.jvm.java
@@ -67,6 +69,8 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var vehicleType: TextView
     private lateinit var hookNumber: TextView
     private lateinit var checkinTime: TextView
+    private lateinit var checkoutTime: TextView
+    private lateinit var lnrOutTime: LinearLayout
     private lateinit var createdDate: TextView
     private lateinit var parkingNote: TextView
     private lateinit var image: ImageView
@@ -101,6 +105,7 @@ class PaymentActivity : AppCompatActivity() {
         vehicleType = findViewById(R.id.vehicleType)
         hookNumber = findViewById(R.id.hookNumber)
         checkinTime = findViewById(R.id.checkinTime)
+        checkoutTime = findViewById(R.id.checkoutTime)
         createdDate = findViewById(R.id.createdDate)
         parkingNote = findViewById(R.id.parkingNote)
         image = findViewById(R.id.image)
@@ -119,6 +124,7 @@ class PaymentActivity : AppCompatActivity() {
         barcodeButton = findViewById(R.id.barcodeButton)
         parkingCard = findViewById(R.id.parkingCard)
         lnrCheckOut = findViewById(R.id.lnrCheckOut)
+        lnrOutTime = findViewById(R.id.lnrOutTime)
         sharedPreferencesHelper = SharedPreferencesHelper(this)
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
 
@@ -134,7 +140,7 @@ class PaymentActivity : AppCompatActivity() {
         }
 
         val vehicleUuid = intent.getStringExtra("vehicleUuid")
-        if(vehicleUuid!=""){
+        if(!TextUtils.isEmpty(vehicleUuid)){
             initialAPICall(vehicleUuid.toString())
         }
 
@@ -150,10 +156,7 @@ class PaymentActivity : AppCompatActivity() {
         barcodeButton.setOnClickListener {
             startBarcodeScanner()
         }
-        val currentTime = LocalTime.now()
-        val formatter = DateTimeFormatter.ofPattern("HH:mm")
-        val formattedTime = currentTime.format(formatter)
-        timeEditText.setText(formattedTime.toString())
+        timeEditText.setText(getFormattedTime())
         expandButton.setOnClickListener {
             isExpanded = !isExpanded
 
@@ -211,6 +214,15 @@ class PaymentActivity : AppCompatActivity() {
                             vehicleType.setText(vehicleDetails.vehicleType ?: "")
                             hookNumber.setText(vehicleDetails.hookNo ?: "")
                             checkinTime.setText(vehicleDetails.inTime ?: "")
+                            checkoutTime.setText(vehicleDetails.outTime ?: "")
+                            if(!TextUtils.isEmpty(vehicleDetails.outTime)){
+                                lnrOutTime.visibility= View.VISIBLE
+                                checkoutTime.text =vehicleDetails.outTime
+                                lnrCheckOut.visibility= View.GONE
+                            }else{
+                                lnrOutTime.visibility= View.GONE
+                                lnrCheckOut.visibility= View.VISIBLE
+                            }
                             createdDate.setText(vehicleDetails.createdDate ?: "")
                             parkingNote.setText(vehicleDetails.notes ?: "")
                             vehicleuuId = vehicleDetails.parkingId ?: ""
@@ -321,7 +333,6 @@ class PaymentActivity : AppCompatActivity() {
                 // Update EditText with formatted time
                 val formattedTime = formatTime(hourOfDay, minuteOfHour)
                 timeEditText.setText(formattedTime)
-
                 // Enable submit button
                 checkOutButton.isEnabled = true
             },
@@ -455,6 +466,15 @@ class PaymentActivity : AppCompatActivity() {
                 vehicleType.setText(vehicleList.get(0).vehicleType ?: "")
                 hookNumber.setText(vehicleList.get(0).hookNo ?: "")
                 checkinTime.setText(vehicleList.get(0).inTime ?: "")
+                checkoutTime.setText(vehicleList.get(0).outTime ?: "")
+                if(!TextUtils.isEmpty(vehicleList.get(0).outTime)){
+                    lnrOutTime.visibility= View.VISIBLE
+                    checkoutTime.text =vehicleList.get(0).outTime
+                    lnrCheckOut.visibility= View.GONE
+                }else{
+                    lnrOutTime.visibility= View.GONE
+                    lnrCheckOut.visibility= View.VISIBLE
+                }
                 createdDate.setText(vehicleList.get(0).createdDate ?: "")
                 parkingNote.setText(vehicleList.get(0).notes ?: "")
                 vehicleuuId = vehicleList.get(0).uuid ?: ""
@@ -523,5 +543,18 @@ class PaymentActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         tokenEditText.setText("")
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getFormattedTime(): String {
+        val currentTime = LocalTime.now()
+
+        // Builder pattern for more control
+        val formatter = DateTimeFormatterBuilder()
+            .appendPattern("hh:mm")  // 12-hour format
+            .appendLiteral(" ")
+            .appendPattern("a")      // AM/PM marker
+            .toFormatter(Locale.getDefault())  // Respects device locale
+
+        return currentTime.format(formatter)
     }
 }

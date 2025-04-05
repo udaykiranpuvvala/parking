@@ -97,9 +97,6 @@ class HistoryFragment : Fragment()  {
         })*/
         vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->
             vehicleAdapter = VehicleAdapter(requireContext(), vehicleList) { vehicle ->
-
-                Toast.makeText(context, "Clicked on ${vehicle.vehicleNo}", Toast.LENGTH_SHORT).show()
-                // Example: Navigate to a detail screen
                 val intent = Intent(requireActivity(), PaymentActivity::class.java)
                 intent.putExtra("vehicleUuid", vehicle.uuid)
                 startActivity(intent)
