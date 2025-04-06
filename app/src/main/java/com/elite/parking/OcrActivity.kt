@@ -127,6 +127,18 @@ class OcrActivity : AppCompatActivity() {
     }
 
     private fun processImageForOCR(bitmap: Bitmap) {
+        /*val image = FirebaseVisionImage.fromBitmap(bitmap)
+          val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
+
+            detector.processImage(image)
+                .addOnSuccessListener { firebaseVisionText ->
+                    for (block in firebaseVisionText.textBlocks) {
+                        Log.d("OCR", "Detected text: ${block.text}")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("OCR", "Text recognition failed: $e")
+                }*/
         val image = InputImage.fromBitmap(bitmap, 0)
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 

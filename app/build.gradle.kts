@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+//    id("com.google.gms.google-services")
 }
 
 android {
@@ -76,6 +77,9 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
+
+//    implementation("com.google.firebase:firebase-ml-vision:24.1.0")
+//    implementation("com.google.firebase:firebase-ml-vision-text-model:20.0.3")
 
 
 //    implementation ("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
