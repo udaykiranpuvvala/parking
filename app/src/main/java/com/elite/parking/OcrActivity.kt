@@ -8,8 +8,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +40,7 @@ class OcrActivity : AppCompatActivity() {
     private lateinit var textView: TextView
     private lateinit var btnSubmit: Button
     private lateinit var refresh: ImageView
+    private lateinit var lnrRefresh: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,7 @@ class OcrActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
         btnSubmit = findViewById(R.id.btnSubmit)
         refresh = findViewById(R.id.refresh)
+        lnrRefresh = findViewById(R.id.lnrRefresh)
         val captureButton: Button = findViewById(R.id.captureButton)
 
         // Request camera permissions
@@ -148,15 +152,21 @@ class OcrActivity : AppCompatActivity() {
                     val extractedText = visionText.text
                     val numberPlate = extractNumberPlate(extractedText)
                     textView.text = extractedText//numberPlate ?: "No valid number plate detected"
+                    lnrRefresh.visibility=View.VISIBLE
+                    btnSubmit.visibility=View.VISIBLE
 
                 }else{
                     textView.text = "";
                     Toast.makeText(this, "Please provide valid image to Capture Number Plate", Toast.LENGTH_LONG).show()
+                    lnrRefresh.visibility=View.GONE
+                    btnSubmit.visibility=View.GONE
                 }
             }
             .addOnFailureListener { e ->
                 Log.e("OCR", "Text recognition failed", e)
                 textView.text = "OCR failed"
+                lnrRefresh.visibility=View.GONE
+                btnSubmit.visibility=View.GONE
             }
     }
 

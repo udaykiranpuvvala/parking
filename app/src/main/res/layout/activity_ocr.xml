@@ -42,7 +42,8 @@
         <!-- Camera Preview Area -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="vertical">
@@ -50,7 +51,7 @@
             <androidx.camera.view.PreviewView
                 android:id="@+id/viewFinder"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="match_parent"
                 android:scaleType="fitCenter"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
@@ -58,6 +59,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
+                android:visibility="gone"
                 android:layout_marginTop="10dp"
                 android:layout_margin="20dp"
                 android:scaleType="fitCenter" />
@@ -68,7 +70,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.6"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -94,6 +96,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:visibility="gone"
+                android:id="@+id/lnrRefresh"
                 android:orientation="horizontal"
                 android:padding="8dp">
 
@@ -133,7 +137,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
