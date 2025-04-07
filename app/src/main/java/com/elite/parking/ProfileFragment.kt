@@ -1,20 +1,28 @@
 package com.elite.parking
 
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.util.TimeUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.os.postDelayed
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -33,8 +41,16 @@ import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.AuthViewModel
 import com.elite.parking.viewModel.LoginViewModel
 import com.elite.parking.viewModel.VehicleCheckInViewModel
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.client.android.BuildConfig
-import org.json.JSONException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -62,9 +78,13 @@ class ProfileFragment : Fragment() {
         val tvEmail: TextView = view.findViewById(R.id.tvEmail)
         val tvMobile: TextView = view.findViewById(R.id.tvPhone)
         val tvdesignation: TextView = view.findViewById(R.id.tvdesignation)
-        val tvAddress: TextView = view.findViewById(R.id.tvAddress)
         val version: TextView= view.findViewById(R.id.tvVersion)
-        val logout: Button= view.findViewById(R.id.btnLogout)
+        val logout: LinearLayout= view.findViewById(R.id.btnLogout)
+        val changePassword: LinearLayout= view.findViewById(R.id.changePassword)
+        changePassword.setOnClickListener {
+            showStyledPasswordDialog()
+        }
+
         logoutViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
         logoutViewModel.response.observe(viewLifecycleOwner, Observer { resource ->
@@ -115,7 +135,6 @@ class ProfileFragment : Fragment() {
                 tvEmail.text = email
                 tvMobile.text = mobile
                 tvdesignation.text = designation
-                tvAddress.text = address
             }
         } ?: run {
             Toast.makeText(context, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
@@ -168,4 +187,128 @@ class ProfileFragment : Fragment() {
         builder.show()
     }
 
+
+
+        private fun showStyledPasswordDialog() {
+            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_change_password, null)
+
+            // Initialize views
+            val etCurrentPassword = dialogView.findViewById<EditText>(R.id.etCurrentPassword)
+            val etNewPassword = dialogView.findViewById<EditText>(R.id.etNewPassword)
+            val etConfirmPassword = dialogView.findViewById<EditText>(R.id.etConfirmPassword)
+
+            val currentPasswordLayout = dialogView.findViewById<TextInputLayout>(R.id.currentPasswordLayout)
+            val newPasswordLayout = dialogView.findViewById<TextInputLayout>(R.id.newPasswordLayout)
+            val confirmPasswordLayout = dialogView.findViewById<TextInputLayout>(R.id.confirmPasswordLayout)
+
+            val btnCancel = dialogView.findViewById<Button>(R.id.btnCancel)
+            val btnChange = dialogView.findViewById<Button>(R.id.btnChange)
+
+            val dialog = Dialog(requireContext()).apply {
+                setContentView(dialogView)
+                //window?.setBackgroundDrawableResource(android.R.color.transparent)
+                window?.setLayout(
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT
+                )
+                setCancelable(false)
+            }
+
+            // Button click listeners
+            btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            btnChange.setOnClickListener {
+                val currentPass = etCurrentPassword.text.toString()
+                val newPass = etNewPassword.text.toString()
+                val confirmPass = etConfirmPassword.text.toString()
+
+                if (validatePasswordInputs(
+                        currentPass,
+                        newPass,
+                        confirmPass,
+                        currentPasswordLayout,
+                        newPasswordLayout,
+                        confirmPasswordLayout
+                    )) {
+                    // Show loading state
+                    btnChange.isEnabled = false
+//                    btnChange.icon = ContextCompat.getDrawable(requireContext(), R.drawable.parkingcar_48)
+//                    btnChange.iconGravity = MaterialButton.ICON_GRAVITY_END
+//                    btnChange.iconPadding = 8
+
+                    GlobalScope.launch {
+                        delay(2000)
+                        withContext(Dispatchers.Main) {
+                            dialog.dismiss()
+                            showPasswordChangeSuccess()
+                        }
+                    }
+                }
+            }
+
+            // Show keyboard when dialog appears
+            dialog.setOnShowListener {
+                etCurrentPassword.requestFocus()
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(etCurrentPassword, InputMethodManager.SHOW_IMPLICIT)
+            }
+
+            dialog.show()
+        }
+
+        private fun validatePasswordInputs(
+            currentPass: String,
+            newPass: String,
+            confirmPass: String,
+            currentLayout: TextInputLayout,
+            newLayout: TextInputLayout,
+            confirmLayout: TextInputLayout
+        ): Boolean {
+            var isValid = true
+
+            // Reset errors
+            currentLayout.error = null
+            newLayout.error = null
+            confirmLayout.error = null
+
+            if (currentPass.isEmpty()) {
+                currentLayout.error = "Current password is required"
+                isValid = false
+            } else if (currentPass.length < 6) {
+                currentLayout.error = "Password is too short"
+                isValid = false
+            }
+
+            if (newPass.isEmpty()) {
+                newLayout.error = "New password is required"
+                isValid = false
+            } else if (newPass.length < 8) {
+                newLayout.error = "Use 8+ characters for better security"
+                isValid = false
+            } else if (!newPass.matches(".*[A-Z].*".toRegex())) {
+                newLayout.error = "Include at least one uppercase letter"
+                isValid = false
+            } else if (!newPass.matches(".*[0-9].*".toRegex())) {
+                newLayout.error = "Include at least one number"
+                isValid = false
+            }
+
+            if (confirmPass != newPass) {
+                confirmLayout.error = "Passwords don't match"
+                isValid = false
+            }
+
+            return isValid
+        }
+
+        private fun showPasswordChangeSuccess() {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Password Changed")
+                .setMessage("Your password has been updated successfully!")
+                .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                .setIcon(R.drawable.car_crash)
+                .show()
+        }
 }

@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/toolBarback"
-            android:text="@string/app_name"
+            android:text="Check In"
             android:layout_gravity="center"
             android:gravity="center"
             android:drawableStart="@drawable/arrow_back"
@@ -389,9 +389,10 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:hint="Enter Token number"
+                                android:hint="Enter Serial No"
                                 android:inputType="number"
                                 android:maxLines="1"
+                                android:paddingStart="10dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="16sp"
@@ -499,7 +500,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/white"
-                                android:text="Select Parking Lot"
+                                android:text="Select Parking"
                                 android:textSize="10dp"
                                 android:maxLines="2"
                                 android:layout_marginTop="5dp"
@@ -516,9 +517,10 @@
                                 android:id="@+id/selectedSlotNumber"
                                 android:textSize="10dp"
                                 android:maxLines="2"
+                                android:textStyle="bold"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                android:textColor="@color/green" />
+                                android:textColor="@color/maroon" />
                         </LinearLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
@@ -561,7 +563,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/maroon"
-                    android:text="Submit"
+                    android:text="Save"
                     android:textColor="@color/white" />
                 </androidx.cardview.widget.CardView>
 

@@ -23,7 +23,7 @@ class ParkingViewModel : ViewModel() {
     fun fetchParkingSlots(companyId : String,authToken: String) {
         viewModelScope.launch {
             try {
-                val response = repository.getAvailableParkingSlots(companyId,authToken)
+                val response = repository.getAvailableParkingSlots(companyId, authToken)
                 if (response.isSuccessful && response.body() != null) {
                     val slots = response.body()!!.content
                     val groupedList = groupByFloor(slots)
@@ -37,7 +37,7 @@ class ParkingViewModel : ViewModel() {
         }
     }
 
-    private fun groupByFloor(slots: List<ParkingSlot>): List<ListItem> {
+   /* private fun groupByFloor(slots: List<ParkingSlot>): List<ListItem> {
         val groupedList = mutableListOf<ListItem>()
         val floorMap = slots.groupBy { it.floorNo }
 
@@ -47,5 +47,24 @@ class ParkingViewModel : ViewModel() {
         }
 
         return groupedList
-    }
+    }*/
+   private fun groupByFloor(slots: List<ParkingSlot>): List<ListItem> {
+       val groupedList = mutableListOf<ListItem>()
+       val blockMap = slots.groupBy { it.blockNo }
+
+       for ((blockNo, floorSlots) in blockMap) {
+           groupedList.add(ListItem.FloorHeader(blockNo))
+
+           val floorMap = floorSlots.groupBy { it.floorNo }
+           for ((floorNo, floorSlots) in floorMap) {
+               groupedList.add(ListItem.BLockHeader(floorNo))
+
+               floorSlots.forEach {
+                   groupedList.add(ListItem.ParkingSlotItem(it))
+               }
+           }
+       }
+       return groupedList
+   }
+
 }

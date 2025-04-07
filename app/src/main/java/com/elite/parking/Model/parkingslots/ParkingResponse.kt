@@ -19,7 +19,13 @@ data class ParkingSlot(
 
 // For sectioned list with headers
 sealed class ListItem {
-    data class Header(val floorNo: String) : ListItem()
+    data class BLockHeader(val blockNo: String) : ListItem()
+    data class FloorHeader(val floorNo: String) : ListItem()
     data class ParkingSlotItem(val slot: ParkingSlot) : ListItem()
+
+  /*  data class FloorHeader(val floorNo: String) : ListItem()
+    data class BLockHeader(val blockNo: String, val parkingSlots: List<ParkingSlotItem>) : ListItem()
+    data class ParkingSlotItem(val slot: ParkingSlot) : ListItem()
+    data class ParkingSlot(val parkingNo: String, val availabilityStatus: Int)*/
 }
 

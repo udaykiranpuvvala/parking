@@ -3,6 +3,7 @@ package com.elite.parking
 import android.app.Activity
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -71,6 +72,7 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var checkinTime: TextView
     private lateinit var checkoutTime: TextView
     private lateinit var lnrOutTime: LinearLayout
+    private lateinit var lnrNoData: LinearLayout
     private lateinit var createdDate: TextView
     private lateinit var parkingNote: TextView
     private lateinit var image: ImageView
@@ -111,6 +113,7 @@ class PaymentActivity : AppCompatActivity() {
         parkingNote = findViewById(R.id.parkingNote)
         image = findViewById(R.id.image)
         toolBarback = findViewById(R.id.toolBarback)
+        lnrNoData = findViewById(R.id.lnrNoData)
 
 
         timeEditText = findViewById(R.id.timeEditText)
@@ -153,7 +156,7 @@ class PaymentActivity : AppCompatActivity() {
             if (token.isNotEmpty()) {
                 searchToken(token)
             } else {
-                Toast.makeText(this, "Please enter a token number", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter a Serial number", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -212,6 +215,7 @@ class PaymentActivity : AppCompatActivity() {
                             val vehicleDetails = content[0]
                             lnrCheckOut.visibility= View.VISIBLE
                             parkingCard.visibility= View.VISIBLE
+                            lnrNoData.visibility=View.GONE
                             // Populate the UI with vehicle details
                             parkingId.setText(vehicleDetails.parkingId ?: "")
                             vehicleNumber.setText(vehicleDetails.vehicleNo ?: "")
@@ -234,12 +238,14 @@ class PaymentActivity : AppCompatActivity() {
                             // Load image using Glide
                             Glide.with(this)
                                 .load(vehicleDetails.imageUrl)
-                                .placeholder(R.drawable.car3)
-                                .error(R.drawable.car3)
+                                .placeholder(R.drawable.ic_default_image)
+                                .error(R.drawable.ic_default_image)
                                 .into(image)
                         } else {
                             lnrCheckOut.visibility= View.GONE
                             parkingCard.visibility= View.GONE
+                            lnrNoData.visibility=View.VISIBLE
+
                             Toast.makeText(this, "No vehicle details available", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -389,7 +395,7 @@ class PaymentActivity : AppCompatActivity() {
         successSection.visibility = View.VISIBLE
 
         // Set the confirmed time
-        confirmedTimeText.text = formatTime(selectedHour, selectedMinute)
+        confirmedTimeText.text = timeEditText.text.toString().trim()
 
         // Animate the checkmark
         animateCheckmark()
@@ -465,6 +471,7 @@ class PaymentActivity : AppCompatActivity() {
             if (vehicleList != null) {
                 lnrCheckOut.visibility= View.VISIBLE
                 parkingCard.visibility= View.VISIBLE
+                lnrNoData.visibility=View.GONE
                 parkingId.setText(vehicleList.get(0).parkingId ?: "")
                 vehicleNumber.setText(vehicleList.get(0).vehicleNo ?: "")
                 vehicleType.setText(vehicleList.get(0).vehicleType ?: "")
@@ -484,8 +491,8 @@ class PaymentActivity : AppCompatActivity() {
                 vehicleuuId = vehicleList.get(0).uuid ?: ""
                 Glide.with(this)
                     .load(vehicleList.get(0).imageUrl)
-                    .placeholder(R.drawable.car3)
-                    .error(R.drawable.car3)
+                    .placeholder(R.drawable.ic_default_image)
+                    .error(R.drawable.ic_default_image)
                     .into(image)
             }
 
@@ -519,11 +526,11 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun startBarcodeScanner() {
         val integrator = IntentIntegrator(this)
-        integrator.setPrompt("Scan a token barcode")
-        integrator.setBeepEnabled(true)
-        integrator.setOrientationLocked(true)
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-        integrator.initiateScan()
+        integrator.setPrompt("Scan a token barcode") // Optional prompt
+        integrator.setBeepEnabled(true) // Optional beep on scan
+        integrator.setOrientationLocked(true) // Optional lock orientation
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES) // Scan all barcode types
+        integrator.initiateScan() // Start the scan
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

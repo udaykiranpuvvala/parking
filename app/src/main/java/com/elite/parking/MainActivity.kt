@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -78,8 +79,8 @@ class MainActivity : AppCompatActivity() {
 
             val indicator = itemView.findViewById<View>(R.id.bottom_navigation) ?: View(this).apply {
                 id = R.id.bottom_navigation
-                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 4)
-                setBackgroundColor(Color.RED) // Change to your color
+                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8)
+                setBackgroundColor(ContextCompat.getColor(context, R.color.maroon))
                 itemView.addView(this)
             }
             indicator.visibility = if (selected) View.VISIBLE else View.INVISIBLE

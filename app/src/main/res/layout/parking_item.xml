@@ -29,9 +29,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:layout_gravity="center"
-
-                app:shapeAppearanceOverlay="@style/RoundedCornerMedium"
-                tools:src="@drawable/car3" />
+                app:shapeAppearanceOverlay="@style/RoundedCornerMedium" />
 
             <!-- Status Ribbon (Top-Right) -->
             <LinearLayout
@@ -66,39 +64,63 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="2"
             android:orientation="horizontal">
 
-
-
-            <!-- Time Indicators -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
-                android:layout_weight="1.5"
                 android:layout_gravity="top"
                 android:gravity="top"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/vehicleNo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="AP39CZ9999"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/vehicleNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AP39CZ9999"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.03"
+                            android:fontFamily="sans-serif-condensed"/>
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="end"
+                       android:gravity="end">
+                    <TextView
+                        android:id="@+id/hookNumber"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/badge_ripple"
+                        android:text="1"
+                        android:layout_gravity="end"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_marginEnd="16dp"
+                        android:elevation="2dp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"/>
+                   </LinearLayout>
+
+                </LinearLayout>
                 <TextView
                     android:id="@+id/inTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="4dp"
                     android:layout_gravity="center"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:drawableTint="@color/black"
-                    android:text="05:04 PM"
+                    android:text="Check In : 05:08 PM   1994/08/09"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
@@ -108,13 +130,14 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="4dp"
                     android:layout_gravity="center"
-                    android:gravity="center"
+                    android:gravity="start"
+                    android:layout_marginTop="5dp"
                     android:drawableTint="@color/black"
-                    android:text="08:04 PM"
+                    android:text="Check Out : 05:08 PM   1994/08/09"
                     android:textColor="@color/maroon"
                     android:textSize="14sp" />
             </LinearLayout>
-            <LinearLayout
+          <!--  <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:orientation="vertical"
@@ -127,7 +150,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:drawableTint="@color/black"
-                android:text="Token"
+                android:text="Serial"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
             <TextView
@@ -140,7 +163,7 @@
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold" />
-            </LinearLayout>
+            </LinearLayout>-->
 
         </LinearLayout>
 

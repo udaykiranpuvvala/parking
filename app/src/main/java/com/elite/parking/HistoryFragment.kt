@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +32,7 @@ class HistoryFragment : Fragment()  {
     private lateinit var vehicleViewModel: VehicleViewModel.VehicleViewModelList
     private lateinit var userId: String
     private lateinit var authToken: String
+    private lateinit var lnrNoData: LinearLayout
     private lateinit var shimmerLayout: ShimmerFrameLayout
 
     private lateinit var childFab1: FloatingActionButton
@@ -45,6 +47,7 @@ class HistoryFragment : Fragment()  {
 
         shimmerLayout = view.findViewById(R.id.shimmerLayout)
         recyclerView = view.findViewById(R.id.vehicleRecyclerView)
+        lnrNoData = view.findViewById(R.id.lnrNoData)
         recyclerView.layoutManager = LinearLayoutManager(context)
         sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
@@ -64,12 +67,12 @@ class HistoryFragment : Fragment()  {
         shimmerLayout.startShimmer()
 
         // Simulate data loading (e.g., API call)
-        Handler(Looper.getMainLooper()).postDelayed({
+       /* Handler(Looper.getMainLooper()).postDelayed({
             // Stop shimmer effect & show RecyclerView
             shimmerLayout.stopShimmer()
             shimmerLayout.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
-        }, 3000) // 3 seconds delay
+        }, 3000) // 3 seconds delay*/
 
         childFab1.setOnClickListener {
             val intent = Intent(requireActivity(), CarFormActivity::class.java)
@@ -96,6 +99,14 @@ class HistoryFragment : Fragment()  {
             recyclerView.adapter = vehicleAdapter
         })*/
         vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->
+            if(vehicleList.size>=1){
+                lnrNoData.visibility=View.GONE
+            }else{
+                lnrNoData.visibility=View.VISIBLE
+            }
+
+            shimmerLayout.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
             vehicleAdapter = VehicleAdapter(requireContext(), vehicleList) { vehicle ->
                 val intent = Intent(requireActivity(), PaymentActivity::class.java)
                 intent.putExtra("vehicleUuid", vehicle.uuid)

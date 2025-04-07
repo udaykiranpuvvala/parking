@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
     <color name="green">#8BD58D</color>
+    <color name="greenDark">#055707</color>
     <color name="maroon">#800000</color>
     <color name="viewColor">#D0CFCF</color>
     <color name="colorSelectedHome">#FFFF00</color> <!-- Yellow for Home -->

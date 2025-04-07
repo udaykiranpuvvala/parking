@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Car Body -->
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M50,120H150C152.21,120 154,121.79 154,124V140C154,142.21 152.21,144 150,144H50C47.79,144 46,142.21 46,140V124C46,121.79 47.79,120 50,120ZM50,121V139H150V121H50Z"/>
+
+    <!-- Car Roof -->
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M60,90H140C142.21,90 144,91.79 144,94V110C144,112.21 142.21,114 140,114H60C57.79,114 56,112.21 56,110V94C56,91.79 57.79,90 60,90ZM60,91V109H140V91H60Z"/>
+
+    <!-- Car Wheels -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M70,140C70,141.66 69.34,143 68,143C66.66,143 66,141.66 66,140C66,138.34 66.66,137 68,137C69.34,137 70,138.34 70,140ZM130,140C130,141.66 129.34,143 128,143C126.66,143 126,141.66 126,140C126,138.34 126.66,137 128,137C129.34,137 130,138.34 130,140Z"/>
+
+    <!-- "No Data" Text Placeholder -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M40,160H160V170H40V160Z"/>
+</vector>

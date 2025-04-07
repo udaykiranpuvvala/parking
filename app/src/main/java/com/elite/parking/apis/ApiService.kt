@@ -29,22 +29,22 @@ interface ApiService {
     @POST("valetparkingapi/auth/user/loginByMobilePassword")
       fun loginByMobilePassword(@Body request: LoginRequest): Call<LoginResponse>
 
-    @GET("valetparkingapi/vehicleDetails/getByUserId/{userId}")
+    @GET("valetparkingapi/parkingDetails/getByUserId/{userId}")
     fun getVehicleDetails(@Path("userId") userId: String, @Header("Authorization") authToken: String): Call<VehicleResponse>
 
-    @GET("valetparkingapi/vehicleDetails/getById/{id}")
+    @GET("valetparkingapi/parkingDetails/getById/{id}")
     fun getVehicleDetailsById(@Path("id") vehicleId: String,@Header("Authorization") authToken: String): Call<VehicleDetailResponse>
 
-    @POST("valetparkingapi/vehicleDetails/checkIn")
+    @POST("valetparkingapi/parkingDetails/checkIn")
     fun checkIn(
         @Header("Authorization") authToken: String,
         @Body vehicleCheckInRequest: VehicleCheckInRequest
     ): Call<VehicleCheckInResponse>
 
-    @POST("valetparkingapi/vehicleDetails/checkOut")
+    @POST("valetparkingapi/parkingDetails/checkOut")
     fun checkOut(@Header("Authorization") authToken: String, @Body request: CheckOutRequest): Call<VehicleDetailResponse>
 
-    @POST("valetparkingapi/vehicleDetails/getVehicleDetailsByHookNoOrVehicleNo")
+    @POST("valetparkingapi/parkingDetails/getVehicleDetailsByHookNoOrVehicleNo")
      fun getVehicleDetailsbyHookNumber(@Header("Authorization") token: String, @Body request: VehicleDetailsByHookNumberRequest): Call<VehicleDetailResponse>
 
 

@@ -33,7 +33,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
+            android:text="Check Out"
             android:layout_gravity="center"
             android:gravity="center"
             android:id="@+id/toolBarback"
@@ -69,7 +69,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Enter token number"
+                android:hint="Enter Serial number"
                 android:inputType="number"
                 android:maxLines="1"
                 android:textSize="16sp"
@@ -103,6 +103,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Scan barcode"/>
         </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -501,7 +502,7 @@
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:src="@drawable/car3" />
+                                android:src="@drawable/ic_default_image" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -700,7 +701,7 @@
                             android:adjustViewBounds="true"
                             android:contentDescription="Vehicle image"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/car3" />
+                            android:src="@drawable/ic_default_image" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -801,7 +802,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Your CheckOut is confirmed"
+                            android:text="Your CheckOut Time is confirmed"
                             android:textColor="#666666"
                             android:textSize="16sp"
                             android:layout_marginTop="8dp"/>
@@ -809,5 +810,26 @@
                 </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="200dp"
+            android:id="@+id/lnrNoData"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/no_data_icon"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="No Data"/>
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

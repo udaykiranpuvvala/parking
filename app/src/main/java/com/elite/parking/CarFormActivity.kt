@@ -41,6 +41,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.Model.VehicleCheckInRequest
+import com.elite.parking.Model.parkingslots.ListItem
 import com.elite.parking.apis.ApiService.Companion.api
 import com.elite.parking.loader.NetworkUtils
 import com.elite.parking.loader.ProgressBarUtility
@@ -195,7 +196,11 @@ class CarFormActivity : AppCompatActivity() {
 
         inDateEditText.setText(formattedDate.toString())
         inTimeEditText.setText(getFormattedTime())
-        vehicleNoEditText.filters = arrayOf(InputFilter.AllCaps())
+        val maxLength = 10
+        vehicleNoEditText.filters = arrayOf(
+            InputFilter.LengthFilter(maxLength),
+            InputFilter.AllCaps()
+        )
 
         vehicleNoEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
@@ -224,7 +229,7 @@ class CarFormActivity : AppCompatActivity() {
                         userId = userId,
                         vehicleNo = vehicleNoEditText.text.toString(),
                         vehicleType = selectedVehicleType.toString(),
-                        companyId = "",
+                        companyId = companyId,
                         hookNo = hookNumberEditText.text.toString(),
                         notes = notesEditText.text.toString(),
                         inTime = inTimeEditText.text.toString(),
@@ -365,20 +370,20 @@ class CarFormActivity : AppCompatActivity() {
             return false
         }
 
-        if (parkingimageUrl.isEmpty()) {
+        /*if (parkingimageUrl.isEmpty()) {
             showToast("Please Capture Image")
             return false
-        }
+        }*/
         /*val model = vehicleModelEditText.text.toString().trim()
         if (model.isEmpty()) {
             showToast("Vehicle Model is required.")
             return false
         }*/
-        val notes = notesEditText.text.toString().trim()
+        /*val notes = notesEditText.text.toString().trim()
         if (notes.isEmpty()) {
             showToast("Notes is required.")
             return false
-        }
+        }*/
 
         if (selectedVehicleType == null) {
             showToast("Please select a vehicle type")
@@ -410,8 +415,9 @@ class CarFormActivity : AppCompatActivity() {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     return when (parkingAdapter.getItemViewType(position)) {
-                        SectionedParkingAdapter.TYPE_HEADER -> 3 // Headers take full row
-                        else -> 1 // Items take 1 column
+                        SectionedParkingAdapter.TYPE_BLOCK_HEADER -> 3
+                        SectionedParkingAdapter.TYPE_FLOOR_HEADER -> 3
+                        else -> 1
                     }
                 }
             }
@@ -590,15 +596,12 @@ class CarFormActivity : AppCompatActivity() {
         return null
     }
     private fun startBarcodeScanner() {
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
-        // Initialize the IntentIntegrator
         val integrator = IntentIntegrator(this)
-        integrator.setPrompt("Scan a token barcode")
-        integrator.setBeepEnabled(true)
-        integrator.setOrientationLocked(false)  // You can leave it false so that it doesn't lock orientation in scan screen
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-        integrator.initiateScan()  // Start scanning
+        integrator.setPrompt("Scan a token barcode") // Optional prompt
+        integrator.setBeepEnabled(true) // Optional beep on scan
+        integrator.setOrientationLocked(true) // Optional lock orientation
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES) // Scan all barcode types
+        integrator.initiateScan() // Start the scan
     }
     private fun validateVehicleNumber(vehicleNumber: String) {
         // Modified regex to allow no spaces between components
