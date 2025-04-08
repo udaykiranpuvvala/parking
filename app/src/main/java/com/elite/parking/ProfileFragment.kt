@@ -27,9 +27,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.elite.parking.Model.LogoutRequest
+import com.elite.parking.Model.UpdatePasswordFactory
 import com.elite.parking.Model.UserSession
 import com.elite.parking.Model.UserSession.token
 import com.elite.parking.Model.VehicleCheckInRequest
+import com.elite.parking.Model.VehicleViewCheckOutFactory
 import com.elite.parking.Resource
 import com.elite.parking.SplashScreenActivity
 import com.elite.parking.apis.ApiService
@@ -37,10 +39,14 @@ import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.loader.NetworkUtils
 import com.elite.parking.loader.ProgressBarUtility
 import com.elite.parking.repository.AuthRepository
+import com.elite.parking.repository.VehicleRepository
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.AuthViewModel
 import com.elite.parking.viewModel.LoginViewModel
 import com.elite.parking.viewModel.VehicleCheckInViewModel
+import com.elite.parking.viewModel.VehicleViewModel
+import com.elite.parking.viewModel.VehicleViewModel.UpDatePasswordViewModel
+import com.elite.parking.viewModel.VehicleViewModel.VehicleDetailCheckOutViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -63,6 +69,7 @@ class ProfileFragment : Fragment() {
     private lateinit var userId: String
 
     private lateinit var logoutViewModel: AuthViewModel
+    private lateinit var upDatePasswordViewModel: VehicleViewModel.UpDatePasswordViewModel
 
 
     override fun onCreateView(
@@ -230,21 +237,17 @@ class ProfileFragment : Fragment() {
                         confirmPass,
                         currentPasswordLayout,
                         newPasswordLayout,
-                        confirmPasswordLayout
-                    )) {
-                    // Show loading state
-                    btnChange.isEnabled = false
-//                    btnChange.icon = ContextCompat.getDrawable(requireContext(), R.drawable.parkingcar_48)
-//                    btnChange.iconGravity = MaterialButton.ICON_GRAVITY_END
-//                    btnChange.iconPadding = 8
+                        confirmPasswordLayout)) {
 
-                    GlobalScope.launch {
+                    upDatePasswordAPICall(currentPass,confirmPass,dialog)
+
+                  /*  GlobalScope.launch {
                         delay(2000)
                         withContext(Dispatchers.Main) {
                             dialog.dismiss()
                             showPasswordChangeSuccess()
                         }
-                    }
+                    }*/
                 }
             }
 
@@ -276,10 +279,10 @@ class ProfileFragment : Fragment() {
             if (currentPass.isEmpty()) {
                 currentLayout.error = "Current password is required"
                 isValid = false
-            } else if (currentPass.length < 6) {
+            } /*else if (currentPass.length < 6) {
                 currentLayout.error = "Password is too short"
                 isValid = false
-            }
+            }*/
 
             if (newPass.isEmpty()) {
                 newLayout.error = "New password is required"
@@ -311,4 +314,32 @@ class ProfileFragment : Fragment() {
                 .setIcon(R.drawable.car_crash)
                 .show()
         }
+
+    private fun upDatePasswordAPICall(oldPassword: String,newPassword: String,dialog: Dialog) {
+        val apiService = RetrofitClient.instance.create(ApiService::class.java)
+        val repository = VehicleRepository(apiService)
+        upDatePasswordViewModel = ViewModelProvider(this, UpdatePasswordFactory(repository)).get(UpDatePasswordViewModel::class.java)
+        upDatePasswordViewModel.isLoading.observe(this, Observer { isLoading ->
+            ProgressBarUtility.showProgressDialog(requireContext())
+        })
+
+        upDatePasswordViewModel.error.observe(this, Observer { errorMessage ->
+            ProgressBarUtility.dismissProgressDialog()
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+        })
+
+        upDatePasswordViewModel.upDatePasswordDetail.observe(
+            this,
+            Observer { vehicleDetailResponse ->
+                vehicleDetailResponse?.let {
+                    ProgressBarUtility.dismissProgressDialog()
+                    Toast.makeText(context, vehicleDetailResponse.mssg, Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+            })
+
+        upDatePasswordViewModel.updatePasswordReq(authToken,oldPassword, userId,newPassword)
+
+    }
+
 }

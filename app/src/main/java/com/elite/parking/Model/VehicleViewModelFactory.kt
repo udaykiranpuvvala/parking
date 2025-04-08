@@ -20,3 +20,9 @@ class VehicleViewCheckOutFactory(private val repository: VehicleRepository) : Vi
         return VehicleViewModel.VehicleDetailCheckOutViewModel(repository) as T
     }
 }
+
+class UpdatePasswordFactory(private val repository: VehicleRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return VehicleViewModel.UpDatePasswordViewModel(repository) as T
+    }
+}

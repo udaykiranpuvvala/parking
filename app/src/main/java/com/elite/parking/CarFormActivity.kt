@@ -57,9 +57,11 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
+import java.time.format.DateTimeParseException
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -224,6 +226,11 @@ class CarFormActivity : AppCompatActivity() {
             if (NetworkUtils.isNetworkAvailable(this)) {
                 if (validateForm()) {
                     ProgressBarUtility.showProgressDialog(this)
+                    val inputFormatter = DateTimeFormatter.ofPattern("[h:mm][hh:mm] a dd/MM/yyyy")
+                    val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                    val dateTime = LocalDateTime.parse(inTimeEditText.text.toString()+" "+inDateEditText.text.toString(), inputFormatter)
+                    val formattedDateTime = dateTime.format(outputFormatter)
+
                     val vehicleCheckInRequest = VehicleCheckInRequest(
                         parkingId = parkingLotNumber,
                         userId = userId,
@@ -232,7 +239,7 @@ class CarFormActivity : AppCompatActivity() {
                         companyId = companyId,
                         hookNo = hookNumberEditText.text.toString(),
                         notes = notesEditText.text.toString(),
-                        inTime = inTimeEditText.text.toString(),
+                        inTime = formattedDateTime.toString(),
                         imageUrl = parkingimageUrl,
                         createdDate = inDateEditText.text.toString(),
                         modifiedDate = "",

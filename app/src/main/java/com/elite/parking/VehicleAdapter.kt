@@ -1,17 +1,23 @@
 package com.elite.parking
 
 import android.content.Context
+import android.os.Build
 import android.text.TextUtils
+import android.text.format.DateUtils.formatDateTime
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.elite.parking.Model.login.Vehicle
 import com.google.android.material.imageview.ShapeableImageView
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.*
 
@@ -21,7 +27,6 @@ class VehicleAdapter(
     private val onItemClick: (Vehicle) -> Unit
 ) : RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder>() {
 
-    // Sort vehicles by inTime (AM/PM format) and then by createdDate
     init {
         vehicleList = sortVehicles(vehicleList)
     }
@@ -43,46 +48,21 @@ class VehicleAdapter(
         notifyDataSetChanged()
     }
 
-    // Helper method to sort vehicles by inTime and createdDate
     private fun sortVehicles(list: List<Vehicle>): List<Vehicle> {
         return list.sortedWith(
             compareByDescending<Vehicle> { vehicle ->
-                // First, sort by inTime
                 parseTime(vehicle.inTime)
-            }.thenByDescending { vehicle ->
-                // Then, sort by createdDate
-                parseDate(vehicle.createdDate)
             }
         )
     }
 
     private fun parseTime(timeString: String): Date {
         return try {
-            val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+            val sdf =
+                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()) // Matching inTime format
             sdf.parse(timeString) ?: Date(0)
         } catch (e: Exception) {
-            Date(0)  // Default date in case of parsing error
-        }
-    }
-
-    private fun parseDate(dateString: String): Date {
-        return try {
-            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            sdf.parse(dateString) ?: Date(0)
-        } catch (e: Exception) {
             Date(0)
-        }
-    }
-
-    // Method to format inTime for display in the "dd MMM hh:mm a" format
-    private fun formatInTime(dateString: String): String {
-        return try {
-            val sdf =
-                SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())  // Format with AM/PM
-            val date = sdf.parse(dateString)
-            SimpleDateFormat("dd MMM hh:mm a", Locale.getDefault()).format(date ?: Date())
-        } catch (e: Exception) {
-            dateString  // Return the original date string if parsing fails
         }
     }
 
@@ -95,14 +75,14 @@ class VehicleAdapter(
         private val imageView: ShapeableImageView = itemView.findViewById(R.id.imageView)
         private val lnrBackground: LinearLayout = itemView.findViewById(R.id.lnrBackground)
 
+        @RequiresApi(Build.VERSION_CODES.O)
         fun bind(vehicle: Vehicle, position: Int) {
-            // Set vehicle data
             vehicleNo.text = vehicle.vehicleNo
             inTime.text =
-                "Check In: ${formatInTime(vehicle.inTime + "   " + convertDateFormat(vehicle.createdDate))}"
+                "Check In: ${(convertDateFormat(vehicle.inTime))}"
 
             outTime.text = if (!TextUtils.isEmpty(vehicle.outTime)) {
-                "Check Out: ${vehicle.outTime.toString() + " " + convertDateFormat(vehicle.modifiedDate)}"
+                "Check Out: ${convertDateFormat(vehicle.outTime.toString())}"
             } else {
                 "Check Out: --/--/-- --:--"
             }
@@ -110,13 +90,10 @@ class VehicleAdapter(
             hookNumber.text = vehicle.hookNo
             status.text = if (vehicle.status == 1) "Parked" else "Completed"
 
-            // Set background based on status
             lnrBackground.setBackgroundResource(
                 if (vehicle.status == 1) R.drawable.status_ribbon_bg
                 else R.drawable.status_ribbon_left
             )
-
-            // Load vehicle image
             Glide.with(itemView.context)
                 .load(vehicle.imageUrl)
                 .placeholder(R.drawable.ic_default_image)
@@ -146,22 +123,19 @@ class VehicleAdapter(
     }
 
     fun convertDateFormat(inputDate: String?): String {
-        if (inputDate.isNullOrEmpty()) {
-            return ""  // Return a message or handle it as per your need
-        }
-
-        val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("d-MMM-yyyy", Locale.getDefault())
-
-        return try {
-            val date: Date = inputFormat.parse(inputDate) ?: throw IllegalArgumentException("")
-            outputFormat.format(date)
+        try {
+            val inputFormat =
+                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()) // Matching input format
+            val outputFormat = SimpleDateFormat("hh:mm a, dd MMM", Locale.getDefault())
+            val date = inputFormat.parse(inputDate)
+            date ?: throw IllegalArgumentException("Invalid input time format")
+            return outputFormat.format(date)
         } catch (e: Exception) {
-            ""
+            return "Error: ${e.message}"
         }
     }
-
 }
+
 
 
 

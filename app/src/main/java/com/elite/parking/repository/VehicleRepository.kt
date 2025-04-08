@@ -2,6 +2,8 @@ package com.elite.parking.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.elite.parking.Model.CheckOutRequest
+import com.elite.parking.Model.UpdatePasswordRequest
+import com.elite.parking.Model.UpdatePasswordResponse
 import com.elite.parking.Model.VehicleDetailResponse
 import com.elite.parking.Model.VehicleDetailsByHookNumberRequest
 import com.elite.parking.Model.login.VehicleResponse
@@ -32,6 +34,26 @@ class VehicleRepository(private val apiService: ApiService) {
             }
 
             override fun onFailure(call: Call<VehicleDetailResponse>, t: Throwable) {
+                // Handle failure
+                //result.postValue(null)
+            }
+        })
+        return result
+    }
+
+    fun upDatePassword(authToken: String, request: UpdatePasswordRequest): LiveData<UpdatePasswordResponse> {
+        val result = MutableLiveData<UpdatePasswordResponse>()
+        apiService.upDatePassword("Bearer $authToken", request).enqueue(object : Callback<UpdatePasswordResponse> {
+            override fun onResponse(call: Call<UpdatePasswordResponse>, response: Response<UpdatePasswordResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    result.postValue(response.body())
+                } else {
+                    // Handle error response
+                   // result.postValue(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdatePasswordResponse>, t: Throwable) {
                 // Handle failure
                 //result.postValue(null)
             }

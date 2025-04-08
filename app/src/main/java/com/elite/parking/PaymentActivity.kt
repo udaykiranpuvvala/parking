@@ -48,10 +48,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import kotlin.jvm.java
 
@@ -185,9 +187,17 @@ class PaymentActivity : AppCompatActivity() {
             showTimePickerDialog()
         }
         checkOutButton.setOnClickListener {
-            val timeInput = timeEditText.text.toString().trim()
+            val currentDate = Date()
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val formattedDate = dateFormat.format(currentDate)
+            val inputFormatter = DateTimeFormatter.ofPattern("[h:mm][hh:mm] a dd/MM/yyyy")
+            val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+            val dateTime = LocalDateTime.parse(timeEditText.text.toString()+" "+formattedDate.toString(), inputFormatter)
+            val formattedDateTime = dateTime.format(outputFormatter)
 
-            if (isValidTime(timeInput)) {
+            val timeInput = formattedDateTime.toString()
+
+            if (!TextUtils.isEmpty(timeInput)) {
                 checkOutAPICall(timeInput)
             } else {
                 timeEditText.error = "Please enter valid time (HH:MM)"
@@ -363,29 +373,6 @@ class PaymentActivity : AppCompatActivity() {
         return SimpleDateFormat("h:mm a", Locale.getDefault()).format(calendar.time)
     }
 
-    private fun processTimeConfirmation(timeInput: String) {
-        // Show loading state
-        checkOutButton.text = "Processing..."
-        checkOutButton.isEnabled = false
-
-        // Format time for display (convert to AM/PM format)
-        val inputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
-        val formattedTime = try {
-            val date = inputFormat.parse(timeInput)
-            outputFormat.format(date!!)
-        } catch (e: Exception) {
-            timeInput
-            showSuccessAnimation()
-        }
-
-        /*GlobalScope.launch {
-            delay(2000)  // Wait for 3 seconds
-            withContext(Dispatchers.Main) {
-
-            }
-        }*/
-    }
 
     private fun showSuccessAnimation() {
         // Hide input section

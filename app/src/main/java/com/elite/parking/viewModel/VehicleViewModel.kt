@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elite.parking.Model.CheckOutRequest
+import com.elite.parking.Model.UpdatePasswordRequest
+import com.elite.parking.Model.UpdatePasswordResponse
 import com.elite.parking.Model.VehicleCheckInResponse
 import com.elite.parking.Model.VehicleDetail
 import com.elite.parking.Model.VehicleDetailResponse
@@ -120,6 +122,33 @@ class VehicleViewModel {
             }
         }
     }
+
+    class UpDatePasswordViewModel(private val repository: VehicleRepository) : ViewModel() {
+
+        private val _vehicleDetail = MutableLiveData<UpdatePasswordResponse>()
+        val upDatePasswordDetail: LiveData<UpdatePasswordResponse> get() = _vehicleDetail
+
+        private val _isLoading = MutableLiveData<Boolean>()
+        val isLoading: LiveData<Boolean> get() = _isLoading
+
+        private val _error = MutableLiveData<String>()
+        val error: LiveData<String> get() = _error
+
+        fun updatePasswordReq(authToken: String, password: String, userId: String,newpassword: String) {
+            _isLoading.value = true
+            val passRequest = UpdatePasswordRequest(password, userId,newpassword)
+
+            repository.upDatePassword(authToken, passRequest).observeForever { response ->
+                _isLoading.value = false
+                if (response != null) {
+                    _vehicleDetail.postValue(response)
+                } else {
+                    _error.postValue("Failed to Update the Password.")
+                }
+            }
+        }
+    }
+
 
     class VehicleDetailsbyHookNumberViewModel : ViewModel() {
         private val _vehicleCheckInResponse = MutableLiveData<Resource<VehicleDetailResponse>>()

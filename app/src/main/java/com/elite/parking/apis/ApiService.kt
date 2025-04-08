@@ -3,6 +3,8 @@ package com.elite.parking.apis
 import com.elite.parking.Model.CheckOutRequest
 import com.elite.parking.Model.LogoutRequest
 import com.elite.parking.Model.LogoutResponse
+import com.elite.parking.Model.UpdatePasswordRequest
+import com.elite.parking.Model.UpdatePasswordResponse
 import com.elite.parking.Model.UploadResponse
 import com.elite.parking.Model.VehicleCheckInRequest
 import com.elite.parking.Model.VehicleCheckInResponse
@@ -46,6 +48,9 @@ interface ApiService {
 
     @POST("valetparkingapi/parkingDetails/getVehicleDetailsByHookNoOrVehicleNo")
      fun getVehicleDetailsbyHookNumber(@Header("Authorization") token: String, @Body request: VehicleDetailsByHookNumberRequest): Call<VehicleDetailResponse>
+
+     @POST("valetparkingapi/auth/user/updatePassword")
+    fun upDatePassword(@Header("Authorization") authToken: String, @Body request: UpdatePasswordRequest): Call<UpdatePasswordResponse>
 
 
     companion object {
