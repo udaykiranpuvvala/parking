@@ -40,6 +40,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.elite.parking.LoginActivity
 import com.elite.parking.Model.VehicleCheckInRequest
 import com.elite.parking.Model.parkingslots.ListItem
 import com.elite.parking.apis.ApiService.Companion.api
@@ -273,6 +274,9 @@ class CarFormActivity : AppCompatActivity() {
 
         parkingSlot.setOnClickListener {
             showParkingDialog()
+
+          /*  val intent = Intent(this@CarFormActivity, ParkingSlotsActivity::class.java)
+            startActivity(intent)*/
         }
         btnUploadPhotos.setOnClickListener { checkCameraPermission() }
         setSelected(llSuv)

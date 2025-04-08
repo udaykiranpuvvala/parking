@@ -9,9 +9,9 @@
     tools:context=".SplashScreenActivity">
 
     <ImageView
-        android:layout_width="220dp"
+        android:layout_width="280dp"
         android:layout_height="220dp"
-        android:src="@drawable/parking_car_512"
+        android:src="@drawable/app_img"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -41,7 +41,7 @@ class SectionedParkingAdapter(
     }
 
     inner class ParkingSlotViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val slotTextView: TextView = itemView.findViewById(R.id.slotTextView)
+        val slotTextView: TextView = itemView.findViewById(R.id.tv_slot_number)
 
         init {
             itemView.setOnClickListener {

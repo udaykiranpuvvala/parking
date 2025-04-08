@@ -28,4 +28,13 @@ sealed class ListItem {
     data class ParkingSlotItem(val slot: ParkingSlot) : ListItem()
     data class ParkingSlot(val parkingNo: String, val availabilityStatus: Int)*/
 }
+data class Block(
+    val blockNo: String,
+    val floors: List<Floor>
+)
+
+data class Floor(
+    val floorNo: String,
+    val slots: List<ParkingSlot>
+)
 

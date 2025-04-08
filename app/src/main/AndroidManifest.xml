@@ -36,6 +36,10 @@
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
+            android:name=".ParkingSlotsActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
             android:name=".CarFormActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
