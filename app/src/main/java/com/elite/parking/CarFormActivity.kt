@@ -411,12 +411,12 @@ class CarFormActivity : AppCompatActivity() {
         //recyclerView.layoutManager = GridLayoutManager(this,3)
 
 
-        recyclerView.layoutManager = GridLayoutManager(this, 3).apply {
+        recyclerView.layoutManager = GridLayoutManager(this, 4).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     return when (parkingAdapter.getItemViewType(position)) {
-                        SectionedParkingAdapter.TYPE_BLOCK_HEADER -> 3
-                        SectionedParkingAdapter.TYPE_FLOOR_HEADER -> 3
+                        SectionedParkingAdapter.TYPE_BLOCK_HEADER -> 4
+                        SectionedParkingAdapter.TYPE_FLOOR_HEADER -> 4
                         else -> 1
                     }
                 }
@@ -424,9 +424,9 @@ class CarFormActivity : AppCompatActivity() {
         }
 
         parkingAdapter = SectionedParkingAdapter(this, emptyList()) { selectedSlot ->
-            parkingLotNumber= "Floor: ${selectedSlot.floorNo}  : Block: ${selectedSlot.blockNo} : Parking No: ${selectedSlot.parkingNo}"
-            Toast.makeText(this, "Selected Slot:  ${selectedSlot.floorNo}  :  ${selectedSlot.parkingNo}", Toast.LENGTH_SHORT).show()
-            selectedSlotNumber.setText("Floor: ${selectedSlot.floorNo}  : Block: ${selectedSlot.blockNo} : Parking No: ${selectedSlot.parkingNo}")
+            parkingLotNumber= "Block: ${selectedSlot.blockNo}  : Floor: ${selectedSlot.floorNo} : Parking No: ${selectedSlot.parkingNo}"
+           // Toast.makeText(this, "Selected Slot:  ${selectedSlot.floorNo}  :  ${selectedSlot.parkingNo}", Toast.LENGTH_SHORT).show()
+            selectedSlotNumber.setText("Block: ${selectedSlot.blockNo}  : Floor : ${selectedSlot.floorNo} : Parking No: ${selectedSlot.parkingNo}")
             selectedSlotNumber.visibility=View.VISIBLE
             dialog.dismiss()
         }
