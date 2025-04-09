@@ -9,12 +9,10 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.Model.parkingslots.Block
 import com.elite.parking.Model.parkingslots.Floor
 import com.elite.parking.Model.parkingslots.ParkingSlot
-import com.elite.parking.databinding.ItemParkingSlotBinding
 
 
 class ParkingSlotAdapter(private val blocks: List<Block>) :

@@ -12,9 +12,9 @@
 
     <!-- Cross (X) over the Cloud -->
     <path
-        android:fillColor="#D32F2F"
+        android:fillColor="@color/maroon"
         android:pathData="M7,7L17,17M17,7L7,17"
         android:strokeWidth="2"
-        android:strokeColor="#D32F2F"/>
+        android:strokeColor="@color/maroon"/>
 </vector>
 

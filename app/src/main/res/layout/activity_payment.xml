@@ -538,7 +538,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="Hook Number"
+                                android:text="Serial Number"
                                 android:textColor="#757575"
                                 android:textSize="12sp" />
 
@@ -584,7 +584,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="In Time"
+                                android:text="Check In "
                                 android:textColor="#757575"
                                 android:textSize="12sp" />
 
@@ -613,7 +613,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="Out Time"
+                                android:text="Check Out "
                                 android:textColor="#757575"
                                 android:textSize="12sp" />
 
@@ -636,7 +636,7 @@
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="match_parent"
-                                android:src="@drawable/camera" />
+                                android:src="@drawable/person" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -819,7 +819,7 @@
             android:orientation="vertical">
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="160dp"
                 android:layout_gravity="center"
                 android:src="@drawable/no_data_icon"/>
             <TextView
@@ -827,6 +827,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:visibility="gone"
                 android:textStyle="bold"
                 android:text="No Data"/>
         </LinearLayout>

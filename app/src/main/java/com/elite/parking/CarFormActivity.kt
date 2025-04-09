@@ -275,7 +275,7 @@ class CarFormActivity : AppCompatActivity() {
         parkingSlot.setOnClickListener {
             showParkingDialog()
 
-          /*  val intent = Intent(this@CarFormActivity, ParkingSlotsActivity::class.java)
+           /* val intent = Intent(this@CarFormActivity, ParkingSlotsActivity::class.java)
             startActivity(intent)*/
         }
         btnUploadPhotos.setOnClickListener { checkCameraPermission() }
@@ -371,7 +371,7 @@ class CarFormActivity : AppCompatActivity() {
         // Validate Hook Number
         val hookNumber = hookNumberEditText.text.toString().trim()
         if (hookNumber.isEmpty()) {
-            showToast("Hook Number is required.")
+            showToast("Serial Number is required.")
             return false
         }
 
@@ -435,7 +435,8 @@ class CarFormActivity : AppCompatActivity() {
         }
 
         parkingAdapter = SectionedParkingAdapter(this, emptyList()) { selectedSlot ->
-            parkingLotNumber= "Block: ${selectedSlot.blockNo}  : Floor: ${selectedSlot.floorNo} : Parking No: ${selectedSlot.parkingNo}"
+            //parkingLotNumber= "Block: ${selectedSlot.blockNo}  : Floor: ${selectedSlot.floorNo} : Parking No: ${selectedSlot.parkingNo}"
+            parkingLotNumber= selectedSlot.uuid
            // Toast.makeText(this, "Selected Slot:  ${selectedSlot.floorNo}  :  ${selectedSlot.parkingNo}", Toast.LENGTH_SHORT).show()
             selectedSlotNumber.setText("Block: ${selectedSlot.blockNo}  : Floor : ${selectedSlot.floorNo} : Parking No: ${selectedSlot.parkingNo}")
             selectedSlotNumber.visibility=View.VISIBLE

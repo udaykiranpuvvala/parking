@@ -463,17 +463,17 @@ class PaymentActivity : AppCompatActivity() {
                 vehicleNumber.setText(vehicleList.get(0).vehicleNo ?: "")
                 vehicleType.setText(vehicleList.get(0).vehicleType ?: "")
                 hookNumber.setText(vehicleList.get(0).hookNo ?: "")
-                checkinTime.setText(vehicleList.get(0).inTime ?: "")
-                checkoutTime.setText(vehicleList.get(0).outTime ?: "")
+                checkinTime.setText(convertDateFormatCheckIn(vehicleList.get(0).inTime) ?: "")
+                checkoutTime.setText(convertDateFormatCheckIn(vehicleList.get(0).outTime) ?: "")
                 if(!TextUtils.isEmpty(vehicleList.get(0).outTime)){
                     lnrOutTime.visibility= View.VISIBLE
-                    checkoutTime.text =vehicleList.get(0).outTime
+                    checkoutTime.text =(convertDateFormatCheckIn(vehicleList.get(0).outTime))
                     lnrCheckOut.visibility= View.GONE
                 }else{
                     lnrOutTime.visibility= View.GONE
                     lnrCheckOut.visibility= View.VISIBLE
                 }
-                createdDate.setText(vehicleList.get(0).createdDate ?: "")
+                createdDate.setText(convertDateFormat(vehicleList.get(0).createdDate) ?: "")
                 parkingNote.setText(vehicleList.get(0).notes ?: "")
                 vehicleuuId = vehicleList.get(0).uuid ?: ""
                 Glide.with(this)
@@ -554,5 +554,31 @@ class PaymentActivity : AppCompatActivity() {
             .toFormatter(Locale.getDefault())  // Respects device locale
 
         return currentTime.format(formatter)
+    }
+
+    fun convertDateFormatCheckIn(inputDate: String?): String {
+        try {
+            val inputFormat =
+                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("hh:mm a, dd MMM", Locale.getDefault())
+            val date = inputFormat.parse(inputDate)
+            date ?: throw IllegalArgumentException("Invalid input time format")
+            return outputFormat.format(date)
+        } catch (e: Exception) {
+            return "Error: ${e.message}"
+        }
+    }
+
+    fun convertDateFormat(inputDate: String?): String {
+        try {
+            val inputFormat =
+                SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("hh:mm a, dd MMM", Locale.getDefault())
+            val date = inputFormat.parse(inputDate)
+            date ?: throw IllegalArgumentException("Invalid input time format")
+            return outputFormat.format(date)
+        } catch (e: Exception) {
+            return "Error: ${e.message}"
+        }
     }
 }

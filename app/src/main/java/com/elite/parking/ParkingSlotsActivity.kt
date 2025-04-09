@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.ParkingViewModel
+import com.google.gson.Gson
 import kotlin.getValue
 
 class ParkingSlotsActivity : AppCompatActivity() {
@@ -45,12 +47,24 @@ class ParkingSlotsActivity : AppCompatActivity() {
 
         parkingViewModel.fetchParkingSlots(companyId,token)
 
-        parkingViewModel.parkingSlots.observe(this) { slots ->
-           /* val response = Gson().fromJson(slots.toString(), ParkingResponse::class.java)
-            val blocks = ParkingDataProcessor.processToHierarchy(response)
+       /* parkingViewModel.parkingSlots.observe(this, Observer { slots ->
+            if (slots.isNullOrEmpty()) {
+                Toast.makeText(this, "No parking slots available", Toast.LENGTH_SHORT).show()
+            } else {
+                // Update the RecyclerView with the fetched parking slots
+               // parkingSlotAdapter.submitList(slots)
 
-            val recyclerView = findViewById<RecyclerView>(R.id.blocksRecyclerView)
-            recyclerView.adapter = BlockAdapter(blocks)*/
+                val response = Gson().fromJson(slots.toString(), ParkingResponse::class.java)
+                val blocks = ParkingDataProcessor.processToHierarchy(response)
+
+                val recyclerView = findViewById<RecyclerView>(R.id.blocksRecyclerView)
+                recyclerView.adapter = BlockAdapter(blocks)
+            }
+
+        })*/
+
+        parkingViewModel.parkingSlots.observe(this) { slots ->
+           /* */
         }
 
 
