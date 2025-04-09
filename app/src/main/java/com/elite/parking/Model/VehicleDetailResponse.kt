@@ -10,6 +10,9 @@ data class VehicleDetailResponse(
 data class VehicleDetail(
     val uuid: String,
     val parkingId: String,
+    val blockNo: String,
+    val floorNo: String,
+    val parkingNo: String,
     val userId: String,
     val vehicleNo: String,
     val vehicleType: String,

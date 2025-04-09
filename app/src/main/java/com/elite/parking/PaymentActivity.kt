@@ -226,8 +226,7 @@ class PaymentActivity : AppCompatActivity() {
                             lnrCheckOut.visibility= View.VISIBLE
                             parkingCard.visibility= View.VISIBLE
                             lnrNoData.visibility=View.GONE
-                            // Populate the UI with vehicle details
-                            parkingId.setText(vehicleDetails.parkingId ?: "")
+                            parkingId.setText("Block: ${vehicleDetails.blockNo}  : Floor: ${vehicleDetails.floorNo} : Parking No: ${vehicleDetails.parkingNo}"?: "")
                             vehicleNumber.setText(vehicleDetails.vehicleNo ?: "")
                             vehicleType.setText(vehicleDetails.vehicleType ?: "")
                             hookNumber.setText(vehicleDetails.hookNo ?: "")
@@ -459,7 +458,8 @@ class PaymentActivity : AppCompatActivity() {
                 lnrCheckOut.visibility= View.VISIBLE
                 parkingCard.visibility= View.VISIBLE
                 lnrNoData.visibility=View.GONE
-                parkingId.setText(vehicleList.get(0).parkingId ?: "")
+                //parkingId.setText(vehicleList.get(0).parkingId ?: "")
+                parkingId.setText("Block: ${vehicleList.get(0).blockNo}  : Floor: ${vehicleList.get(0).floorNo} : Parking No: ${vehicleList.get(0).parkingNo}"?: "")
                 vehicleNumber.setText(vehicleList.get(0).vehicleNo ?: "")
                 vehicleType.setText(vehicleList.get(0).vehicleType ?: "")
                 hookNumber.setText(vehicleList.get(0).hookNo ?: "")

@@ -435,7 +435,7 @@
                                 android:text="P12345"
                                 android:textAlignment="textEnd"
                                 android:textColor="#212121"
-                                android:textSize="14sp"
+                                android:textSize="12sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
