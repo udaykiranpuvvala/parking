@@ -33,9 +33,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Check Out"
+            android:text="    Check Out"
             android:layout_gravity="center"
-            android:gravity="center"
+            android:gravity="start"
             android:id="@+id/toolBarback"
             android:drawableStart="@drawable/arrow_back"
             android:textColor="@android:color/white"

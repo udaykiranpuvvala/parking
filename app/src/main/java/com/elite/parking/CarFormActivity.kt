@@ -207,7 +207,7 @@ class CarFormActivity : AppCompatActivity() {
         val maxLength = 10
         vehicleNoEditText.filters = arrayOf(
             InputFilter.LengthFilter(maxLength),
-            InputFilter.AllCaps()
+            InputFilter.AllCaps(),
         )
         vehicleNoEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
@@ -557,8 +557,10 @@ class CarFormActivity : AppCompatActivity() {
                 REQUEST_CODE -> {
 
                     val resultValIntent = data?.getStringExtra("key")
+                    vehicleNoEditText.setText(resultValIntent ?: Toast.makeText(this, "Number is null", Toast.LENGTH_SHORT).show().let { "" })
+
                     if (resultValIntent != null) {
-                        vehicleNoEditText.setText("" + resultValIntent)
+                        vehicleNoEditText.setText(resultValIntent)
                     } else {
                         Toast.makeText(this, "Number is null", Toast.LENGTH_SHORT).show()
                     }

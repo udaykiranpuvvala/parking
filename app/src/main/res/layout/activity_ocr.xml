@@ -22,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:drawableStart="@drawable/arrow_back"
-            android:gravity="center"
-            android:text="Capture Number Plate"
+            android:gravity="start"
+            android:text="    Capture Number Plate"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />

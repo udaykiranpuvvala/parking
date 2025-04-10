@@ -3,6 +3,8 @@ package com.elite.parking
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -19,6 +21,7 @@ import com.elite.parking.Model.parkingslots.ParkingSlots
 import com.elite.parking.adapter.BlockAdapter
 import com.elite.parking.adapter.BlockTwoAdapter
 import com.elite.parking.adapter.ParkingDataProcessor
+import com.elite.parking.loader.ProgressBarUtility
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.ParkingViewModel
 import com.elite.parking.viewModel.ParkingViewModel.ParkingViewModelData
@@ -37,6 +40,7 @@ class ParkingSlotsActivity : AppCompatActivity() {
     private lateinit var companyId: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewTwo: RecyclerView
+    private lateinit var lnrNoData: LinearLayout
     private lateinit var blockAdapter: BlockAdapter
     private lateinit var blockAdapter2: BlockTwoAdapter
 
@@ -65,6 +69,7 @@ class ParkingSlotsActivity : AppCompatActivity() {
         }
         recyclerView = findViewById(R.id.blocksRecyclerView)
         recyclerViewTwo = findViewById(R.id.blocks2RecyclerView)
+        lnrNoData = findViewById(R.id.lnrNoData)
         parkingViewModelData.getAvailableSlotsData(companyId, token)
         val onSlotSelected: (ParkingSlots, Floor, Block) -> Unit = { slot, floor, block ->
             val intent = Intent(this, CarFormActivity::class.java)
@@ -76,8 +81,20 @@ class ParkingSlotsActivity : AppCompatActivity() {
             finish()
             //Toast.makeText(this, "${block.blockNo+" "+floor.floorNo+" "+slot.parkingNo+" "+slot.uuid} ", Toast.LENGTH_SHORT).show()
         }
+
+        parkingViewModelData.isLoading.observe(this, Observer { isLoading ->
+            ProgressBarUtility.showProgressDialog(this)
+        })
+
+        parkingViewModelData.error.observe(this, Observer { errorMessage ->
+            ProgressBarUtility.dismissProgressDialog()
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+        })
         parkingViewModelData.parkingResponse.observe(this, Observer { response ->
             if (response != null) {
+                recyclerViewTwo.visibility=View.VISIBLE
+                lnrNoData.visibility=View.GONE
+                ProgressBarUtility.dismissProgressDialog()
                 recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 recyclerViewTwo.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 

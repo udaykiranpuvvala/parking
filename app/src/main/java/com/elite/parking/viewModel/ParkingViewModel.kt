@@ -77,10 +77,26 @@ class ParkingViewModel : ViewModel() {
         private val _parkingResponse = MutableLiveData<ParkingResponse>()
         val parkingResponse: LiveData<ParkingResponse> get() = _parkingResponse
 
+        private val _isLoading = MutableLiveData<Boolean>()
+        val isLoading: LiveData<Boolean> get() = _isLoading
+
+
+        private val _error = MutableLiveData<String>()
+        val error: LiveData<String> get() = _error
+
         fun getAvailableSlotsData(companyId: String, token: String) {
+            _isLoading.value = true
             viewModelScope.launch {
                 val response = parkingRepository.getAvailableSlotsData(companyId, token)
-                _parkingResponse.value = response as ParkingResponse?
+
+                _isLoading.value = false
+                if (response != null) {
+                    _parkingResponse.value = response as ParkingResponse?
+                } else {
+                    _error.postValue("Failed to Update the Password.")
+                }
+
+
             }
         }
     }

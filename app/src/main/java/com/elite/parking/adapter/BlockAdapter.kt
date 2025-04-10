@@ -1,11 +1,14 @@
 package com.elite.parking.adapter
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,11 +25,12 @@ class BlockAdapter(
     private val onBlockSelected: (Int) -> Unit
 ) : RecyclerView.Adapter<BlockAdapter.BlockViewHolder>() {
 
-    private var selectedPosition: Int = RecyclerView.NO_POSITION
+    private var selectedPosition: Int = 0  // Select first item by default
 
     inner class BlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val blockName: TextView = itemView.findViewById(R.id.blockName)
         val tickOverlay: ImageView = itemView.findViewById(R.id.tickIcon)
+        val linearBlock: LinearLayout = itemView.findViewById(R.id.linearBlock)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlockViewHolder {
@@ -37,18 +41,14 @@ class BlockAdapter(
     override fun onBindViewHolder(holder: BlockViewHolder, position: Int) {
         val block = blockList[position]
         holder.blockName.text = "Block ${block.blockNo}"
-        holder.tickOverlay.visibility = if (selectedPosition == position) View.VISIBLE else View.GONE
 
-       /* if (position == selectedPosition) {
-            holder.blockName.setCompoundDrawablesWithIntrinsicBounds(
-                0, 0, R.drawable.ic_tick, 0 // Tick icon on the right
-            )
+        if (position == selectedPosition) {
+            holder.linearBlock.setBackgroundResource(R.drawable.selector_bg)
+            // holder.tickOverlay.visibility = View.VISIBLE
         } else {
-            // No tick
-            holder.blockName.setCompoundDrawablesWithIntrinsicBounds(
-                0, 0, 0, 0
-            )
-        }*/
+            holder.linearBlock.setBackgroundResource(R.drawable.unselector_bg)
+            // holder.tickOverlay.visibility = View.GONE
+        }
 
         holder.itemView.setOnClickListener {
             val previousPosition = selectedPosition
@@ -60,7 +60,18 @@ class BlockAdapter(
     }
 
     override fun getItemCount(): Int = blockList.size
+
+    // This is optional but useful: automatically trigger callback after the adapter is attached
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        if (blockList.isNotEmpty()) {
+            Handler(Looper.getMainLooper()).post {
+                onBlockSelected(selectedPosition)
+            }
+        }
+    }
 }
+
 
 
 
