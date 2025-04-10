@@ -27,7 +27,7 @@ class FloorAdapter(private val context: Context, private val floors: List<Floor>
     override fun onBindViewHolder(holder: FloorViewHolder, position: Int) {
         val floor = floors[position]
         holder.floorTitle.text = "Floor: ${floor.floorNo}"
-        holder.slotRecycler.layoutManager = GridLayoutManager(holder.itemView.context, 3)
+        holder.slotRecycler.layoutManager = GridLayoutManager(holder.itemView.context, 4)
         holder.slotRecycler.adapter = SlotAdapter(context, floor.slots, floor, block, onSlotSelected)
 
         // Set click listener for floor

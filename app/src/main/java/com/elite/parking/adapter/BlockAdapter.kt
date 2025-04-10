@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,15 +18,15 @@ import com.elite.parking.R
 class BlockAdapter(
     private val context: Context,
     private val blockList: List<Block>,
-    private val onSlotSelected: (ParkingSlots, Floor, Block) -> Unit
+    private val onSlotSelected: (ParkingSlots, Floor, Block) -> Unit,
+    private val onBlockSelected: (Int) -> Unit
 ) : RecyclerView.Adapter<BlockAdapter.BlockViewHolder>() {
 
-    // Store the selected block position
-    private var selectedBlockPosition: Int = -1
+    private var selectedPosition: Int = RecyclerView.NO_POSITION
 
     inner class BlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val blockName: TextView = itemView.findViewById(R.id.blockName)
-        val floorRecyclerView: RecyclerView = itemView.findViewById(R.id.floorRecycler)
+        val tickOverlay: ImageView = itemView.findViewById(R.id.tickIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlockViewHolder {
@@ -35,30 +37,33 @@ class BlockAdapter(
     override fun onBindViewHolder(holder: BlockViewHolder, position: Int) {
         val block = blockList[position]
         holder.blockName.text = "Block ${block.blockNo}"
+        holder.tickOverlay.visibility = if (selectedPosition == position) View.VISIBLE else View.GONE
 
-        // Set up the floor RecyclerView for this block
-        val floorAdapter = FloorAdapter(context, block.floors, block, onSlotSelected)
-        holder.floorRecyclerView.layoutManager = LinearLayoutManager(holder.itemView.context, LinearLayoutManager.VERTICAL, false)
-        holder.floorRecyclerView.adapter = floorAdapter
+       /* if (position == selectedPosition) {
+            holder.blockName.setCompoundDrawablesWithIntrinsicBounds(
+                0, 0, R.drawable.ic_tick, 0 // Tick icon on the right
+            )
+        } else {
+            // No tick
+            holder.blockName.setCompoundDrawablesWithIntrinsicBounds(
+                0, 0, 0, 0
+            )
+        }*/
 
-        // If this block is selected, make the floor RecyclerView visible
-        holder.floorRecyclerView.visibility = if (position == selectedBlockPosition) View.VISIBLE else View.GONE
-
-        // Handle block click event to toggle visibility of its floor RecyclerView
         holder.itemView.setOnClickListener {
-            if (selectedBlockPosition == position) {
-                // If the block is already selected, unselect it (hide the floors)
-                selectedBlockPosition = -1
-            } else {
-                // If this block is clicked, show its floors and hide others
-                selectedBlockPosition = position
-            }
-            notifyDataSetChanged()  // Refresh the recycler view to apply changes
+            val previousPosition = selectedPosition
+            selectedPosition = position
+            notifyItemChanged(previousPosition)
+            notifyItemChanged(selectedPosition)
+            onBlockSelected(position)
         }
     }
 
     override fun getItemCount(): Int = blockList.size
 }
+
+
+
 
 
 

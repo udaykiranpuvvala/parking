@@ -17,6 +17,7 @@ import com.elite.parking.Model.parkingslots.ParkingResponse
 import com.elite.parking.Model.parkingslots.ParkingSlot
 import com.elite.parking.Model.parkingslots.ParkingSlots
 import com.elite.parking.adapter.BlockAdapter
+import com.elite.parking.adapter.BlockTwoAdapter
 import com.elite.parking.adapter.ParkingDataProcessor
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.ParkingViewModel
@@ -35,7 +36,9 @@ class ParkingSlotsActivity : AppCompatActivity() {
     private lateinit var token: String
     private lateinit var companyId: String
     private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewTwo: RecyclerView
     private lateinit var blockAdapter: BlockAdapter
+    private lateinit var blockAdapter2: BlockTwoAdapter
 
     private lateinit var toolBarback: TextView
 
@@ -61,6 +64,7 @@ class ParkingSlotsActivity : AppCompatActivity() {
             Toast.makeText(this, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
         }
         recyclerView = findViewById(R.id.blocksRecyclerView)
+        recyclerViewTwo = findViewById(R.id.blocks2RecyclerView)
         parkingViewModelData.getAvailableSlotsData(companyId, token)
         val onSlotSelected: (ParkingSlots, Floor, Block) -> Unit = { slot, floor, block ->
             val intent = Intent(this, CarFormActivity::class.java)
@@ -74,7 +78,8 @@ class ParkingSlotsActivity : AppCompatActivity() {
         }
         parkingViewModelData.parkingResponse.observe(this, Observer { response ->
             if (response != null) {
-                recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false)
+                recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                recyclerViewTwo.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
                 if (response.content != null) {
                     val slots: List<ParkingSlot> = response.content
@@ -98,11 +103,21 @@ class ParkingSlotsActivity : AppCompatActivity() {
                             Block(blockNo, floors)
                         }
 
-                    blockAdapter = BlockAdapter(this, blockList, onSlotSelected)
+                    // Initialize BlockAdapter
+                    blockAdapter = BlockAdapter(this, blockList, onSlotSelected) { selectedPosition ->
+                        // Update BlockTwoAdapter when a block is selected from BlockAdapter
+                        blockAdapter2.updateSelectedBlockPosition(selectedPosition)
+                    }
                     recyclerView.adapter = blockAdapter
+
+                    // Initialize BlockTwoAdapter
+                    blockAdapter2 = BlockTwoAdapter(this, blockList, onSlotSelected)
+                    recyclerViewTwo.adapter = blockAdapter2
                 }
             }
         })
+
+
 
     }
 }

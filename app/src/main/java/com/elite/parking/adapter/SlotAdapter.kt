@@ -31,7 +31,7 @@ class SlotAdapter(
 
     override fun onBindViewHolder(holder: SlotViewHolder, position: Int) {
         val slot = slots[position]
-        holder.slotTitle.text = "Slot: ${slot.parkingNo}"
+        holder.slotTitle.text = "${slot.parkingNo}"
 
         // Set the slot color based on its availability status
         when (slot.availabilityStatus) {
