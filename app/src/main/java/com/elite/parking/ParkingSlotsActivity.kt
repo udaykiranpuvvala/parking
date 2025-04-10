@@ -98,7 +98,6 @@ class ParkingSlotsActivity : AppCompatActivity() {
                             Block(blockNo, floors)
                         }
 
-                    // Initialize the block adapter and pass the callback to it
                     blockAdapter = BlockAdapter(this, blockList, onSlotSelected)
                     recyclerView.adapter = blockAdapter
                 }

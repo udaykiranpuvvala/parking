@@ -1,24 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="#E6E4E4"
-    android:padding="12dp">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    app:strokeColor="@color/black"
+    app:strokeWidth="1dp">
 
-    <TextView
-        android:id="@+id/blockName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Block"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/floorRecycler"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"/>
-</LinearLayout>
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <!-- Block Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/blockName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Block"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:drawablePadding="8dp" />
+
+        </LinearLayout>
+
+
+        <!-- Floors RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/floorRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:paddingTop="4dp"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

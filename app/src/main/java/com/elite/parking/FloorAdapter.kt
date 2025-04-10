@@ -16,7 +16,6 @@ class FloorAdapter(private val context: Context, private val floors: List<Floor>
 
     class FloorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val floorTitle: TextView = view.findViewById(R.id.floorName)
-        val view: View = view.findViewById(R.id.view)
         val slotRecycler: RecyclerView = view.findViewById(R.id.slotRecycler)
     }
 
@@ -28,20 +27,17 @@ class FloorAdapter(private val context: Context, private val floors: List<Floor>
     override fun onBindViewHolder(holder: FloorViewHolder, position: Int) {
         val floor = floors[position]
         holder.floorTitle.text = "Floor: ${floor.floorNo}"
-        holder.slotRecycler.visibility = if (floor.isExpanded) View.VISIBLE else View.GONE
-        holder.view.visibility = if (floor.isExpanded) View.VISIBLE else View.GONE
-        holder.floorTitle.setOnClickListener {
-            floor.isExpanded = !floor.isExpanded
-            notifyItemChanged(position)
-        }
+        holder.slotRecycler.layoutManager = GridLayoutManager(holder.itemView.context, 3)
+        holder.slotRecycler.adapter = SlotAdapter(context, floor.slots, floor, block, onSlotSelected)
 
-        if (floor.isExpanded) {
-            holder.slotRecycler.layoutManager = GridLayoutManager(holder.itemView.context, 3)
-            holder.slotRecycler.adapter = SlotAdapter(context, floor.slots, floor, block, onSlotSelected) // Pass block and floor
+        // Set click listener for floor
+        holder.itemView.setOnClickListener {
+            // Handle floor click (you can implement floor expansion logic if necessary)
         }
     }
 
     override fun getItemCount(): Int = floors.size
 }
+
 
 

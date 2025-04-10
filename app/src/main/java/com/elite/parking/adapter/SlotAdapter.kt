@@ -20,8 +20,6 @@ class SlotAdapter(
     private val onSlotSelected: (ParkingSlots, Floor, Block) -> Unit
 ) : RecyclerView.Adapter<SlotAdapter.SlotViewHolder>() {
 
-    private var selectedPosition: Int = RecyclerView.NO_POSITION
-
     class SlotViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val slotTitle: TextView = view.findViewById(R.id.slotTitle)
     }
@@ -33,36 +31,22 @@ class SlotAdapter(
 
     override fun onBindViewHolder(holder: SlotViewHolder, position: Int) {
         val slot = slots[position]
-        holder.slotTitle.text = "${slot.parkingNo}"
+        holder.slotTitle.text = "Slot: ${slot.parkingNo}"
 
+        // Set the slot color based on its availability status
         when (slot.availabilityStatus) {
-            1 -> { // Available
-                if (position == selectedPosition) {
-                    holder.slotTitle.setBackgroundColor(ContextCompat.getColor(context, R.color.maroon))
-                    holder.slotTitle.setTextColor(ContextCompat.getColor(context, R.color.white))
-                } else {
-                    holder.slotTitle.setBackgroundColor(ContextCompat.getColor(context, R.color.green))
-                    holder.slotTitle.setTextColor(ContextCompat.getColor(context, R.color.black))
-                }
-            }
-            else -> { // Unavailable
-                holder.slotTitle.setBackgroundColor(ContextCompat.getColor(context, R.color.viewColor))
-                holder.slotTitle.setTextColor(ContextCompat.getColor(context, R.color.white))
-            }
+            1 -> holder.slotTitle.setBackgroundColor(ContextCompat.getColor(context, R.color.green)) // Available
+            else -> holder.slotTitle.setBackgroundColor(ContextCompat.getColor(context, R.color.red)) // Unavailable
         }
 
         // Set click listener for slot
         holder.itemView.setOnClickListener {
-            if (slot.availabilityStatus == 1) {
-                selectedPosition = position
-                notifyDataSetChanged()
-                // Notify the activity or fragment that a slot has been selected
-                onSlotSelected(slot, floor, block)
-            }
+            onSlotSelected(slot, floor, block) // Notify the activity when a slot is selected
         }
     }
 
     override fun getItemCount(): Int = slots.size
 }
+
 
 
