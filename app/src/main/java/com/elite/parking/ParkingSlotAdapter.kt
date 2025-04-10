@@ -15,11 +15,10 @@ import com.elite.parking.Model.parkingslots.Floor
 import com.elite.parking.Model.parkingslots.ParkingSlot
 
 
-class ParkingSlotAdapter(private val blocks: List<Block>) :
-    RecyclerView.Adapter<ParkingSlotAdapter.BlockViewHolder>() {
+class ParkingSlotAdapter() {
 
     // ViewHolder for Block items
-    inner class BlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    /*inner class BlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val blockTitle: TextView = itemView.findViewById(R.id.tv_block_title)
         val floorsRecyclerView: RecyclerView = itemView.findViewById(R.id.rv_floors)
     }
@@ -116,6 +115,6 @@ class ParkingSlotAdapter(private val blocks: List<Block>) :
 
             override fun getItemCount(): Int = slots.size
         }
-    }
+    }*/
 }
 

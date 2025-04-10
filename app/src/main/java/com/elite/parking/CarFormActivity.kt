@@ -16,6 +16,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.InputFilter
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -111,14 +112,15 @@ class CarFormActivity : AppCompatActivity() {
     private lateinit var userId: String
     private lateinit var token: String
     private lateinit var companyId: String
-    private  var parkingLotNumber: String=""
-    private  var parkingimageUrl: String=""
-    private  var isValidVehicleNumber: String=""
+    private var parkingLotNumber: String = ""
+    private var parkingimageUrl: String = ""
+    private var isValidVehicleNumber: String = ""
 
     private val parkingViewModel: ParkingViewModel by viewModels()
     private lateinit var parkingAdapter: SectionedParkingAdapter
 
     private var lastSelectedLayout: LinearLayout? = null
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,7 +143,10 @@ class CarFormActivity : AppCompatActivity() {
 
 
         val repository = FileUploadRepository(api)
-        fileUploadViewModel = ViewModelProvider(this, ViewModelFactory.ViewModelFactoryFileUploadRepository(repository))[FileUploadViewModel::class.java]
+        fileUploadViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory.ViewModelFactoryFileUploadRepository(repository)
+        )[FileUploadViewModel::class.java]
 
         toolBarback.setOnClickListener {
             finish()
@@ -151,10 +156,10 @@ class CarFormActivity : AppCompatActivity() {
                 ProgressBarUtility.dismissProgressDialog()
                 Toast.makeText(this, "image Upload Successful!", Toast.LENGTH_SHORT).show()
                 //selectedImages.add(Uri.parse(imageUrl.content.url))  // Add uploaded image URL
-               /* selectedImages.forEach {
-                    Log.e("Images","Added Images"+result)
-                }*/
-                parkingimageUrl=imageUrl.content.url
+                /* selectedImages.forEach {
+                     Log.e("Images","Added Images"+result)
+                 }*/
+                parkingimageUrl = imageUrl.content.url
                 imageAdapter.notifyDataSetChanged()
             }
             result.onFailure {
@@ -177,7 +182,7 @@ class CarFormActivity : AppCompatActivity() {
         val llLuxury = findViewById<LinearLayout>(R.id.ll_luxury)
         val llSedan = findViewById<LinearLayout>(R.id.ll_sedan)
         val llHatchback = findViewById<LinearLayout>(R.id.ll_hatchback)
-       // lnrLytCamera = findViewById(R.id.lnrLytCamera)
+        // lnrLytCamera = findViewById(R.id.lnrLytCamera)
         imgBtnCamera = findViewById(R.id.imgBtnCamera)
 
         recyclerView = findViewById(R.id.recyclerViewImages)
@@ -188,7 +193,7 @@ class CarFormActivity : AppCompatActivity() {
         recyclerView.adapter = imageAdapter
 
         val btnUploadPhotos: LinearLayout = findViewById(R.id.btn_upload_photos)
-       // val parkingLotSpinner: Spinner = findViewById(R.id.spinner_parkinglot)
+        // val parkingLotSpinner: Spinner = findViewById(R.id.spinner_parkinglot)
         val btnSubmit: Button = findViewById(R.id.checkOutButton)
         // Initialize the ViewModel
         vehicleCheckInViewModel = ViewModelProvider(this).get(VehicleCheckInViewModel::class.java)
@@ -204,13 +209,22 @@ class CarFormActivity : AppCompatActivity() {
             InputFilter.LengthFilter(maxLength),
             InputFilter.AllCaps()
         )
-
         vehicleNoEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
 
             }
 
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
                 val vehicleNumber = charSequence.toString()
                 validateVehicleNumber(vehicleNumber)
             }
@@ -219,7 +233,17 @@ class CarFormActivity : AppCompatActivity() {
                 // Not used, can be left empty
             }
         })
-
+        val selectedSlot = intent.getStringExtra("selectedSlot")
+        val selectedFloor = intent.getStringExtra("selectedFloor")
+        val selectedBlock = intent.getStringExtra("selectedBlock")
+        val selectedSlotUUID = intent.getStringExtra("selectedSlotUuid")
+        parkingLotNumber = selectedSlotUUID.toString();
+        if (!parkingLotNumber.equals("null")&&!TextUtils.isEmpty(parkingLotNumber)) {
+            selectedSlotNumber.visibility = View.VISIBLE
+            selectedSlotNumber.setText("Block: ${selectedBlock}  : Floor : ${selectedFloor} : Parking No: ${selectedSlot}")
+        }else{
+            selectedSlotNumber.visibility = View.GONE
+        }
         barcodeButton.setOnClickListener {
             startBarcodeScanner()
         }
@@ -229,7 +253,10 @@ class CarFormActivity : AppCompatActivity() {
                     ProgressBarUtility.showProgressDialog(this)
                     val inputFormatter = DateTimeFormatter.ofPattern("[h:mm][hh:mm] a dd/MM/yyyy")
                     val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-                    val dateTime = LocalDateTime.parse(inTimeEditText.text.toString()+" "+inDateEditText.text.toString(), inputFormatter)
+                    val dateTime = LocalDateTime.parse(
+                        inTimeEditText.text.toString() + " " + inDateEditText.text.toString(),
+                        inputFormatter
+                    )
                     val formattedDateTime = dateTime.format(outputFormatter)
 
                     val vehicleCheckInRequest = VehicleCheckInRequest(
@@ -246,9 +273,9 @@ class CarFormActivity : AppCompatActivity() {
                         modifiedDate = "",
                         status = 1
                     )
-                    vehicleCheckInViewModel.checkIn(token,vehicleCheckInRequest)
+                    vehicleCheckInViewModel.checkIn(token, vehicleCheckInRequest)
                 }
-            }else{
+            } else {
                 Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show()
             }
         }
@@ -267,16 +294,16 @@ class CarFormActivity : AppCompatActivity() {
 
                 is Resource.Failure -> {
                     ProgressBarUtility.dismissProgressDialog()
-                  //  Toast.makeText(this, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                    //  Toast.makeText(this, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         })
 
         parkingSlot.setOnClickListener {
-            showParkingDialog()
-
-           /* val intent = Intent(this@CarFormActivity, ParkingSlotsActivity::class.java)
-            startActivity(intent)*/
+            //showParkingDialog()
+            val intent = Intent(this@CarFormActivity, ParkingSlotsActivity::class.java)
+            startActivity(intent)
+            finish()
         }
         btnUploadPhotos.setOnClickListener { checkCameraPermission() }
         setSelected(llSuv)
@@ -300,10 +327,10 @@ class CarFormActivity : AppCompatActivity() {
             setSelected(llHatchback)
             selectedVehicleType = "Hatchback"
         }
-     /*   lnrLytCamera.setOnClickListener {
-            val intent = Intent(this, OcrActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE)
-        }*/
+        /*   lnrLytCamera.setOnClickListener {
+               val intent = Intent(this, OcrActivity::class.java)
+               startActivityForResult(intent, REQUEST_CODE)
+           }*/
 
         imgBtnCamera.setOnClickListener {
             val intent = Intent(this, OcrActivity::class.java)
@@ -337,6 +364,7 @@ class CarFormActivity : AppCompatActivity() {
         }
 
     }
+
     private fun formatTime(hour: Int, minute: Int): String {
         val calendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
@@ -344,6 +372,7 @@ class CarFormActivity : AppCompatActivity() {
         }
         return SimpleDateFormat("h:mm a", Locale.getDefault()).format(calendar.time)
     }
+
     private fun setSelected(selectedLayout: LinearLayout) {
         // If the selected item is already selected, do nothing
         if (selectedLayout == lastSelectedLayout) return
@@ -351,12 +380,13 @@ class CarFormActivity : AppCompatActivity() {
         selectedLayout.setBackgroundResource(R.drawable.selector_bg)  // Set selected state
         lastSelectedLayout = selectedLayout
     }
+
     private fun validateForm(): Boolean {
         val vehicleNo = vehicleNoEditText.text.toString().trim()
         if (vehicleNo.isEmpty()) {
             showToast("Vehicle Number is required.")
             return false
-        }else if (isValidVehicleNumber.isEmpty()){
+        } else if (isValidVehicleNumber.isEmpty()) {
             showToast("Enter Proper Vehicle Number")
             return false
         }
@@ -402,6 +432,7 @@ class CarFormActivity : AppCompatActivity() {
         }
         return true
     }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -414,7 +445,7 @@ class CarFormActivity : AppCompatActivity() {
             .create()
 
         val recyclerView: RecyclerView = dialogView.findViewById(R.id.recyclerViewParking)
-        val closeButton : ImageView = dialogView.findViewById(R.id.close_button)
+        val closeButton: ImageView = dialogView.findViewById(R.id.close_button)
 
         closeButton.setOnClickListener {
             dialog.dismiss()
@@ -436,17 +467,17 @@ class CarFormActivity : AppCompatActivity() {
 
         parkingAdapter = SectionedParkingAdapter(this, emptyList()) { selectedSlot ->
             //parkingLotNumber= "Block: ${selectedSlot.blockNo}  : Floor: ${selectedSlot.floorNo} : Parking No: ${selectedSlot.parkingNo}"
-            parkingLotNumber= selectedSlot.uuid
-           // Toast.makeText(this, "Selected Slot:  ${selectedSlot.floorNo}  :  ${selectedSlot.parkingNo}", Toast.LENGTH_SHORT).show()
+            parkingLotNumber = selectedSlot.uuid
+            // Toast.makeText(this, "Selected Slot:  ${selectedSlot.floorNo}  :  ${selectedSlot.parkingNo}", Toast.LENGTH_SHORT).show()
             selectedSlotNumber.setText("Block: ${selectedSlot.blockNo}  : Floor : ${selectedSlot.floorNo} : Parking No: ${selectedSlot.parkingNo}")
-            selectedSlotNumber.visibility=View.VISIBLE
+            selectedSlotNumber.visibility = View.VISIBLE
             dialog.dismiss()
         }
 
         recyclerView.adapter = parkingAdapter
 
         val authToken = token
-        parkingViewModel.fetchParkingSlots(companyId,authToken)
+        parkingViewModel.fetchParkingSlots(companyId, authToken)
 
         parkingViewModel.parkingSlots.observe(this) { slots ->
             parkingAdapter.updateData(slots)
@@ -493,6 +524,7 @@ class CarFormActivity : AppCompatActivity() {
             Toast.makeText(this, "Failed to create file", Toast.LENGTH_SHORT).show()
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
@@ -550,6 +582,7 @@ class CarFormActivity : AppCompatActivity() {
         // Restore the orientation after the scan is finished (optional)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
+
     private fun createImageFile(): File {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -557,6 +590,7 @@ class CarFormActivity : AppCompatActivity() {
             deleteOnExit() // Auto-delete if needed
         }
     }
+
     private fun saveBitmapToFile(bitmap: Bitmap): File {
         val file = File(cacheDir, "captured_image.png")
         val outputStream = FileOutputStream(file)
@@ -565,6 +599,7 @@ class CarFormActivity : AppCompatActivity() {
         outputStream.close()
         return file
     }
+
     private fun convertUriToFile(imageUri: Uri): File {
         val inputStream = contentResolver.openInputStream(imageUri)
         val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -573,23 +608,25 @@ class CarFormActivity : AppCompatActivity() {
         // Save the bitmap to a file
         return saveBitmapToFile(bitmap)
     }
+
     private fun uploadCapturedImage(uri: Uri) {
         imageFile?.let { file ->
             val token = token
-            val fileFromUriC = uriToFile(this,uri);
+            val fileFromUriC = uriToFile(this, uri);
             if (fileFromUriC != null) {
                 ProgressBarUtility.showProgressDialog(this)
                 fileUploadViewModel.uploadImage(token, fileFromUriC)
-            }else{
+            } else {
                 ProgressBarUtility.dismissProgressDialog()
                 showToast("Image is issue")
             }
         } ?: Toast.makeText(this, "No image to upload", Toast.LENGTH_SHORT).show()
     }
+
     fun uriToFile(context: Context, uri: Uri): File? {
         val contentResolver = context.contentResolver
         val fileName = "temp_image_${System.currentTimeMillis()}.jpg" // Unique name
-        Log.e("Upload Image","Filename : $fileName")
+        Log.e("Upload Image", "Filename : $fileName")
         val file = File(context.cacheDir, fileName) // Store in cache directory
 
         try {
@@ -607,6 +644,7 @@ class CarFormActivity : AppCompatActivity() {
         }
         return null
     }
+
     private fun startBarcodeScanner() {
         val integrator = IntentIntegrator(this)
         integrator.setPrompt("Scan a token barcode") // Optional prompt
@@ -615,20 +653,21 @@ class CarFormActivity : AppCompatActivity() {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES) // Scan all barcode types
         integrator.initiateScan() // Start the scan
     }
+
     private fun validateVehicleNumber(vehicleNumber: String) {
         // Modified regex to allow no spaces between components
         val regex = "^[A-Z]{2}\\d{1,2}[A-Z]{1,2}\\d{1,4}$".toRegex()
 
         // Check if the input matches the regex
         if (vehicleNumber.matches(regex)) {
-            isValidVehicleNumber="Valid Vehicle Number"
+            isValidVehicleNumber = "Valid Vehicle Number"
             validationResultText.text = "Valid Vehicle Number"
-            validationResultText.visibility= View.GONE
+            validationResultText.visibility = View.GONE
             validationResultText.setTextColor(resources.getColor(android.R.color.holo_green_dark))
         } else {
-            isValidVehicleNumber==""
+            isValidVehicleNumber == ""
             validationResultText.text = "Invalid Vehicle Number"
-            validationResultText.visibility= View.VISIBLE
+            validationResultText.visibility = View.VISIBLE
             validationResultText.setTextColor(resources.getColor(android.R.color.holo_red_dark))
         }
     }

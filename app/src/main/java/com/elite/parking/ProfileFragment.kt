@@ -287,7 +287,7 @@ class ProfileFragment : Fragment() {
             if (newPass.isEmpty()) {
                 newLayout.error = "New password is required"
                 isValid = false
-            } else if (newPass.length < 8) {
+            } /*else if (newPass.length < 8) {
                 newLayout.error = "Use 8+ characters for better security"
                 isValid = false
             } else if (!newPass.matches(".*[A-Z].*".toRegex())) {
@@ -296,7 +296,7 @@ class ProfileFragment : Fragment() {
             } else if (!newPass.matches(".*[0-9].*".toRegex())) {
                 newLayout.error = "Include at least one number"
                 isValid = false
-            }
+            }*/
 
             if (confirmPass != newPass) {
                 confirmLayout.error = "Passwords don't match"

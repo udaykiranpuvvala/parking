@@ -242,7 +242,7 @@ class PaymentActivity : AppCompatActivity() {
                             }
                             createdDate.setText(vehicleDetails.createdDate ?: "")
                             parkingNote.setText(vehicleDetails.notes ?: "")
-                            vehicleuuId = vehicleDetails.parkingId ?: ""
+                            vehicleuuId = vehicleDetails.uuid ?: ""
 
                             // Load image using Glide
                             Glide.with(this)

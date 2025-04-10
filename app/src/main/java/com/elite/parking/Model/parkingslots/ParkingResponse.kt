@@ -7,14 +7,18 @@ data class ParkingResponse(
 )
 
 data class ParkingSlot(
-    val uuid: String,
+    val parkingNo: String,
+    val companyId: String,
     val blockNo: String,
     val floorNo: String,
-    val companyId: String,
-    val parkingNo: String,
-    val availabilityStatus: Int, // 2 means notavailable
-    val type: String,
-    val status: Int
+    val modifiedDate: String?,
+    val createdBy: String,
+    val uuid: String,
+    val availabilityStatus: Int,
+    val hookNo: String?,
+    val status: Int,
+    val type: Int,
+    val createdDate: String
 )
 
 // For sectioned list with headers
@@ -30,11 +34,25 @@ sealed class ListItem {
 }
 data class Block(
     val blockNo: String,
-    val floors: List<Floor>
+    val floors: List<Floor>,
+    var selectedFloor: Floor? = null // NEW
 )
+
 
 data class Floor(
     val floorNo: String,
-    val slots: List<ParkingSlot>
+    val slots: List<ParkingSlots>,
+    var isExpanded: Boolean = false // default collapsed
 )
+
+
+
+data class ParkingSlots(
+    val parkingNo: String,
+    val availabilityStatus: Int,
+    val type: Int,
+    val uuid: String
+)
+
+
 

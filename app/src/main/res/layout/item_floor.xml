@@ -1,20 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/tv_floor_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="8dp"/>
+        android:orientation="vertical"
+        android:padding="12dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_slots"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"/>
-</LinearLayout>
+        <TextView
+            android:id="@+id/floorName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:paddingBottom="8dp"
+            android:text="Floor"
+            android:textColor="@color/maroon"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/view"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"
+            android:background="@color/viewColor" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/slotRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:paddingTop="4dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+

@@ -5,7 +5,7 @@ import com.elite.parking.Model.parkingslots.Floor
 import com.elite.parking.Model.parkingslots.ParkingResponse
 
 object ParkingDataProcessor {
-    fun processToHierarchy(response: ParkingResponse): List<Block> {
+    /*fun processToHierarchy(response: ParkingResponse): List<Block> {
         return response.content
             .groupBy { it.blockNo }
             .map { (blockNo, slots) ->
@@ -20,5 +20,5 @@ object ParkingDataProcessor {
                         }.sortedBy { it.floorNo }
                 )
             }.sortedBy { it.blockNo }
-    }
+    }*/
 }

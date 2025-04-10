@@ -20,6 +20,12 @@
     <color name="colorRipple">#E35C22</color>
     <color name="maroonlite">#EF7824</color>
 
+    <color name="slot_stroke">#BDBDBD</color>
+    <color name="slot_text">#212121</color>
+    <color name="slot_available">#4CAF50</color>
+    <color name="slot_unavailable">#F44336</color>
+    <color name="slot_default">#E0E0E0</color>
+
 <!--    <color name="colorIconTint">#B0BEC5</color> &lt;!&ndash; Light Gray for unselected icons &ndash;&gt;-->
 <!--    <color name="colorText">#FFFFFF</color> &lt;!&ndash; White for text &ndash;&gt;-->
 <!--    <color name="colorBackground">#212121</color> &lt;!&ndash; Dark Background Color &ndash;&gt;-->
