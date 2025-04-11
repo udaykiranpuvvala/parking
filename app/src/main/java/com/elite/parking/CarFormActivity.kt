@@ -233,17 +233,7 @@ class CarFormActivity : AppCompatActivity() {
                 // Not used, can be left empty
             }
         })
-        val selectedSlot = intent.getStringExtra("selectedSlot")
-        val selectedFloor = intent.getStringExtra("selectedFloor")
-        val selectedBlock = intent.getStringExtra("selectedBlock")
-        val selectedSlotUUID = intent.getStringExtra("selectedSlotUuid")
-        parkingLotNumber = selectedSlotUUID.toString();
-        if (!parkingLotNumber.equals("null")&&!TextUtils.isEmpty(parkingLotNumber)) {
-            selectedSlotNumber.visibility = View.VISIBLE
-            selectedSlotNumber.setText("Block: ${selectedBlock}  : Floor : ${selectedFloor} : Parking No: ${selectedSlot}")
-        }else{
-            selectedSlotNumber.visibility = View.GONE
-        }
+
         barcodeButton.setOnClickListener {
             startBarcodeScanner()
         }
@@ -302,6 +292,11 @@ class CarFormActivity : AppCompatActivity() {
         parkingSlot.setOnClickListener {
             //showParkingDialog()
             val intent = Intent(this@CarFormActivity, ParkingSlotsActivity::class.java)
+            intent.putExtra("vehicleNo", vehicleNoEditText.text.toString().trim())
+            intent.putExtra("serialNumber", hookNumberEditText.text.toString().trim())
+            intent.putExtra("checkintime", inTimeEditText.text.toString().trim())
+            intent.putExtra("vehicleType", selectedVehicleType.toString().trim())
+            intent.putExtra("vehicleImage", parkingimageUrl.toString().trim())
             startActivity(intent)
             finish()
         }
@@ -361,6 +356,43 @@ class CarFormActivity : AppCompatActivity() {
 
             timePickerDialog.setTitle("Select Booking Time")
             timePickerDialog.show()
+        }
+
+        val selectedSlot = intent.getStringExtra("selectedSlot")
+        val selectedFloor = intent.getStringExtra("selectedFloor")
+        val selectedBlock = intent.getStringExtra("selectedBlock")
+        val selectedSlotUUID = intent.getStringExtra("selectedSlotUuid")
+        vehicleNoEditText.setText( intent.getStringExtra("vehicleNo"))
+        parkingimageUrl= intent.getStringExtra("vehicleImage").toString()
+
+        if(!intent.getStringExtra("checkintime").equals("null")&&!TextUtils.isEmpty(intent.getStringExtra("checkintime"))){
+            inTimeEditText.setText( intent.getStringExtra("checkintime"))
+        }else{
+            inDateEditText.setText(formattedDate.toString())
+        }
+        hookNumberEditText.setText( intent.getStringExtra("serialNumber"))
+        selectedVehicleType=intent.getStringExtra("vehicleType")
+        selectedVehicleType=intent.getStringExtra("vehicleImage")
+
+        val vehicleType = intent.getStringExtra("vehicleType")
+        if (!vehicleType.isNullOrEmpty() && vehicleType != "null") {
+            selectedVehicleType = vehicleType
+            when (vehicleType) {
+                "SUV" -> setSelected(llSuv)
+                "Luxury" -> setSelected(llLuxury)
+                "Sedan" -> setSelected(llSedan)
+                else -> setSelected(llHatchback)
+            }
+        } else {
+            selectedVehicleType = "SUV"
+            setSelected(llSuv)
+        }
+        parkingLotNumber = selectedSlotUUID.toString();
+        if (!parkingLotNumber.equals("null")&&!TextUtils.isEmpty(parkingLotNumber)) {
+            selectedSlotNumber.visibility = View.VISIBLE
+            selectedSlotNumber.setText("Block: ${selectedBlock}  : Floor : ${selectedFloor} : Parking No: ${selectedSlot}")
+        }else{
+            selectedSlotNumber.visibility = View.GONE
         }
 
     }
