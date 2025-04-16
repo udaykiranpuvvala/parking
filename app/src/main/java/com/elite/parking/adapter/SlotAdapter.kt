@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.Model.parkingslots.Block
@@ -41,7 +42,11 @@ class SlotAdapter(
 
         // Set click listener for slot
         holder.itemView.setOnClickListener {
-            onSlotSelected(slot, floor, block) // Notify the activity when a slot is selected
+            when (slot.availabilityStatus) {
+                1 ->  onSlotSelected(slot, floor, block)
+               // else ->  Toast.makeText(this, "image Upload Successful!", Toast.LENGTH_SHORT).show()
+
+            }
         }
     }
 

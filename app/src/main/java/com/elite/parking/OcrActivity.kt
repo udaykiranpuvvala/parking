@@ -150,11 +150,11 @@ class OcrActivity : AppCompatActivity() {
             .addOnSuccessListener { visionText ->
                 if (!visionText.text.isNullOrBlank()) {
                     var extractedText = visionText.text
-                    extractedText = extractedText.replace("\\s+".toRegex(), "") // Removes all whitespaces
+                    extractedText = extractedText.replace("IND", "", ignoreCase = true) // Remove "IND"
+                    extractedText = extractedText.replace("\\s+".toRegex(), "") // Remove all whitespaces
                     extractedText = extractedText.trim()
 
-                   // val numberPlate = extractNumberPlate(extractedText)
-                    textView.text = extractedText // Or display the number plate: numberPlate ?: extractedText
+                    textView.text = extractedText
 
                     lnrRefresh.visibility = View.VISIBLE
                     btnSubmit.visibility = View.VISIBLE
