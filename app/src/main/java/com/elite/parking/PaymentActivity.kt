@@ -1,9 +1,7 @@
 package com.elite.parking
 
-import android.app.Activity
 import android.app.TimePickerDialog
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -19,28 +17,23 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.elite.parking.Model.VehicleCheckInRequest
 import com.elite.parking.Model.VehicleDetailsByHookNumberRequest
 import com.elite.parking.Model.VehicleViewCheckOutFactory
 import com.elite.parking.Model.VehicleViewModelItemFactory
-import com.elite.parking.Resource
 import com.elite.parking.apis.ApiService
 import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.loader.NetworkUtils
 import com.elite.parking.loader.ProgressBarUtility
 import com.elite.parking.repository.VehicleRepository
 import com.elite.parking.storage.SharedPreferencesHelper
-import com.elite.parking.viewModel.VehicleCheckInViewModel
 import com.elite.parking.viewModel.VehicleViewModel
 import com.elite.parking.viewModel.VehicleViewModel.VehicleDetailCheckOutViewModel
-import com.google.android.material.textfield.TextInputEditText
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -108,7 +101,7 @@ class PaymentActivity : AppCompatActivity() {
         parkingId = findViewById(R.id.parkingId)
         vehicleNumber = findViewById(R.id.vehicleNumber)
         vehicleType = findViewById(R.id.vehicleType)
-        hookNumber = findViewById(R.id.hookNumber)
+        hookNumber = findViewById(R.id.serialNumber)
         checkinTime = findViewById(R.id.checkinTime)
         checkoutTime = findViewById(R.id.checkoutTime)
         createdDate = findViewById(R.id.createdDate)
@@ -163,7 +156,11 @@ class PaymentActivity : AppCompatActivity() {
         }
 
         barcodeButton.setOnClickListener {
-            startBarcodeScanner()
+            //startBarcodeScanner()
+            val dialog = QRScannerDialog { scannedText ->
+                tokenEditText.setText( scannedText.toString())
+            }
+            dialog.show(supportFragmentManager, "QRScanner")
         }
         timeEditText.setText(getFormattedTime())
         expandButton.setOnClickListener {
@@ -226,7 +223,7 @@ class PaymentActivity : AppCompatActivity() {
                             lnrCheckOut.visibility= View.VISIBLE
                             parkingCard.visibility= View.VISIBLE
                             lnrNoData.visibility=View.GONE
-                            parkingId.setText("Block: ${vehicleDetails.blockNo}  : Floor: ${vehicleDetails.floorNo} : Parking No: ${vehicleDetails.parkingNo}"?: "")
+                            parkingId.setText(" ${vehicleDetails.blockName}  : ${vehicleDetails.floorName} : ${vehicleDetails.parkingNo}"?: "")
                             vehicleNumber.setText(vehicleDetails.vehicleNo ?: "")
                             vehicleType.setText(vehicleDetails.vehicleType ?: "")
                             hookNumber.setText(vehicleDetails.hookNo ?: "")
@@ -459,7 +456,7 @@ class PaymentActivity : AppCompatActivity() {
                 parkingCard.visibility= View.VISIBLE
                 lnrNoData.visibility=View.GONE
                 //parkingId.setText(vehicleList.get(0).parkingId ?: "")
-                parkingId.setText("Block: ${vehicleList.get(0).blockNo}  : Floor: ${vehicleList.get(0).floorNo} : Parking No: ${vehicleList.get(0).parkingNo}"?: "")
+                parkingId.setText(" ${vehicleList.get(0).blockName}  : ${vehicleList.get(0).floorName} : ${vehicleList.get(0).parkingNo}"?: "")
                 vehicleNumber.setText(vehicleList.get(0).vehicleNo ?: "")
                 vehicleType.setText(vehicleList.get(0).vehicleType ?: "")
                 hookNumber.setText(vehicleList.get(0).hookNo ?: "")

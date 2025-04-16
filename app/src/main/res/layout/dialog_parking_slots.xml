@@ -17,7 +17,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:contentDescription="Close"
-            android:padding="8dp"
+            android:padding="@dimen/_8dp"
             android:src="@drawable/close" />
 
         <!-- Header Title -->
@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:text="Parking Slots"
             android:textColor="@color/maroon"
-            android:textSize="18sp"
+            android:textSize="@dimen/_18sp"
             android:textStyle="bold" />
     </RelativeLayout>
     <View

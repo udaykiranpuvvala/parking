@@ -3,7 +3,6 @@ package com.elite.parking
 import android.content.Context
 import android.os.Build
 import android.text.TextUtils
-import android.text.format.DateUtils.formatDateTime
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +14,6 @@ import com.bumptech.glide.Glide
 import com.elite.parking.Model.login.Vehicle
 import com.google.android.material.imageview.ShapeableImageView
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.util.*
 import java.util.*
 
 class VehicleAdapter(
@@ -71,7 +66,7 @@ class VehicleAdapter(
         private val inTime: TextView = itemView.findViewById(R.id.inTime)
         private val outTime: TextView = itemView.findViewById(R.id.outTime)
         private val status: TextView = itemView.findViewById(R.id.status)
-        private val hookNumber: TextView = itemView.findViewById(R.id.hookNumber)
+        private val hookNumber: TextView = itemView.findViewById(R.id.serialNumber)
         private val imageView: ShapeableImageView = itemView.findViewById(R.id.imageView)
         private val lnrBackground: LinearLayout = itemView.findViewById(R.id.lnrBackground)
 

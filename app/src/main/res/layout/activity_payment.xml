@@ -39,7 +39,7 @@
             android:id="@+id/toolBarback"
             android:drawableStart="@drawable/arrow_back"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="@dimen/_18sp"
             android:textStyle="bold"/>
 
     </androidx.appcompat.widget.Toolbar>
@@ -50,18 +50,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp"
+        android:padding="@dimen/_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textHeader">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/_8dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:background="@drawable/search_bar_background"
-            android:padding="8dp">
+            android:padding="@dimen/_8dp">
 
             <!-- Token Number EditText -->
             <EditText
@@ -72,7 +72,7 @@
                 android:hint="Enter Serial number"
                 android:inputType="number"
                 android:maxLines="1"
-                android:textSize="16sp"
+                android:textSize="@dimen/_16sp"
                 android:padding="4dp"
                 android:background="@null"
                 android:textColor="#212121"
@@ -91,7 +91,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="24dp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="@dimen/_8dp"
                 android:background="#E0E0E0"/>
 
             <!-- Barcode Scanner Button -->
@@ -361,7 +361,7 @@
                         android:padding="10dp"
                         android:text="Parked near entrance"
                         android:textColor="#212121"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/_16sp" />
 
                     &lt;!&ndash; Image Placeholder &ndash;&gt;
                     <TextView
@@ -392,7 +392,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:visibility="gone"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="@dimen/_12dp"
                 app:cardElevation="8dp">
 
                 <LinearLayout
@@ -412,7 +412,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp"
+                            android:layout_marginBottom="@dimen/_12dp"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -426,7 +426,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text="Parking ID"
                                 android:textColor="#757575"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/_12sp" />
 
                             <TextView
                                 android:id="@+id/parkingId"
@@ -435,7 +435,7 @@
                                 android:text="P12345"
                                 android:textAlignment="textEnd"
                                 android:textColor="#212121"
-                                android:textSize="12sp"
+                                android:textSize="@dimen/_12sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -457,7 +457,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text="Vehicle Number"
                                 android:textColor="#757575"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/_12sp" />
 
                             <TextView
                                 android:id="@+id/vehicleNumber"
@@ -466,7 +466,7 @@
                                 android:text="ABC1234"
                                 android:textAlignment="textEnd"
                                 android:textColor="#212121"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/_14sp" />
                         </LinearLayout>
 
                         <!-- Expand/Collapse Button -->
@@ -477,7 +477,7 @@
                             android:background="@null"
                             android:drawableEnd="@drawable/ic_expand_more"
                             android:text="Show Details"
-                            android:textSize="12dp"
+                            android:textSize="@dimen/_12dp"
                             android:textColor="@color/maroon" />
                     </LinearLayout>
 
@@ -491,7 +491,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_marginBottom="12dp"
+                            android:layout_marginBottom="@dimen/_12dp"
                             android:background="#E0E0E0" />
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -510,7 +510,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text="Vehicle Type"
                                 android:textColor="#757575"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/_12sp" />
 
                             <TextView
                                 android:id="@+id/vehicleType"
@@ -519,14 +519,14 @@
                                 android:text="Car"
                                 android:textAlignment="textEnd"
                                 android:textColor="#212121"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/_14sp" />
                         </LinearLayout>
 
                         <!-- Hook Number -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp"
+                            android:layout_marginBottom="@dimen/_12dp"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -537,42 +537,42 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/_8dp"
                                 android:text="Serial Number"
                                 android:textColor="#757575"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/_12sp" />
 
                             <TextView
-                                android:id="@+id/hookNumber"
+                                android:id="@+id/serialNumber"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="H001"
                                 android:textAlignment="textEnd"
                                 android:textColor="#212121"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/_14sp" />
                         </LinearLayout>
 
                         <!-- Divider -->
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_marginBottom="12dp"
+                            android:layout_marginBottom="@dimen/_12dp"
                             android:background="#E0E0E0" />
 
                         <!-- Time Information -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp"
+                            android:layout_marginBottom="@dimen/_12dp"
                             android:text="Time Information"
                             android:textColor="@color/maroon"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/_14sp"
                             android:textStyle="bold" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginBottom="@dimen/_8dp"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -583,10 +583,10 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/_8dp"
                                 android:text="Check In "
                                 android:textColor="#757575"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/_12sp" />
 
                             <TextView
                                 android:id="@+id/checkinTime"
@@ -595,7 +595,7 @@
                                 android:text="2025-03-28 08:30:00"
                                 android:textAlignment="textEnd"
                                 android:textColor="#212121"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/_14sp" />
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -612,10 +612,10 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/_8dp"
                                 android:text="Check Out "
                                 android:textColor="#757575"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/_12sp" />
 
                             <TextView
                                 android:id="@+id/checkoutTime"
@@ -624,7 +624,7 @@
                                 android:text=""
                                 android:textAlignment="textEnd"
                                 android:textColor="#212121"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/_14sp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -644,7 +644,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text="Created Date"
                                 android:textColor="#757575"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/_12sp" />
 
                             <TextView
                                 android:id="@+id/createdDate"
@@ -653,14 +653,14 @@
                                 android:text="2025-03-28"
                                 android:textAlignment="textEnd"
                                 android:textColor="#212121"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/_14sp" />
                         </LinearLayout>
 
                         <!-- Divider -->
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_marginBottom="12dp"
+                            android:layout_marginBottom="@dimen/_12dp"
                             android:background="#E0E0E0" />
 
                         <!-- Notes Section -->
@@ -670,7 +670,7 @@
                             android:layout_marginBottom="8dp"
                             android:text="Notes"
                             android:textColor="@color/maroon"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/_14sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -682,16 +682,16 @@
                             android:padding="10dp"
                             android:text="Parked near entrance"
                             android:textColor="#212121"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/_16sp" />
 
                         <!-- Image Placeholder -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginBottom="@dimen/_8dp"
                             android:text="Vehicle Image"
                             android:textColor="@color/maroon"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/_14sp"
                             android:textStyle="bold" />
 
                         <ImageView
@@ -731,10 +731,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="@dimen/_8dp"
                         android:text="CheckOut Time"
                         android:textColor="#000000"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/_14sp" />
 
                     <EditText
                         android:id="@+id/timeEditText"
@@ -743,11 +743,11 @@
                         android:hint="Tap to select time"
                         android:inputType="none"
                         android:textColor="#000000"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/_16sp"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:background="@drawable/edittext_border"
-                        android:padding="12dp"/>
+                        android:padding="@dimen/_12dp"/>
 
                     <Button
                         android:id="@+id/checkOutButton"
@@ -758,7 +758,7 @@
                         android:text=" CheckOut"
                         android:textAllCaps="false"
                         android:textColor="#FFFFFF"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/_16sp" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -804,7 +804,7 @@
                             android:layout_height="wrap_content"
                             android:text="Your CheckOut Time is confirmed"
                             android:textColor="#666666"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/_16sp"
                             android:layout_marginTop="8dp"/>
                     </LinearLayout>
                 </RelativeLayout>

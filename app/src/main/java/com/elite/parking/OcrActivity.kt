@@ -42,6 +42,7 @@ class OcrActivity : AppCompatActivity() {
     private lateinit var btnSubmit: Button
     private lateinit var refresh: ImageView
     private lateinit var lnrRefresh: LinearLayout
+    private lateinit var overlayDim: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,8 @@ class OcrActivity : AppCompatActivity() {
         btnSubmit = findViewById(R.id.btnSubmit)
         refresh = findViewById(R.id.refresh)
         lnrRefresh = findViewById(R.id.lnrRefresh)
-        toolBarback = findViewById(R.id.toolBarback)
+        //toolBarback = findViewById(R.id.toolBarback)
+        overlayDim = findViewById(R.id.overlayDim)
         val captureButton: Button = findViewById(R.id.captureButton)
 
         // Request camera permissions
@@ -62,34 +64,39 @@ class OcrActivity : AppCompatActivity() {
             startCamera()
         }
 
-        toolBarback.setOnClickListener {
+      /*  toolBarback.setOnClickListener {
             finish()
-        }
+        }*/
+
         captureButton.setOnClickListener {
             try {
                 takePhoto()
-            }catch (e:Exception){
-                e.stackTrace
+            } catch (e: Exception) {
+                e.printStackTrace()
                 Toast.makeText(this@OcrActivity, "Please provide valid image to Capture Number Plate", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
+
         btnSubmit.setOnClickListener {
-            if(!textView.text.toString().isNullOrBlank()) {
+            if (!textView.text.toString().isNullOrBlank()) {
                 val resultIntent = Intent()
                 resultIntent.putExtra("key", textView.text.toString())
                 setResult(Activity.RESULT_OK, resultIntent)
                 finish()
-            }else{
+            } else {
                 Toast.makeText(this, "Provide proper Number Plate to proceed", Toast.LENGTH_SHORT).show()
             }
         }
+
         refresh.setOnClickListener {
             imageView.setImageDrawable(null)
+            lnrRefresh.visibility= View.GONE
+            btnSubmit.visibility= View.GONE
             textView.setText("Capture Image again")
         }
-        cameraExecutor = Executors.newSingleThreadExecutor()
 
+        cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
     private fun startCamera() {
@@ -136,49 +143,37 @@ class OcrActivity : AppCompatActivity() {
     }
 
     private fun processImageForOCR(bitmap: Bitmap) {
-        /*val image = FirebaseVisionImage.fromBitmap(bitmap)
-          val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
-
-            detector.processImage(image)
-                .addOnSuccessListener { firebaseVisionText ->
-                    for (block in firebaseVisionText.textBlocks) {
-                        Log.d("OCR", "Detected text: ${block.text}")
-                    }
-                }
-                .addOnFailureListener { e ->
-                    Log.e("OCR", "Text recognition failed: $e")
-                }*/
         val image = InputImage.fromBitmap(bitmap, 0)
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
         recognizer.process(image)
             .addOnSuccessListener { visionText ->
-                if(!visionText.text.isNullOrBlank()) {
-                    val extractedText = visionText.text
-                    val numberPlate = extractNumberPlate(extractedText)
-                    textView.text = extractedText//numberPlate ?: "No valid number plate detected"
-                    lnrRefresh.visibility=View.VISIBLE
-                    btnSubmit.visibility=View.VISIBLE
+                if (!visionText.text.isNullOrBlank()) {
+                    var extractedText = visionText.text
+                    extractedText = extractedText.replace("\\s+".toRegex(), "") // Removes all whitespaces
+                    extractedText = extractedText.trim()
 
-                }else{
-                    textView.text = "";
-                    Toast.makeText(this, "Please provide valid image to Capture Number Plate", Toast.LENGTH_LONG).show()
-                    lnrRefresh.visibility=View.GONE
-                    btnSubmit.visibility=View.GONE
+                   // val numberPlate = extractNumberPlate(extractedText)
+                    textView.text = extractedText // Or display the number plate: numberPlate ?: extractedText
+
+                    lnrRefresh.visibility = View.VISIBLE
+                    btnSubmit.visibility = View.VISIBLE
+                } else {
+                    textView.text = ""
+                    Toast.makeText(this, "Please provide a valid image to Capture Number Plate", Toast.LENGTH_LONG).show()
+                    lnrRefresh.visibility = View.GONE
+                    btnSubmit.visibility = View.GONE
                 }
             }
             .addOnFailureListener { e ->
                 Log.e("OCR", "Text recognition failed", e)
                 textView.text = "OCR failed"
-                lnrRefresh.visibility=View.GONE
-                btnSubmit.visibility=View.GONE
+                lnrRefresh.visibility = View.GONE
+                btnSubmit.visibility = View.GONE
             }
     }
 
-    private fun extractNumberPlate(text: String): String? {
-        val regex = Regex("[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}")
-        return regex.find(text)?.value
-    }
+
 
     override fun onDestroy() {
         super.onDestroy()

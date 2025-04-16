@@ -53,12 +53,12 @@ class ParkingViewModel : ViewModel() {
      }*/
     private fun groupByFloor(slots: List<ParkingSlot>): List<ListItem> {
         val groupedList = mutableListOf<ListItem>()
-        val blockMap = slots.groupBy { it.blockNo }
+        val blockMap = slots.groupBy { it.blockNoId }
 
         for ((blockNo, floorSlots) in blockMap) {
             groupedList.add(ListItem.FloorHeader(blockNo))
 
-            val floorMap = floorSlots.groupBy { it.floorNo }
+            val floorMap = floorSlots.groupBy { it.floorNoId }
             for ((floorNo, floorSlots) in floorMap) {
                 groupedList.add(ListItem.BLockHeader(floorNo))
 

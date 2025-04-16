@@ -87,10 +87,10 @@ class SectionedParkingAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
             is ListItem.BLockHeader -> {
-                (holder as BlockHeaderViewHolder).headerText.text = "Floor: ${item.blockNo}"
+                (holder as BlockHeaderViewHolder).headerText.text = "${item.blockName}"
             }
             is ListItem.FloorHeader -> {
-                (holder as FloorHeaderViewHolder).subHeaderText.text = "Block: ${item.floorNo}"
+                (holder as FloorHeaderViewHolder).subHeaderText.text = "${item.floorName}"
             }
 
             is ListItem.ParkingSlotItem -> {

@@ -11,5 +11,5 @@
         android:background="@color/black"
         android:textColor="#FFFFFF"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="14sp"/>
+        android:textSize="@dimen/_14sp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

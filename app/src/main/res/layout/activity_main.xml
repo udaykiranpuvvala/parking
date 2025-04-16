@@ -34,7 +34,7 @@
             android:layout_gravity="center"
             android:gravity="start"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="@dimen/_18sp"
             android:textStyle="bold"/>
 
     </androidx.appcompat.widget.Toolbar>

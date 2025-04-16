@@ -11,7 +11,7 @@
         android:id="@+id/cardContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="@dimen/_12dp"
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
         android:foreground="?attr/selectableItemBackgroundBorderless">
@@ -28,7 +28,7 @@
                 android:id="@+id/blockName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Block A"
+                android:text=""
                 android:textSize="15sp"
                 android:textColor="@color/black"
                 android:textStyle="normal"

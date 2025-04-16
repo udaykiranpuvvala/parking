@@ -27,7 +27,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/round_image"
             android:contentDescription="Profile Image"
-            android:elevation="8dp"
+            android:elevation="@dimen/_8dp"
             android:src="@drawable/person"
             android:scaleType="centerCrop" />
 
@@ -48,7 +48,7 @@
             android:layout_marginTop="4dp"
             android:text="Parking Boy"
             android:textColor="#757575"
-            android:textSize="14sp"
+            android:textSize="@dimen/_14sp"
             android:fontFamily="sans-serif" />
         <TextView
             android:id="@+id/tvPhone"
@@ -56,14 +56,14 @@
             android:layout_height="wrap_content"
             android:text="9234567890"
             android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:textSize="@dimen/_14sp" />
         <TextView
             android:id="@+id/tvEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="sankar@example.com"
             android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:textSize="@dimen/_14sp" />
     </LinearLayout>
 
     <TextView
@@ -74,14 +74,14 @@
         android:layout_marginBottom="16dp"
         android:text="Version 1.1.1"
         android:textColor="#757575"
-        android:textSize="14sp" />
+        android:textSize="@dimen/_14sp" />
 
     <!-- Menu Items -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:cardCornerRadius="8dp"
+        android:layout_marginBottom="@dimen/_8dp"
+        app:cardCornerRadius="@dimen/_8dp"
         app:cardElevation="2dp">
 
         <LinearLayout
@@ -110,7 +110,7 @@
                     android:layout_marginStart="16dp"
                     android:text="Change Password"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/_14sp" />
             </LinearLayout>
 
             <!-- Divider -->
@@ -138,7 +138,7 @@
                     android:layout_marginStart="16dp"
                     android:text="Check App Update"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp"/>
+                    android:textSize="@dimen/_14sp"/>
             </LinearLayout>
 
             <!-- Divider -->
@@ -166,7 +166,7 @@
                     android:layout_marginStart="16dp"
                     android:text="Privacy Policy"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp"/>
+                    android:textSize="@dimen/_14sp"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -192,7 +192,7 @@
                     android:layout_marginStart="16dp"
                     android:text="Logout"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp"/>
+                    android:textSize="@dimen/_14sp"/>
             </LinearLayout>
 
         </LinearLayout>

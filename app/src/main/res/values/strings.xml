@@ -56,6 +56,19 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="enter_vehicle_number">Enter Vehicle number</string>
+    <string name="in_time">Check In Time</string>
+    <string name="created_date">Created Date</string>
+    <string name="upload_photos">+ Upload Photos</string>
+    <string name="select_parking">Select Parking</string>
+    <string name="enter_notes">Enter Notes</string>
+    <string name="suv">SUV</string>
+    <string name="luxury">Luxury</string>
+    <string name="sedan">Sedan</string>
+    <string name="hatchback">Hatchback</string>
+    <string name="vehicle_number">Vehicle Number</string>
+    <string name="vehicle_type">Vehicle Type</string>
+    <string name="enter_serial_no">Enter Serial No</string>
 
     <style name="CircleImageView" parent="">
         <item name="cornerFamily">rounded</item>
@@ -66,6 +79,7 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
     </style>
+
     <style name="RoundedCornerMedium" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>

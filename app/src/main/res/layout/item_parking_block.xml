@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="@dimen/_8dp">
 
     <TextView
         android:id="@+id/tv_block_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="@dimen/_18sp"
         android:textStyle="bold"
-        android:padding="8dp"/>
+        android:padding="@dimen/_8dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_floors"

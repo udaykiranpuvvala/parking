@@ -8,14 +8,14 @@
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="@dimen/_12dp"
     app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp">
+        android:padding="@dimen/_12dp">
 
         <!-- Image Container -->
         <FrameLayout
@@ -40,7 +40,7 @@
                 android:background="@drawable/status_ribbon_left"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="@dimen/_8dp">
 
                 <ImageView
                     android:layout_width="14dp"
@@ -69,7 +69,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/_8dp"
                 android:layout_gravity="top"
                 android:gravity="top"
                 android:orientation="vertical">
@@ -86,7 +86,7 @@
                             android:layout_height="wrap_content"
                             android:text="AP39CZ9999"
                             android:textColor="@color/black"
-                            android:textSize="18sp"
+                            android:textSize="@dimen/_18sp"
                             android:textStyle="bold"
                             android:letterSpacing="0.03"
                             android:fontFamily="sans-serif-condensed"/>
@@ -96,14 +96,14 @@
                        android:layout_gravity="end"
                        android:gravity="end">
                     <TextView
-                        android:id="@+id/hookNumber"
+                        android:id="@+id/serialNumber"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="@drawable/badge_ripple"
                         android:text="1"
                         android:layout_gravity="end"
                         android:textColor="@color/white"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/_14sp"
                         android:textStyle="bold"
                         android:gravity="center"
                         android:layout_marginEnd="16dp"
@@ -122,7 +122,7 @@
                     android:drawableTint="@color/black"
                     android:text="Check In : 05:08 PM   1994/08/09"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/_14sp" />
 
                 <TextView
                     android:id="@+id/outTime"
@@ -135,7 +135,7 @@
                     android:drawableTint="@color/black"
                     android:text="Check Out : 05:08 PM   1994/08/09"
                     android:textColor="@color/maroon"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/_14sp" />
             </LinearLayout>
           <!--  <LinearLayout
                 android:layout_width="0dp"

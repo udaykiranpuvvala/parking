@@ -77,8 +77,8 @@ class ParkingSlotsActivity : AppCompatActivity() {
         val onSlotSelected: (ParkingSlots, Floor, Block) -> Unit = { slot, floor, block ->
             val intent = Intent(this, CarFormActivity::class.java)
             intent.putExtra("selectedSlot", slot.parkingNo)
-            intent.putExtra("selectedFloor", floor.floorNo)
-            intent.putExtra("selectedBlock", block.blockNo)
+            intent.putExtra("selectedFloor", floor.floorName)
+            intent.putExtra("selectedBlock", block.blockName)
             intent.putExtra("selectedSlotUuid", slot.uuid)
             intent.putExtra("vehicleNo",vehicleNo)
             intent.putExtra("serialNumber", serialNumber)
@@ -125,10 +125,10 @@ class ParkingSlotsActivity : AppCompatActivity() {
                     val slots: List<ParkingSlot> = response.content
 
                     val blockList = slots
-                        .groupBy { it.blockNo }
+                        .groupBy { it.blockName }
                         .map { (blockNo, blockSlots) ->
                             val floors = blockSlots
-                                .groupBy { it.floorNo }
+                                .groupBy { it.floorName }
                                 .map { (floorNo, floorSlots) ->
                                     val parkingSlots = floorSlots.map {
                                         ParkingSlots(

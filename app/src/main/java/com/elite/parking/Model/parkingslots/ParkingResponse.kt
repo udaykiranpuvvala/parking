@@ -9,8 +9,10 @@ data class ParkingResponse(
 data class ParkingSlot(
     val parkingNo: String,
     val companyId: String,
-    val blockNo: String,
-    val floorNo: String,
+    val blockNoId : String,
+    val blockName : String,
+    val floorNoId : String,
+    val floorName : String,
     val modifiedDate: String?,
     val createdBy: String,
     val uuid: String,
@@ -23,8 +25,8 @@ data class ParkingSlot(
 
 // For sectioned list with headers
 sealed class ListItem {
-    data class BLockHeader(val blockNo: String) : ListItem()
-    data class FloorHeader(val floorNo: String) : ListItem()
+    data class BLockHeader(val blockName: String) : ListItem()
+    data class FloorHeader(val floorName: String) : ListItem()
     data class ParkingSlotItem(val slot: ParkingSlot) : ListItem()
 
   /*  data class FloorHeader(val floorNo: String) : ListItem()
@@ -33,14 +35,14 @@ sealed class ListItem {
     data class ParkingSlot(val parkingNo: String, val availabilityStatus: Int)*/
 }
 data class Block(
-    val blockNo: String,
+    val blockName: String?="",
     val floors: List<Floor>,
     var selectedFloor: Floor? = null // NEW
 )
 
 
 data class Floor(
-    val floorNo: String,
+    val floorName: String?="",
     val slots: List<ParkingSlots>,
     var isExpanded: Boolean = false // default collapsed
 )
@@ -48,7 +50,7 @@ data class Floor(
 
 
 data class ParkingSlots(
-    val parkingNo: String,
+    val parkingNo: String?="",
     val availabilityStatus: Int,
     val type: Int,
     val uuid: String

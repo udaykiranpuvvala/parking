@@ -11,7 +11,7 @@
         android:background="@color/maroonlite"
         android:textColor="#FFFFFF"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="14sp"/>
+        android:textSize="@dimen/_14sp"/>
 
  <!--   <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewParkingSlots"

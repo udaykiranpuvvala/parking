@@ -59,11 +59,11 @@ dependencies {
     implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
     implementation ("com.github.bumptech.glide:glide:4.11.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
-//
-    implementation("androidx.camera:camera-core:1.4.0-beta01")
-    implementation("androidx.camera:camera-camera2:1.4.0-beta01")
-    implementation("androidx.camera:camera-lifecycle:1.4.0-beta01")
-    implementation("androidx.camera:camera-view:1.4.0-beta01")
+
+    implementation("androidx.camera:camera-core:1.4.2")
+    implementation("androidx.camera:camera-camera2:1.4.2")
+    implementation("androidx.camera:camera-lifecycle:1.4.2")
+    implementation("androidx.camera:camera-view:1.4.2")
     implementation("com.google.mlkit:text-recognition:16.0.0")
 
 
@@ -77,11 +77,6 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
+    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
 
-//    implementation("com.google.firebase:firebase-ml-vision:24.1.0")
-//    implementation("com.google.firebase:firebase-ml-vision-text-model:20.0.3")
-
-
-//    implementation ("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
-//    implementation("com.google.mlkit:text-recognition:16.0.0")
 }

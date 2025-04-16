@@ -40,7 +40,7 @@ class BlockAdapter(
 
     override fun onBindViewHolder(holder: BlockViewHolder, position: Int) {
         val block = blockList[position]
-        holder.blockName.text = "Block ${block.blockNo}"
+        holder.blockName.text = "${block.blockName}"
 
         if (position == selectedPosition) {
             holder.linearBlock.setBackgroundResource(R.drawable.selector_bg)

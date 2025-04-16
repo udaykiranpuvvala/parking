@@ -41,9 +41,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.elite.parking.LoginActivity
 import com.elite.parking.Model.VehicleCheckInRequest
-import com.elite.parking.Model.parkingslots.ListItem
 import com.elite.parking.apis.ApiService.Companion.api
 import com.elite.parking.loader.NetworkUtils
 import com.elite.parking.loader.ProgressBarUtility
@@ -63,7 +61,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
-import java.time.format.DateTimeParseException
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -90,7 +87,7 @@ class CarFormActivity : AppCompatActivity() {
     private lateinit var validationResultText: TextView
     private lateinit var inDateEditText: TextView
     private lateinit var parkingSlot: LinearLayout
-    private lateinit var hookNumberEditText: EditText
+    private lateinit var serialNumberEditText: EditText
     private lateinit var barcodeButton: ImageButton
     private lateinit var notesEditText: TextInputEditText
     private lateinit var submitButton: Button
@@ -131,7 +128,7 @@ class CarFormActivity : AppCompatActivity() {
         inTimeEditText = findViewById(R.id.inTimeEditText)
         toolBarback = findViewById(R.id.toolBarback)
         lnrInTime = findViewById(R.id.lnrInTime)
-        hookNumberEditText = findViewById(R.id.hookNumber)
+        serialNumberEditText = findViewById(R.id.serialNumber)
         notesEditText = findViewById(R.id.notesEditText)
         submitButton = findViewById(R.id.checkOutButton)
         inDateEditText = findViewById(R.id.inDateEditText)
@@ -235,7 +232,11 @@ class CarFormActivity : AppCompatActivity() {
         })
 
         barcodeButton.setOnClickListener {
-            startBarcodeScanner()
+            //startBarcodeScanner()
+            val dialog = QRScannerDialog { scannedText ->
+                serialNumberEditText.setText( scannedText.toString())
+            }
+            dialog.show(supportFragmentManager, "QRScanner")
         }
         btnSubmit.setOnClickListener {
             if (NetworkUtils.isNetworkAvailable(this)) {
@@ -255,7 +256,7 @@ class CarFormActivity : AppCompatActivity() {
                         vehicleNo = vehicleNoEditText.text.toString(),
                         vehicleType = selectedVehicleType.toString(),
                         companyId = companyId,
-                        hookNo = hookNumberEditText.text.toString(),
+                        hookNo = serialNumberEditText.text.toString(),
                         notes = notesEditText.text.toString(),
                         inTime = formattedDateTime.toString(),
                         imageUrl = parkingimageUrl,
@@ -293,7 +294,7 @@ class CarFormActivity : AppCompatActivity() {
             //showParkingDialog()
             val intent = Intent(this@CarFormActivity, ParkingSlotsActivity::class.java)
             intent.putExtra("vehicleNo", vehicleNoEditText.text.toString().trim())
-            intent.putExtra("serialNumber", hookNumberEditText.text.toString().trim())
+            intent.putExtra("serialNumber", serialNumberEditText.text.toString().trim())
             intent.putExtra("checkintime", inTimeEditText.text.toString().trim())
             intent.putExtra("vehicleType", selectedVehicleType.toString().trim())
             intent.putExtra("vehicleImage", parkingimageUrl.toString().trim())
@@ -370,7 +371,7 @@ class CarFormActivity : AppCompatActivity() {
         }else{
             inDateEditText.setText(formattedDate.toString())
         }
-        hookNumberEditText.setText( intent.getStringExtra("serialNumber"))
+        serialNumberEditText.setText( intent.getStringExtra("serialNumber"))
         selectedVehicleType=intent.getStringExtra("vehicleType")
         selectedVehicleType=intent.getStringExtra("vehicleImage")
 
@@ -390,7 +391,7 @@ class CarFormActivity : AppCompatActivity() {
         parkingLotNumber = selectedSlotUUID.toString();
         if (!parkingLotNumber.equals("null")&&!TextUtils.isEmpty(parkingLotNumber)) {
             selectedSlotNumber.visibility = View.VISIBLE
-            selectedSlotNumber.setText("Block: ${selectedBlock}  : Floor : ${selectedFloor} : Parking No: ${selectedSlot}")
+            selectedSlotNumber.setText(" ${selectedBlock}  : ${selectedFloor} :  ${selectedSlot}")
         }else{
             selectedSlotNumber.visibility = View.GONE
         }
@@ -431,8 +432,8 @@ class CarFormActivity : AppCompatActivity() {
         }
 
         // Validate Hook Number
-        val hookNumber = hookNumberEditText.text.toString().trim()
-        if (hookNumber.isEmpty()) {
+        val serialNumber = serialNumberEditText.text.toString().trim()
+        if (serialNumber.isEmpty()) {
             showToast("Serial Number is required.")
             return false
         }
@@ -501,7 +502,7 @@ class CarFormActivity : AppCompatActivity() {
             //parkingLotNumber= "Block: ${selectedSlot.blockNo}  : Floor: ${selectedSlot.floorNo} : Parking No: ${selectedSlot.parkingNo}"
             parkingLotNumber = selectedSlot.uuid
             // Toast.makeText(this, "Selected Slot:  ${selectedSlot.floorNo}  :  ${selectedSlot.parkingNo}", Toast.LENGTH_SHORT).show()
-            selectedSlotNumber.setText("Block: ${selectedSlot.blockNo}  : Floor : ${selectedSlot.floorNo} : Parking No: ${selectedSlot.parkingNo}")
+            selectedSlotNumber.setText("${selectedSlot.blockName}  : ${selectedSlot.floorName} :  ${selectedSlot.parkingNo}")
             selectedSlotNumber.visibility = View.VISIBLE
             dialog.dismiss()
         }
@@ -606,7 +607,7 @@ class CarFormActivity : AppCompatActivity() {
             if (result.contents == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
             } else {
-                hookNumberEditText.setText(result.contents)
+                serialNumberEditText.setText(result.contents)
                 Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
             }
         } else {
@@ -692,17 +693,19 @@ class CarFormActivity : AppCompatActivity() {
         // Modified regex to allow no spaces between components
         val regex = "^[A-Z]{2}\\d{1,2}[A-Z]{1,2}\\d{1,4}$".toRegex()
 
-        // Check if the input matches the regex
-        if (vehicleNumber.matches(regex)) {
-            isValidVehicleNumber = "Valid Vehicle Number"
-            validationResultText.text = "Valid Vehicle Number"
-            validationResultText.visibility = View.GONE
-            validationResultText.setTextColor(resources.getColor(android.R.color.holo_green_dark))
-        } else {
-            isValidVehicleNumber == ""
-            validationResultText.text = "Invalid Vehicle Number"
-            validationResultText.visibility = View.VISIBLE
-            validationResultText.setTextColor(resources.getColor(android.R.color.holo_red_dark))
+        if(vehicleNumber.length>=1) {
+            // Check if the input matches the regex
+            if (vehicleNumber.matches(regex)) {
+                isValidVehicleNumber = "Valid Vehicle Number"
+                validationResultText.text = "Valid Vehicle Number"
+                validationResultText.visibility = View.GONE
+                validationResultText.setTextColor(resources.getColor(android.R.color.holo_green_dark))
+            } else {
+                isValidVehicleNumber == ""
+                validationResultText.text = "Invalid Vehicle Number"
+                validationResultText.visibility = View.VISIBLE
+                validationResultText.setTextColor(resources.getColor(android.R.color.holo_red_dark))
+            }
         }
     }
 

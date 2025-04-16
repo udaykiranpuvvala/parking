@@ -34,7 +34,7 @@
             android:gravity="start"
             android:drawableStart="@drawable/arrow_back"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="@dimen/_18sp"
             android:textStyle="bold"/>
 
     </androidx.appcompat.widget.Toolbar>
@@ -64,7 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
-                    app:cardCornerRadius="8dp"
+                    app:cardCornerRadius="@dimen/_8dp"
                     app:cardElevation="4dp">
 
                     <LinearLayout
@@ -77,10 +77,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Vehicle Number"
-                            android:textSize="12sp"
+                            android:text="@string/vehicle_number"
+                            android:textSize="@dimen/_12sp"
                             android:textColor="@color/black"
-                            android:layout_marginBottom="8dp"/>
+                            android:layout_marginBottom="@dimen/_8dp"/>
 
 
                         <LinearLayout
@@ -89,7 +89,7 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
                             android:background="@drawable/search_bar_background"
-                            android:padding="8dp">
+                            android:padding="@dimen/_2dp">
 
                             <!-- Token Number EditText -->
                             <EditText
@@ -97,11 +97,12 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:hint="Enter Vehicle number"
+                                android:hint="@string/enter_vehicle_number"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:maxLength="12"
-                                android:textSize="16sp"
+                                android:paddingStart="@dimen/_10dp"
+                                android:textSize="@dimen/_16sp"
                                 android:padding="2dp"
                                 android:textAllCaps="true"
                                 android:background="@null"
@@ -111,7 +112,7 @@
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="24dp"
-                                android:layout_marginHorizontal="8dp"
+                                android:layout_marginHorizontal="@dimen/_8dp"
                                 android:background="#E0E0E0"/>
 
                             <!-- Barcode Scanner Button -->
@@ -128,23 +129,24 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text=""
+                            android:visibility="gone"
                             android:textColor="@android:color/holo_red_dark"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/_16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text="Vehicle Type"
-                            android:textSize="12sp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:text="@string/vehicle_type"
+                            android:textSize="@dimen/_12sp"
                             android:textColor="@color/black"
-                            android:layout_marginBottom="8dp"/>
+                            android:layout_marginBottom="@dimen/_8dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center"
-                            android:layout_marginBottom="16dp">
+                            android:layout_marginBottom="@dimen/_16dp">
 
                             <!-- SUV -->
                             <androidx.cardview.widget.CardView
@@ -152,8 +154,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:layout_margin="2dp"
-                                app:cardCornerRadius="8dp"
+                                android:layout_margin="@dimen/_2dp"
+                                app:cardCornerRadius="@dimen/_8dp"
                                 app:strokeColor="@color/white"
                                 app:strokeWidth="1dp">
 
@@ -163,21 +165,21 @@
                                     android:orientation="vertical"
                                     android:id="@+id/ll_suv"
                                     android:gravity="center"
-                                    android:padding="12dp">
+                                    android:padding="@dimen/_12dp">
 
                                     <ImageView
                                         android:id="@+id/btn_suv"
-                                        android:layout_width="39dp"
-                                        android:layout_height="40dp"
+                                        android:layout_width="@dimen/_40dp"
+                                        android:layout_height="@dimen/_40dp"
                                         android:contentDescription="SUV"
                                         android:src="@drawable/suv" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="SUV"
+                                        android:text="@string/suv"
                                         android:textSize="10sp"
-                                        android:layout_marginTop="4dp"/>
+                                        android:layout_marginTop="@dimen/_4dp"/>
                                 </LinearLayout>
                             </androidx.cardview.widget.CardView>
 
@@ -188,7 +190,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_margin="2dp"
-                                app:cardCornerRadius="8dp"
+                                app:cardCornerRadius="@dimen/_8dp"
                                 app:strokeColor="@color/white"
                                 app:strokeWidth="1dp">
 
@@ -198,21 +200,21 @@
                                     android:orientation="vertical"
                                     android:gravity="center"
                                     android:id="@+id/ll_luxury"
-                                    android:padding="12dp">
+                                    android:padding="@dimen/_12dp">
 
                                     <ImageView
                                         android:id="@+id/btn_luxury"
-                                        android:layout_width="40dp"
-                                        android:layout_height="40dp"
+                                        android:layout_width="@dimen/_40dp"
+                                        android:layout_height="@dimen/_40dp"
                                         android:src="@drawable/luxury"
                                         android:contentDescription="Luxury"/>
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Luxury"
+                                        android:text="@string/luxury"
                                         android:textSize="10sp"
-                                        android:layout_marginTop="4dp"/>
+                                        android:layout_marginTop="@dimen/_4dp"/>
                                 </LinearLayout>
                             </androidx.cardview.widget.CardView>
 
@@ -222,8 +224,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:layout_margin="2dp"
-                                app:cardCornerRadius="8dp"
+                                android:layout_margin="@dimen/_2dp"
+                                app:cardCornerRadius="@dimen/_8dp"
                                 app:strokeColor="@color/white"
                                 app:strokeWidth="1dp">
 
@@ -233,21 +235,21 @@
                                     android:orientation="vertical"
                                     android:gravity="center"
                                     android:id="@+id/ll_sedan"
-                                    android:padding="12dp">
+                                    android:padding="@dimen/_12dp">
 
                                     <ImageView
                                         android:id="@+id/btn_sedan"
-                                        android:layout_width="40dp"
-                                        android:layout_height="40dp"
+                                        android:layout_width="@dimen/_40dp"
+                                        android:layout_height="@dimen/_40dp"
                                         android:src="@drawable/sedan"
                                         android:contentDescription="Sedan"/>
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Sedan"
+                                        android:text="@string/sedan"
                                         android:textSize="10sp"
-                                        android:layout_marginTop="4dp"/>
+                                        android:layout_marginTop="@dimen/_4dp"/>
                                 </LinearLayout>
                             </androidx.cardview.widget.CardView>
 
@@ -258,7 +260,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_margin="2dp"
-                                app:cardCornerRadius="8dp"
+                                app:cardCornerRadius="@dimen/_8dp"
                                 app:strokeColor="@color/white"
                                 app:strokeWidth="1dp">
 
@@ -268,22 +270,22 @@
                                     android:orientation="vertical"
                                     android:gravity="center"
                                     android:id="@+id/ll_hatchback"
-                                    android:padding="12dp">
+                                    android:padding="@dimen/_12dp">
 
                                     <ImageView
                                         android:id="@+id/btn_hatchback"
-                                        android:layout_width="40dp"
-                                        android:layout_height="40dp"
+                                        android:layout_width="@dimen/_40dp"
+                                        android:layout_height="@dimen/_40dp"
                                         android:src="@drawable/hatchback"
                                         android:contentDescription="Hatchback"/>
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Hatchback"
+                                        android:text="@string/hatchback"
                                         android:textSize="10sp"
                                         android:singleLine="true"
-                                        android:layout_marginTop="4dp"/>
+                                        android:layout_marginTop="@dimen/_4dp"/>
                                 </LinearLayout>
                             </androidx.cardview.widget.CardView>
                         </LinearLayout>
@@ -308,10 +310,10 @@
                                     android:layout_gravity="center"
                                     android:layout_marginBottom="5sp"
                                     android:gravity="center"
-                                    android:paddingTop="8sp"
-                                    android:text="In Time"
+                                    android:paddingTop="@dimen/_8sp"
+                                    android:text="@string/in_time"
                                     android:textColor="@color/black"
-                                    android:textSize="12sp"/>
+                                    android:textSize="@dimen/_12sp"/>
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -325,9 +327,9 @@
                                     android:background="@drawable/search_bar_background"
                                     android:focusableInTouchMode="true"
                                     android:gravity="center"
-                                    android:padding="8sp"
+                                    android:padding="@dimen/_8sp"
                                     android:textColor="#000000"
-                                    android:textSize="14sp"
+                                    android:textSize="@dimen/_14sp"
                                     android:textStyle="bold" />
 
                                 </LinearLayout>
@@ -346,10 +348,10 @@
                                     android:layout_gravity="center"
                                     android:layout_marginBottom="5sp"
                                     android:gravity="center"
-                                    android:paddingTop="8sp"
-                                    android:text="Created Date"
+                                    android:paddingTop="@dimen/_8sp"
+                                    android:text="@string/created_date"
                                     android:textColor="@color/black"
-                                    android:textSize="12sp" />
+                                    android:textSize="@dimen/_12sp" />
 
                                 <TextView
                                     android:id="@+id/inDateEditText"
@@ -359,9 +361,9 @@
                                     android:background="@drawable/search_bar_background"
                                     android:focusableInTouchMode="true"
                                     android:gravity="center"
-                                    android:padding="8sp"
+                                    android:padding="@dimen/_8sp"
                                     android:textColor="#000000"
-                                    android:textSize="14sp"
+                                    android:textSize="@dimen/_14sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
                         </LinearLayout>
@@ -373,7 +375,7 @@
                             android:paddingTop="10sp"
                             android:textColor="@color/black"
                             android:text="@string/hook_number"
-                            android:textSize="12sp"/>
+                            android:textSize="@dimen/_12sp"/>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -385,17 +387,17 @@
 
                             <!-- Token Number EditText -->
                             <EditText
-                                android:id="@+id/hookNumber"
+                                android:id="@+id/serialNumber"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:hint="Enter Serial No"
+                                android:hint="@string/enter_serial_no"
                                 android:inputType="number"
                                 android:maxLines="1"
                                 android:paddingStart="10dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                android:textSize="16sp"
+                                android:textSize="@dimen/_16sp"
                                 android:padding="4dp"
                                 android:background="@null"
                                 android:textColor="#212121"
@@ -405,7 +407,7 @@
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="24dp"
-                                android:layout_marginHorizontal="8dp"
+                                android:layout_marginHorizontal="@dimen/_8dp"
                                 android:background="#E0E0E0"/>
 
                             <!-- Barcode Scanner Button -->
@@ -435,7 +437,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        app:cardCornerRadius="8dp"
+                        app:cardCornerRadius="@dimen/_8dp"
                         app:cardElevation="4dp">
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -465,7 +467,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/white"
-                                android:text="+ Upload Photos"
+                                android:text="@string/upload_photos"
                                 android:textSize="10dp"
                                 android:maxLines="2"
                                 android:layout_marginTop="5dp"
@@ -500,7 +502,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/white"
-                                android:text="Select Parking"
+                                android:text="@string/select_parking"
                                 android:textSize="10dp"
                                 android:maxLines="2"
                                 android:layout_marginTop="5dp"
@@ -544,11 +546,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:background="@drawable/search_bar_background"
-                        android:hint="Enter Notes"
+                        android:hint="@string/enter_notes"
                         android:inputType="textMultiLine"
                         android:padding="10dp"
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/_16sp" />
 
                 </LinearLayout>
                 <androidx.cardview.widget.CardView
@@ -556,7 +558,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/maroon"
                     android:layout_margin="4dp"
-                    app:cardCornerRadius="8dp"
+                    app:cardCornerRadius="@dimen/_8dp"
                     app:cardElevation="4dp">
                 <Button
                     android:id="@+id/checkOutButton"
