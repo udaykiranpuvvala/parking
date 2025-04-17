@@ -12,7 +12,12 @@ import com.elite.parking.Model.parkingslots.Floor
 import com.elite.parking.Model.parkingslots.ParkingSlots
 import com.elite.parking.adapter.SlotAdapter
 
-class FloorAdapter(private val context: Context, private val floors: List<Floor>, private val block: Block, private val onSlotSelected: (ParkingSlots, Floor, Block) -> Unit) : RecyclerView.Adapter<FloorAdapter.FloorViewHolder>() {
+class FloorAdapter(
+    private val context: Context,
+    private var floors: List<Floor>,
+    private val block: Block,
+    private val onSlotSelected: (ParkingSlots, Floor, Block) -> Unit
+) : RecyclerView.Adapter<FloorAdapter.FloorViewHolder>() {
 
     class FloorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val floorTitle: TextView = view.findViewById(R.id.floorName)
@@ -26,18 +31,16 @@ class FloorAdapter(private val context: Context, private val floors: List<Floor>
 
     override fun onBindViewHolder(holder: FloorViewHolder, position: Int) {
         val floor = floors[position]
-        holder.floorTitle.text = "${floor.floorName}"
-        holder.slotRecycler.layoutManager = GridLayoutManager(holder.itemView.context, 4)
+        holder.floorTitle.text = "${floor.floorName} (${floor.slots.size} slots)"
+        holder.slotRecycler.layoutManager = GridLayoutManager(holder.itemView.context, 5)
         holder.slotRecycler.adapter = SlotAdapter(context, floor.slots, floor, block, onSlotSelected)
-
-        // Set click listener for floor
-        holder.itemView.setOnClickListener {
-            // Handle floor click (you can implement floor expansion logic if necessary)
-        }
     }
 
     override fun getItemCount(): Int = floors.size
+
+    // 🔍 Optional: Update floors list for filtering or refreshing
+    fun updateFloors(newFloors: List<Floor>) {
+        this.floors = newFloors
+        notifyDataSetChanged()
+    }
 }
-
-
-

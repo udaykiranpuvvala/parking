@@ -11,47 +11,72 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- Custom Toolbar with Back and Search -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/textHeader"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/maroon"
             android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="    Parking"
-                android:layout_gravity="center"
-                android:gravity="start"
-                android:id="@+id/toolBarback"
-                android:drawableStart="@drawable/arrow_back"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/_18sp"
-                android:textStyle="bold"/>
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <!-- Back Button -->
+                <ImageView
+                    android:id="@+id/toolBarback"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_back"
+                    android:padding="8dp" />
+
+                <!-- Search EditText -->
+                <EditText
+                    android:id="@+id/searchEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:hint="Search here.."
+                    android:paddingHorizontal="12dp"
+                    android:background="@drawable/search_edittext_bg"
+                    android:inputType="text"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#CCFFFFFF"
+                    android:drawableStart="@drawable/ic_search"
+                    android:drawablePadding="8dp"
+                    android:singleLine="true"/>
+            </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 
+        <!-- Blocks horizontal RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/blocksRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            app:layout_constraintTop_toBottomOf="@+id/textHeader"/>
+            android:clipToPadding="false" />
 
+        <!-- Floors vertical RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/blocks2RecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:clipToPadding="false"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/textHeader"/>
+            android:visibility="gone"/>
 
+        <!-- No Data Layout -->
         <LinearLayout
             android:id="@+id/lnrNoData"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -72,7 +97,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Refresh Floating Action Button -->
+    <!-- Floating Refresh Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/refreshButton"
         android:layout_width="wrap_content"
@@ -81,6 +106,5 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_refresh"
         app:backgroundTint="@color/maroon"
-        app:tint="@android:color/white"/>
-
+        app:tint="@android:color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

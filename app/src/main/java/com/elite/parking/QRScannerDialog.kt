@@ -32,8 +32,10 @@ class QRScannerDialog(private val onResult: (String) -> Unit) : DialogFragment()
 
             decodeCallback = DecodeCallback {
                 val result = it.text
+                val numericResult = result.filter { char -> char.isDigit() } // Keeps only digits
+
                 requireActivity().runOnUiThread {
-                    onResult(result)
+                    onResult(numericResult)
                     dialog.dismiss()
                 }
             }

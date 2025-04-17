@@ -1,7 +1,9 @@
 package com.elite.parking
 
+import android.Manifest
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -20,6 +22,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -93,6 +97,9 @@ class PaymentActivity : AppCompatActivity() {
 
     private lateinit var vehicledetailsByHookNumberViewModel: VehicleViewModel.VehicleDetailsbyHookNumberViewModel
 
+    companion object {
+        private const val CAMERA_PERMISSION_CODE = 101
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,12 +162,24 @@ class PaymentActivity : AppCompatActivity() {
             }
         }
 
+
         barcodeButton.setOnClickListener {
             //startBarcodeScanner()
-            val dialog = QRScannerDialog { scannedText ->
-                tokenEditText.setText( scannedText.toString())
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED
+            ) {
+                val dialog = QRScannerDialog { scannedText ->
+                    tokenEditText.setText( scannedText.toString())
+                }
+                dialog.show(supportFragmentManager, "QRScanner")
+            } else {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.CAMERA),
+                    CAMERA_PERMISSION_CODE
+                )
             }
-            dialog.show(supportFragmentManager, "QRScanner")
         }
         timeEditText.setText(getFormattedTime())
         expandButton.setOnClickListener {

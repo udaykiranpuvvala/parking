@@ -61,7 +61,6 @@ class BlockAdapter(
 
     override fun getItemCount(): Int = blockList.size
 
-    // This is optional but useful: automatically trigger callback after the adapter is attached
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         if (blockList.isNotEmpty()) {

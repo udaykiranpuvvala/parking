@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.FloorAdapter
@@ -15,7 +14,7 @@ import com.elite.parking.R
 
 class BlockTwoAdapter(
     private val context: Context,
-    private var blockList: List<Block>, // This will now be mutable
+    private var blockList: List<Block>, // This will be updated using updateBlockList()
     private val onSlotSelected: (ParkingSlots, Floor, Block) -> Unit,
     private var selectedBlockPosition: Int = -1
 ) : RecyclerView.Adapter<BlockTwoAdapter.BlockViewHolder>() {
@@ -36,10 +35,9 @@ class BlockTwoAdapter(
         holder.floorRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         holder.floorRecyclerView.adapter = floorAdapter
 
-        // Only the top item (selected block) will show its floors
+        // Only the first block's floors should be expanded by default
         holder.floorRecyclerView.visibility = if (position == 0) View.VISIBLE else View.GONE
 
-        // Optional: item click logic (for future use)
         holder.itemView.setOnClickListener {
             updateSelectedBlockPosition(position)
         }
@@ -47,10 +45,10 @@ class BlockTwoAdapter(
 
     override fun getItemCount(): Int = blockList.size
 
+    // Move selected block to top
     fun updateSelectedBlockPosition(position: Int) {
         if (position in blockList.indices) {
             val selectedBlock = blockList[position]
-            // Move selected block to top
             val newList = blockList.toMutableList()
             newList.removeAt(position)
             newList.add(0, selectedBlock)
@@ -58,6 +56,10 @@ class BlockTwoAdapter(
             notifyDataSetChanged()
         }
     }
+
+    // Call this from activity when filter/search is applied
+    fun updateBlockList(newBlockList: List<Block>) {
+        blockList = newBlockList
+        notifyDataSetChanged()
+    }
 }
-
-

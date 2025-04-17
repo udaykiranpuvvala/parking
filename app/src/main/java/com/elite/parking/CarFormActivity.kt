@@ -232,11 +232,20 @@ class CarFormActivity : AppCompatActivity() {
         })
 
         barcodeButton.setOnClickListener {
-            //startBarcodeScanner()
-            val dialog = QRScannerDialog { scannedText ->
-                serialNumberEditText.setText( scannedText.toString())
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED
+            ) {
+                val dialog = QRScannerDialog { scannedText ->
+                    serialNumberEditText.setText( scannedText.toString())
+                }
+                dialog.show(supportFragmentManager, "QRScanner")
+            } else {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.CAMERA),
+                    CAMERA_PERMISSION_CODE
+                )
             }
-            dialog.show(supportFragmentManager, "QRScanner")
         }
         btnSubmit.setOnClickListener {
             if (NetworkUtils.isNetworkAvailable(this)) {

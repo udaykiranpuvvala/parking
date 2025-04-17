@@ -2,7 +2,11 @@ package com.elite.parking
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -22,7 +26,6 @@ import com.elite.parking.loader.ProgressBarUtility
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.ParkingViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlin.getValue
 
 class ParkingSlotsActivity : AppCompatActivity() {
 
@@ -38,27 +41,31 @@ class ParkingSlotsActivity : AppCompatActivity() {
     private lateinit var blockAdapter: BlockAdapter
     private lateinit var blockAdapter2: BlockTwoAdapter
 
-    private lateinit var toolBarback: TextView
+    private lateinit var toolBarback: ImageView
     private lateinit var refreshButton: FloatingActionButton
+    private lateinit var searchEditText: EditText
+
+    private var originalBlockList: List<Block> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parking_slots)
 
-        val vehicleNo= intent.getStringExtra("vehicleNo")
-        val serialNumber= intent.getStringExtra("serialNumber")
-        val checkintime= intent.getStringExtra("checkintime")
-        val vehicleType= intent.getStringExtra("vehicleType")
-        val vehicleImage= intent.getStringExtra("vehicleImage")
+        val vehicleNo = intent.getStringExtra("vehicleNo")
+        val serialNumber = intent.getStringExtra("serialNumber")
+        val checkintime = intent.getStringExtra("checkintime")
+        val vehicleType = intent.getStringExtra("vehicleType")
+        val vehicleImage = intent.getStringExtra("vehicleImage")
+
         toolBarback = findViewById(R.id.toolBarback)
         refreshButton = findViewById(R.id.refreshButton)
+        searchEditText = findViewById(R.id.searchEditText)
 
-        toolBarback.setOnClickListener {
-            finish()
-        }
+        toolBarback.setOnClickListener { finish() }
+
         parkingViewModelData = ViewModelProvider(this).get(ParkingViewModel.ParkingViewModelData::class.java)
-
         sharedPreferencesHelper = SharedPreferencesHelper(this)
+
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
         loginResponse?.let {
             val loginData = it.content.firstOrNull()
@@ -70,92 +77,167 @@ class ParkingSlotsActivity : AppCompatActivity() {
         } ?: run {
             Toast.makeText(this, "Please Logout and Login Once.", Toast.LENGTH_SHORT).show()
         }
+
         recyclerView = findViewById(R.id.blocksRecyclerView)
         recyclerViewTwo = findViewById(R.id.blocks2RecyclerView)
         lnrNoData = findViewById(R.id.lnrNoData)
 
         val onSlotSelected: (ParkingSlots, Floor, Block) -> Unit = { slot, floor, block ->
-            val intent = Intent(this, CarFormActivity::class.java)
-            intent.putExtra("selectedSlot", slot.parkingNo)
-            intent.putExtra("selectedFloor", floor.floorName)
-            intent.putExtra("selectedBlock", block.blockName)
-            intent.putExtra("selectedSlotUuid", slot.uuid)
-            intent.putExtra("vehicleNo",vehicleNo)
-            intent.putExtra("serialNumber", serialNumber)
-            intent.putExtra("checkintime", checkintime)
-            intent.putExtra("vehicleType", vehicleType)
-            intent.putExtra("vehicleImage", vehicleImage)
+            val intent = Intent(this, CarFormActivity::class.java).apply {
+                putExtra("selectedSlot", slot.parkingNo)
+                putExtra("selectedFloor", floor.floorName)
+                putExtra("selectedBlock", block.blockName)
+                putExtra("selectedSlotUuid", slot.uuid)
+                putExtra("vehicleNo", vehicleNo)
+                putExtra("serialNumber", serialNumber)
+                putExtra("checkintime", checkintime)
+                putExtra("vehicleType", vehicleType)
+                putExtra("vehicleImage", vehicleImage)
+            }
             startActivity(intent)
             finish()
-            //Toast.makeText(this, "${block.blockNo+" "+floor.floorNo+" "+slot.parkingNo+" "+slot.uuid} ", Toast.LENGTH_SHORT).show()
         }
-
-
-
 
         callApi(onSlotSelected)
+
         refreshButton.setOnClickListener {
             callApi(onSlotSelected)
-
         }
+
+        // Search logic
+        /*searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun onTextChanged(query: CharSequence?, start: Int, before: Int, count: Int) {
+                val searchTerm = query.toString().trim()
+                val filteredList = originalBlockList.filter { block ->
+                    block.blockName?.contains(searchTerm, ignoreCase = true) == true ||
+                            block.floors.any { floor ->
+                                floor.floorName?.contains(searchTerm, ignoreCase = true) == true ||
+                                        // Parking slot's parking number contains the search term
+                                        floor.slots.any { slot ->
+                                            slot.parkingNo?.contains(searchTerm, ignoreCase = true) == true
+                                        }
+                            }
+                }
+
+                // Update the adapter with the filtered list
+                blockAdapter2.updateBlockList(filteredList)
+            }
+        })*/
+       /* searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun onTextChanged(query: CharSequence?, start: Int, before: Int, count: Int) {
+                val searchTerm = query.toString().trim()
+
+                // Filter the block list based on search term in ParkingSlot's parkingNo
+                val filteredList = originalBlockList.filter { block ->
+                    block.floors.any { floor ->
+                        floor.slots.any { slot ->
+                            // Only check parkingNo for slots
+                            slot.parkingNo?.contains(searchTerm, ignoreCase = true) == true
+                        }
+                    }
+                }
+
+                // Update the adapter with the filtered list
+                blockAdapter2.updateBlockList(filteredList)
+            }
+        })*/
+
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun onTextChanged(query: CharSequence?, start: Int, before: Int, count: Int) {
+                val searchTerm = query.toString().trim()
+
+                if (searchTerm.isEmpty()) {
+                    // Reset to full list if search is empty
+                    blockAdapter2.updateBlockList(originalBlockList)
+                    return
+                }
+
+                // Filter only the slots that match the search term
+                val filteredBlocks = originalBlockList.mapNotNull { block ->
+                    val filteredFloors = block.floors.mapNotNull { floor ->
+                        val matchedSlots = floor.slots.filter { slot ->
+                            slot.parkingNo?.contains(searchTerm, ignoreCase = true) == true
+                        }
+                        if (matchedSlots.isNotEmpty()) {
+                            floor.copy(slots = matchedSlots) // Keep only matched slots
+                        } else null
+                    }
+
+                    if (filteredFloors.isNotEmpty()) {
+                        block.copy(floors = filteredFloors) // Keep only floors with matching slots
+                    } else null
+                }
+
+                blockAdapter2.updateBlockList(filteredBlocks)
+            }
+        })
+
+
 
     }
 
     private fun callApi(onSlotSelected: (ParkingSlots, Floor, Block) -> Unit) {
         parkingViewModelData.getAvailableSlotsData(companyId, token)
 
-        parkingViewModelData.isLoading.observe(this, Observer { isLoading ->
+        parkingViewModelData.isLoading.observe(this, Observer {
             ProgressBarUtility.showProgressDialog(this)
         })
 
-        parkingViewModelData.error.observe(this, Observer { errorMessage ->
+        parkingViewModelData.error.observe(this, Observer {
             ProgressBarUtility.dismissProgressDialog()
-            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })
 
         parkingViewModelData.parkingResponse.observe(this, Observer { response ->
-            if (response != null) {
-                recyclerViewTwo.visibility=View.VISIBLE
-                lnrNoData.visibility=View.GONE
-                ProgressBarUtility.dismissProgressDialog()
-                recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-                recyclerViewTwo.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-                if (response.content != null) {
-                    val slots: List<ParkingSlot> = response.content
-
-                    val blockList = slots
-                        .groupBy { it.blockName }
-                        .map { (blockNo, blockSlots) ->
-                            val floors = blockSlots
-                                .groupBy { it.floorName }
-                                .map { (floorNo, floorSlots) ->
-                                    val parkingSlots = floorSlots.map {
-                                        ParkingSlots(
-                                            parkingNo = it.parkingNo,
-                                            availabilityStatus = it.availabilityStatus,
-                                            type = it.type,
-                                            uuid = it.uuid
-                                        )
-                                    }
-                                    Floor(floorNo, parkingSlots)
-                                }
-                            Block(blockNo, floors)
+            ProgressBarUtility.dismissProgressDialog()
+            if (response != null && response.content != null) {
+                val slots = response.content
+                val blockList = slots.groupBy { it.blockName }.map { (blockName, blockSlots) ->
+                    val floors = blockSlots.groupBy { it.floorName }.map { (floorName, floorSlots) ->
+                        val parkingSlots = floorSlots.map {
+                            ParkingSlots(
+                                parkingNo = it.parkingNo,
+                                availabilityStatus = it.availabilityStatus,
+                                type = it.type,
+                                uuid = it.uuid
+                            )
                         }
-
-                    // Initialize BlockAdapter
-                    blockAdapter = BlockAdapter(this, blockList, onSlotSelected) { selectedPosition ->
-                        // Update BlockTwoAdapter when a block is selected from BlockAdapter
-                        blockAdapter2.updateSelectedBlockPosition(selectedPosition)
+                        Floor(floorName, parkingSlots)
                     }
-                    recyclerView.adapter = blockAdapter
-
-                    // Initialize BlockTwoAdapter
-                    blockAdapter2 = BlockTwoAdapter(this, blockList, onSlotSelected)
-                    recyclerViewTwo.adapter = blockAdapter2
+                    Block(blockName, floors)
                 }
+
+                originalBlockList = blockList
+
+                blockAdapter = BlockAdapter(this, blockList, onSlotSelected) { selectedPosition ->
+                    val selectedBlock = blockList[selectedPosition]
+                    blockAdapter2.updateBlockList(listOf(selectedBlock))
+                }
+
+                recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                recyclerView.adapter = blockAdapter
+
+                blockAdapter2 = BlockTwoAdapter(this, listOf(blockList.first()), onSlotSelected)
+                recyclerViewTwo.layoutManager = LinearLayoutManager(this)
+                recyclerViewTwo.adapter = blockAdapter2
+
+                lnrNoData.visibility = View.GONE
+                recyclerViewTwo.visibility = View.VISIBLE
+            } else {
+                lnrNoData.visibility = View.VISIBLE
+                recyclerViewTwo.visibility = View.GONE
             }
         })
-
     }
 }
