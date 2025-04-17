@@ -1,22 +1,24 @@
-package com.elite.parking
+package com.elite.parking.fragment
 
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.Model.VehicleViewModelFactory
+import com.elite.parking.R
+import com.elite.parking.activity.CarFormActivity
+import com.elite.parking.activity.PaymentActivity
+import com.elite.parking.adapter.VehicleAdapter
 import com.elite.parking.apis.ApiService
 import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.repository.VehicleRepository
@@ -91,7 +93,8 @@ class HistoryFragment : Fragment()  {
         // Initialize ViewModel
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
         val repository = VehicleRepository(apiService)
-        vehicleViewModel = ViewModelProvider(this, VehicleViewModelFactory(repository)).get(VehicleViewModel.VehicleViewModelList::class.java)
+        vehicleViewModel = ViewModelProvider(this, VehicleViewModelFactory(repository)).get(
+            VehicleViewModel.VehicleViewModelList::class.java)
 
         // Observe LiveData for vehicle list
        /* vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->
@@ -100,9 +103,9 @@ class HistoryFragment : Fragment()  {
         })*/
         vehicleViewModel.vehicleList.observe(viewLifecycleOwner, { vehicleList ->
             if(vehicleList.size>=1){
-                lnrNoData.visibility=View.GONE
+                lnrNoData.visibility= View.GONE
             }else{
-                lnrNoData.visibility=View.VISIBLE
+                lnrNoData.visibility= View.VISIBLE
             }
 
             shimmerLayout.visibility = View.GONE
@@ -171,7 +174,7 @@ class HistoryFragment : Fragment()  {
         animatorSet.start()
 
         // Hide child FABs after the animation
-        animatorSet.addListener(object : android.animation.Animator.AnimatorListener {
+        animatorSet.addListener(object : Animator.AnimatorListener {
 
             override fun onAnimationStart(p0: Animator) {
                 TODO("Not yet implemented")
@@ -195,5 +198,3 @@ class HistoryFragment : Fragment()  {
 
 
 }
-
-

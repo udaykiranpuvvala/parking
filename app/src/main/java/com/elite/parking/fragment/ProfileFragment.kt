@@ -1,13 +1,10 @@
-package com.elite.parking
+package com.elite.parking.fragment
 
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Looper
-import android.util.Log
-import android.util.TimeUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,49 +13,27 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import androidx.core.os.postDelayed
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.elite.parking.Model.LogoutRequest
 import com.elite.parking.Model.UpdatePasswordFactory
-import com.elite.parking.Model.UserSession
-import com.elite.parking.Model.UserSession.token
-import com.elite.parking.Model.VehicleCheckInRequest
-import com.elite.parking.Model.VehicleViewCheckOutFactory
+import com.elite.parking.R
 import com.elite.parking.Resource
-import com.elite.parking.SplashScreenActivity
+import com.elite.parking.activity.LoginActivity
 import com.elite.parking.apis.ApiService
 import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.loader.NetworkUtils
 import com.elite.parking.loader.ProgressBarUtility
-import com.elite.parking.repository.AuthRepository
 import com.elite.parking.repository.VehicleRepository
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.AuthViewModel
-import com.elite.parking.viewModel.LoginViewModel
-import com.elite.parking.viewModel.VehicleCheckInViewModel
-import com.elite.parking.viewModel.VehicleViewModel
 import com.elite.parking.viewModel.VehicleViewModel.UpDatePasswordViewModel
-import com.elite.parking.viewModel.VehicleViewModel.VehicleDetailCheckOutViewModel
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.zxing.client.android.BuildConfig
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.String
@@ -69,7 +44,7 @@ class ProfileFragment : Fragment() {
     private lateinit var userId: String
 
     private lateinit var logoutViewModel: AuthViewModel
-    private lateinit var upDatePasswordViewModel: VehicleViewModel.UpDatePasswordViewModel
+    private lateinit var upDatePasswordViewModel: UpDatePasswordViewModel
 
 
     override fun onCreateView(

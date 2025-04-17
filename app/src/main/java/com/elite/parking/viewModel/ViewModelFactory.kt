@@ -1,11 +1,8 @@
-package com.elite.parking
+package com.elite.parking.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.elite.parking.apis.ApiService
 import com.elite.parking.repository.FileUploadRepository
-import com.elite.parking.viewModel.AuthViewModel
-import com.elite.parking.viewModel.FileUploadViewModel
 
 class ViewModelFactory{
     class ViewModelFactoryFileUploadRepository(private val repository: FileUploadRepository) : ViewModelProvider.Factory {
@@ -18,6 +15,3 @@ class ViewModelFactory{
         }
     }
 }
-
-
-

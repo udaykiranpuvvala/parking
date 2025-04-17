@@ -23,31 +23,31 @@
         android:theme="@style/ToolBarDark"
         tools:targetApi="31">
         <activity
-            android:name=".OcrActivity"
+            android:name=".activity.OcrActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PaymentActivity"
+            android:name=".activity.PaymentActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ParkingSlotsActivity"
+            android:name=".activity.ParkingSlotsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CarFormActivity"
+            android:name=".activity.CarFormActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activity.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".activity.SplashScreenActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

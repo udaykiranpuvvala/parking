@@ -1,4 +1,4 @@
-package com.elite.parking
+package com.elite.parking.activity
 
 import android.Manifest
 import android.app.TimePickerDialog
@@ -30,6 +30,9 @@ import com.bumptech.glide.Glide
 import com.elite.parking.Model.VehicleDetailsByHookNumberRequest
 import com.elite.parking.Model.VehicleViewCheckOutFactory
 import com.elite.parking.Model.VehicleViewModelItemFactory
+import com.elite.parking.QRScannerDialog
+import com.elite.parking.R
+import com.elite.parking.Resource
 import com.elite.parking.apis.ApiService
 import com.elite.parking.apis.RetrofitClient
 import com.elite.parking.loader.NetworkUtils
@@ -37,7 +40,6 @@ import com.elite.parking.loader.ProgressBarUtility
 import com.elite.parking.repository.VehicleRepository
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.VehicleViewModel
-import com.elite.parking.viewModel.VehicleViewModel.VehicleDetailCheckOutViewModel
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -52,7 +54,6 @@ import java.time.format.DateTimeFormatterBuilder
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import kotlin.jvm.java
 
 class PaymentActivity : AppCompatActivity() {
 
@@ -170,7 +171,7 @@ class PaymentActivity : AppCompatActivity() {
                 == PackageManager.PERMISSION_GRANTED
             ) {
                 val dialog = QRScannerDialog { scannedText ->
-                    tokenEditText.setText( scannedText.toString())
+                    tokenEditText.setText(scannedText.toString())
                 }
                 dialog.show(supportFragmentManager, "QRScanner")
             } else {
@@ -232,29 +233,33 @@ class PaymentActivity : AppCompatActivity() {
                     }
 
                     is Resource.Success -> {
-                        val successMessage = resource.data?.mssg ?: "Vehicle Data Fetched in successfully"
+                        val successMessage =
+                            resource.data?.mssg ?: "Vehicle Data Fetched in successfully"
                         ProgressBarUtility.dismissProgressDialog()
 
                         // Check if content is not null and contains at least one item
                         val content = resource.data?.content
                         if (content != null && content.isNotEmpty()) {
                             val vehicleDetails = content[0]
-                            lnrCheckOut.visibility= View.VISIBLE
-                            parkingCard.visibility= View.VISIBLE
-                            lnrNoData.visibility=View.GONE
-                            parkingId.setText(" ${vehicleDetails.blockName}  : ${vehicleDetails.floorName} : ${vehicleDetails.parkingNo}"?: "")
+                            lnrCheckOut.visibility = View.VISIBLE
+                            parkingCard.visibility = View.VISIBLE
+                            lnrNoData.visibility = View.GONE
+                            parkingId.setText(
+                                " ${vehicleDetails.blockName}  : ${vehicleDetails.floorName} : ${vehicleDetails.parkingNo}"
+                                    ?: ""
+                            )
                             vehicleNumber.setText(vehicleDetails.vehicleNo ?: "")
                             vehicleType.setText(vehicleDetails.vehicleType ?: "")
                             hookNumber.setText(vehicleDetails.hookNo ?: "")
                             checkinTime.setText(vehicleDetails.inTime ?: "")
                             checkoutTime.setText(vehicleDetails.outTime ?: "")
-                            if(!TextUtils.isEmpty(vehicleDetails.outTime)){
-                                lnrOutTime.visibility= View.VISIBLE
-                                checkoutTime.text =vehicleDetails.outTime
-                                lnrCheckOut.visibility= View.GONE
-                            }else{
-                                lnrOutTime.visibility= View.GONE
-                                lnrCheckOut.visibility= View.VISIBLE
+                            if (!TextUtils.isEmpty(vehicleDetails.outTime)) {
+                                lnrOutTime.visibility = View.VISIBLE
+                                checkoutTime.text = vehicleDetails.outTime
+                                lnrCheckOut.visibility = View.GONE
+                            } else {
+                                lnrOutTime.visibility = View.GONE
+                                lnrCheckOut.visibility = View.VISIBLE
                             }
                             createdDate.setText(vehicleDetails.createdDate ?: "")
                             parkingNote.setText(vehicleDetails.notes ?: "")
@@ -267,17 +272,19 @@ class PaymentActivity : AppCompatActivity() {
                                 .error(R.drawable.ic_default_image)
                                 .into(image)
                         } else {
-                            lnrCheckOut.visibility= View.GONE
-                            parkingCard.visibility= View.GONE
-                            lnrNoData.visibility=View.VISIBLE
+                            lnrCheckOut.visibility = View.GONE
+                            parkingCard.visibility = View.GONE
+                            lnrNoData.visibility = View.VISIBLE
 
-                            Toast.makeText(this, "No vehicle details available", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "No vehicle details available", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
 
                     is Resource.Failure -> {
                         ProgressBarUtility.dismissProgressDialog()
-                        Toast.makeText(this, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Error: ${resource.message}", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             })
@@ -310,7 +317,7 @@ class PaymentActivity : AppCompatActivity() {
         val repository = VehicleRepository(apiService)
         vehicleDetailCheckOutViewModel =
             ViewModelProvider(this, VehicleViewCheckOutFactory(repository)).get(
-                VehicleDetailCheckOutViewModel::class.java
+                VehicleViewModel.VehicleDetailCheckOutViewModel::class.java
             )
         vehicleDetailCheckOutViewModel.isLoading.observe(this, Observer { isLoading ->
             ProgressBarUtility.showProgressDialog(this)
@@ -404,7 +411,7 @@ class PaymentActivity : AppCompatActivity() {
         GlobalScope.launch {
             delay(2000)
             withContext(Dispatchers.Main) {
-              finish()
+                finish()
             }
         }
     }
@@ -466,14 +473,15 @@ class PaymentActivity : AppCompatActivity() {
     private fun initialAPICall(vehicleUuid: String) {
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
         val repository = VehicleRepository(apiService)
-        vehicleViewModel = ViewModelProvider(this, VehicleViewModelItemFactory(repository)
+        vehicleViewModel = ViewModelProvider(
+            this, VehicleViewModelItemFactory(repository)
         ).get(VehicleViewModel.VehicleViewModelListItem::class.java)
         vehicleViewModel.vehicleListItem.observe(this, { vehicleList ->
             ProgressBarUtility.dismissProgressDialog()
             if (vehicleList != null) {
                 lnrCheckOut.visibility= View.VISIBLE
                 parkingCard.visibility= View.VISIBLE
-                lnrNoData.visibility=View.GONE
+                lnrNoData.visibility= View.GONE
                 //parkingId.setText(vehicleList.get(0).parkingId ?: "")
                 parkingId.setText(" ${vehicleList.get(0).blockName}  : ${vehicleList.get(0).floorName} : ${vehicleList.get(0).parkingNo}"?: "")
                 vehicleNumber.setText(vehicleList.get(0).vehicleNo ?: "")

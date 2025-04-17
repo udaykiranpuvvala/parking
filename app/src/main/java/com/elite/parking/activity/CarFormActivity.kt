@@ -1,6 +1,5 @@
-package com.elite.parking
+package com.elite.parking.activity
 
-import android.app.Activity
 import android.Manifest
 import android.app.TimePickerDialog
 import android.content.Context
@@ -42,7 +41,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.Model.VehicleCheckInRequest
-import com.elite.parking.apis.ApiService.Companion.api
+import com.elite.parking.activity.OcrActivity
+import com.elite.parking.activity.ParkingSlotsActivity
+import com.elite.parking.QRScannerDialog
+import com.elite.parking.R
+import com.elite.parking.Resource
+import com.elite.parking.adapter.ImageAdapter
+import com.elite.parking.adapter.SectionedParkingAdapter
+import com.elite.parking.apis.ApiService
 import com.elite.parking.loader.NetworkUtils
 import com.elite.parking.loader.ProgressBarUtility
 import com.elite.parking.repository.FileUploadRepository
@@ -50,6 +56,7 @@ import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.FileUploadViewModel
 import com.elite.parking.viewModel.ParkingViewModel
 import com.elite.parking.viewModel.VehicleCheckInViewModel
+import com.elite.parking.viewModel.ViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
 import com.google.zxing.integration.android.IntentIntegrator
 import java.io.File
@@ -139,7 +146,7 @@ class CarFormActivity : AppCompatActivity() {
         val loginResponse = sharedPreferencesHelper.getLoginResponse()
 
 
-        val repository = FileUploadRepository(api)
+        val repository = FileUploadRepository(ApiService.Companion.api)
         fileUploadViewModel = ViewModelProvider(
             this,
             ViewModelFactory.ViewModelFactoryFileUploadRepository(repository)
@@ -236,7 +243,7 @@ class CarFormActivity : AppCompatActivity() {
                 == PackageManager.PERMISSION_GRANTED
             ) {
                 val dialog = QRScannerDialog { scannedText ->
-                    serialNumberEditText.setText( scannedText.toString())
+                    serialNumberEditText.setText(scannedText.toString())
                 }
                 dialog.show(supportFragmentManager, "QRScanner")
             } else {
@@ -499,8 +506,8 @@ class CarFormActivity : AppCompatActivity() {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     return when (parkingAdapter.getItemViewType(position)) {
-                        SectionedParkingAdapter.TYPE_BLOCK_HEADER -> 4
-                        SectionedParkingAdapter.TYPE_FLOOR_HEADER -> 4
+                        SectionedParkingAdapter.Companion.TYPE_BLOCK_HEADER -> 4
+                        SectionedParkingAdapter.Companion.TYPE_FLOOR_HEADER -> 4
                         else -> 1
                     }
                 }
@@ -546,7 +553,7 @@ class CarFormActivity : AppCompatActivity() {
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 imageUri?.let {
                     selectedImageUris.add(it)
                     uploadCapturedImage(it)
@@ -569,7 +576,7 @@ class CarFormActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             when (requestCode) {
                 // Handle image picker result (gallery)
                 PICK_IMAGES_REQUEST -> {

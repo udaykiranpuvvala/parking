@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
    <!-- <TextView
         android:id="@+id/textHeader"
@@ -84,6 +84,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_search"
+                android:tint="@color/maroon"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Search"/>
 

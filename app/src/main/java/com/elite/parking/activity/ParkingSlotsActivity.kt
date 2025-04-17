@@ -1,4 +1,4 @@
-package com.elite.parking
+package com.elite.parking.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,8 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.Model.parkingslots.Block
 import com.elite.parking.Model.parkingslots.Floor
-import com.elite.parking.Model.parkingslots.ParkingSlot
 import com.elite.parking.Model.parkingslots.ParkingSlots
+import com.elite.parking.R
 import com.elite.parking.adapter.BlockAdapter
 import com.elite.parking.adapter.BlockTwoAdapter
 import com.elite.parking.loader.ProgressBarUtility
@@ -204,17 +203,18 @@ class ParkingSlotsActivity : AppCompatActivity() {
             if (response != null && response.content != null) {
                 val slots = response.content
                 val blockList = slots.groupBy { it.blockName }.map { (blockName, blockSlots) ->
-                    val floors = blockSlots.groupBy { it.floorName }.map { (floorName, floorSlots) ->
-                        val parkingSlots = floorSlots.map {
-                            ParkingSlots(
-                                parkingNo = it.parkingNo,
-                                availabilityStatus = it.availabilityStatus,
-                                type = it.type,
-                                uuid = it.uuid
-                            )
+                    val floors =
+                        blockSlots.groupBy { it.floorName }.map { (floorName, floorSlots) ->
+                            val parkingSlots = floorSlots.map {
+                                ParkingSlots(
+                                    parkingNo = it.parkingNo,
+                                    availabilityStatus = it.availabilityStatus,
+                                    type = it.type,
+                                    uuid = it.uuid
+                                )
+                            }
+                            Floor(floorName, parkingSlots)
                         }
-                        Floor(floorName, parkingSlots)
-                    }
                     Block(blockName, floors)
                 }
 
@@ -225,7 +225,8 @@ class ParkingSlotsActivity : AppCompatActivity() {
                     blockAdapter2.updateBlockList(listOf(selectedBlock))
                 }
 
-                recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                recyclerView.layoutManager =
+                    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 recyclerView.adapter = blockAdapter
 
                 blockAdapter2 = BlockTwoAdapter(this, listOf(blockList.first()), onSlotSelected)

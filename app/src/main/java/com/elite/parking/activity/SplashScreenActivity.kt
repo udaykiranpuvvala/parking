@@ -1,8 +1,9 @@
-package com.elite.parking
+package com.elite.parking.activity
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.elite.parking.R
 import com.elite.parking.storage.SharedPreferencesHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,11 +21,11 @@ class SplashScreenActivity : AppCompatActivity() {
             delay(2000)  //
             withContext(Dispatchers.Main) {
                 if (!sharedPreferencesHelper.isLoggedIn()) {
-                    val intent= Intent(this@SplashScreenActivity, LoginActivity::class.java)
+                    val intent = Intent(this@SplashScreenActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else {
-                    val intent= Intent(this@SplashScreenActivity, MainActivity::class.java)
+                    val intent = Intent(this@SplashScreenActivity, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }

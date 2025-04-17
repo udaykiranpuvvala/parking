@@ -1,4 +1,4 @@
-package com.elite.parking
+package com.elite.parking.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.elite.parking.Model.parkingslots.Block
 import com.elite.parking.Model.parkingslots.Floor
 import com.elite.parking.Model.parkingslots.ParkingSlots
-import com.elite.parking.adapter.SlotAdapter
+import com.elite.parking.R
 
 class FloorAdapter(
     private val context: Context,

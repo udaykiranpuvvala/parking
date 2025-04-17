@@ -1,4 +1,4 @@
-package com.elite.parking
+package com.elite.parking.adapter
 
 import android.content.Context
 import android.os.Build
@@ -12,9 +12,11 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.elite.parking.Model.login.Vehicle
+import com.elite.parking.R
 import com.google.android.material.imageview.ShapeableImageView
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class VehicleAdapter(
     private val context: Context,
@@ -130,7 +132,3 @@ class VehicleAdapter(
         }
     }
 }
-
-
-
-

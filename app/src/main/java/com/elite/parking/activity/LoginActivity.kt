@@ -1,6 +1,5 @@
-package com.elite.parking
+package com.elite.parking.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
@@ -13,13 +12,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.elite.parking.Model.UserSession
-import com.elite.parking.Model.login.LoginResponse
 import com.elite.parking.Model.login.User
+import com.elite.parking.R
 import com.elite.parking.loader.NetworkUtils
 import com.elite.parking.loader.ProgressBarUtility
 import com.elite.parking.storage.SharedPreferencesHelper
 import com.elite.parking.viewModel.LoginViewModel
-import com.google.gson.Gson
 
 class LoginActivity : AppCompatActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
@@ -84,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
         UserSession.status = user.status
     }
     fun hideKeyboard() {
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         // Get the current focused view
         val currentFocusView = currentFocus
         if (currentFocusView != null) {

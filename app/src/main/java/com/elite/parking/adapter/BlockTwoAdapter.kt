@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.elite.parking.FloorAdapter
+import com.elite.parking.adapter.FloorAdapter
 import com.elite.parking.Model.parkingslots.Block
 import com.elite.parking.Model.parkingslots.Floor
 import com.elite.parking.Model.parkingslots.ParkingSlots

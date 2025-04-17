@@ -1,7 +1,6 @@
-package com.elite.parking
+package com.elite.parking.activity
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -24,6 +23,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.elite.parking.R
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
@@ -82,7 +82,7 @@ class OcrActivity : AppCompatActivity() {
             if (!textView.text.toString().isNullOrBlank()) {
                 val resultIntent = Intent()
                 resultIntent.putExtra("key", textView.text.toString())
-                setResult(Activity.RESULT_OK, resultIntent)
+                setResult(RESULT_OK, resultIntent)
                 finish()
             } else {
                 Toast.makeText(this, "Provide proper Number Plate to proceed", Toast.LENGTH_SHORT).show()
@@ -100,7 +100,7 @@ class OcrActivity : AppCompatActivity() {
     }
 
     private fun startCamera() {
-        cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        cameraProviderFuture = ProcessCameraProvider.Companion.getInstance(this)
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build().also {
