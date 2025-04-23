@@ -69,6 +69,7 @@
     <string name="vehicle_number">Vehicle Number</string>
     <string name="vehicle_type">Vehicle Type</string>
     <string name="enter_serial_no">Enter Serial No</string>
+    <string name="txt_des">Android Version Check: If the device is running Android 10 or higher, the WRITE_EXTERNAL_STORAGE permission isn’t necessary for most operations in the app-specific directory, so it directly initiates the download. Dexter: Handles the permission request, including cases where the user denies the permission or needs additional rationale.</string>
 
     <style name="CircleImageView" parent="">
         <item name="cornerFamily">rounded</item>

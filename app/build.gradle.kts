@@ -8,24 +8,26 @@ plugins {
 
 android {
 
-    namespace = "com.elite.parking"
+    namespace = "com.mindcoin.valetparking"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.elite.parking"
+        applicationId = "com.mindcoin.valetparkin"
         minSdk = 21
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.0.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled =true
     }
 
     buildTypes {
+        debug {
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -78,5 +80,4 @@ dependencies {
 
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
     implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
-
 }
